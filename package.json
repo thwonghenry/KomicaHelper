@@ -1,0 +1,29 @@
+{
+  "name": "komica_helper",
+  "version": "1.0.0",
+  "description": "A browser helper for komica sites",
+  "main": "src/main.js",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.7.6",
+    "babel-polyfill": "^6.7.4",
+    "babel-preset-es2015": "^6.6.0",
+    "css-loader": "^0.23.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thwonghenry/KomicaHelper.git"
+  },
+  "keywords": [
+    "komica"
+  ],
+  "author": "thwong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thwonghenry/KomicaHelper/issues"
+  },
+  "homepage": "https://github.com/thwonghenry/KomicaHelper#readme"
+}
