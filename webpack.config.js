@@ -23,11 +23,17 @@ module.exports = {
     module: {
         loaders: [{
             test: /\.ts$/,
-            loader: 'ts-loader'
+            loader: 'ts'
         }, {
             test: /\.js$/,
-            loader: 'babel-loader',
+            loader: 'babel',
             exclude: /node_modules/
+        }, {
+            test: /\.jade$/,
+            loader: 'jade'
+        }, {
+            test: /\.sass$/,
+            loader: 'css/locals!sass'
         }]
     },
     babel: {

@@ -13,7 +13,9 @@
     "files": [
         "src/Ajax.ts",
         "src/main.ts",
-        "typings/es6-promise/es6-promise.d.ts"
+        "typings/Ajax.d.ts",
+        "typings/es6-promise/es6-promise.d.ts",
+        "typings/require.d.ts"
     ],
     "atom": {
         "rewriteTsconfig": true
