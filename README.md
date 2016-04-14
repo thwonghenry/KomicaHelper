@@ -1,4 +1,4 @@
-# A chrome extension that support ajax update for komica pages
+# Komica Helper - a chrome extension for komica pages
 ## How to build the script
 1. Make sure you have install node.js and Google Chrome
 2. `npm i`
