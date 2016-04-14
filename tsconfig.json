@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "es3",
+        "module": "commonjs"
+    },
+    "exclude": [
+        "node_modules"
+    ],
+    "filesGlob": [
+        "src/*.ts",
+        "typings/**/*.ts"
+    ],
+    "files": [
+        "src/Ajax.ts",
+        "src/main.ts",
+        "typings/es6-promise/es6-promise.d.ts"
+    ],
+    "atom": {
+        "rewriteTsconfig": true
+    },
+    "compileOnSave": false,
+    "buildOnSave": false
+}

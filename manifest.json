@@ -1,0 +1,13 @@
+{
+   "content_scripts": [ {
+      "all_frames": true,
+      "css": [  ],
+      "js": [ "build/build.js" ],
+      "matches": [ "http://2cat.or.tl/~tedc21thc/*" ],
+      "run_at": "document_start"
+   } ],
+   "description": "Helper for komica sites.",
+   "manifest_version": 2,
+   "name": "Komica Helper",
+   "version": "0.1"
+}
