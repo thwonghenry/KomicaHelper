@@ -20,7 +20,7 @@
 - Night mode / custom style
 - Support Firefox, Microsoft Edge and User Script 
 
-== TODO bugfix / performance improvement:
+## TODO bugfix / performance improvement:
 - Improve performance when updating threads
 
 ## How to build the chrome extension
