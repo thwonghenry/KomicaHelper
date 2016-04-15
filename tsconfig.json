@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es3",
+        "target": "es5",
         "module": "commonjs"
     },
     "exclude": [
@@ -13,8 +13,8 @@
     "files": [
         "src/Ajax.ts",
         "src/main.ts",
+        "src/replyBinder.ts",
         "src/update.ts",
-        "typings/Ajax.d.ts",
         "typings/es6-promise/es6-promise.d.ts",
         "typings/require.d.ts"
     ],

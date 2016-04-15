@@ -4,6 +4,7 @@ interface Ajax {
     method: string;
     url: string;
     xhr: XMLHttpRequest;
+    start(): Promise<string>;
 }
 
 class Ajax {
@@ -16,7 +17,7 @@ class Ajax {
     start(): Promise<string> {
         const onLoad = new Promise<string>((resolve: (string) => any, reject: () => any) => {
             this.xhr.onreadystatechange = () => {
-                const state = this.xhr.readyState;
+                const state: number = this.xhr.readyState;
                 if (state === XMLHttpRequest.DONE) {
                     if (this.xhr.status === 200 || this.xhr.status === 304) {
                         resolve(this.xhr.responseText);

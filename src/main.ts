@@ -1,5 +1,12 @@
-/// reference path="../typings/require.d.ts"
 import {createUpdateCallback} from './update.ts'
+import {bindReply} from './replyBinder.ts'
+
+// a function that add html as DOM node to element
+function addHTMLToElement(tag: string, html: string, element: HTMLElement): void {
+    let node = document.createElement(tag);
+    node.innerHTML = html;
+    element.appendChild(node);
+}
 
 // initialize ajax updator
 const url: string = window.location.href;
@@ -11,40 +18,69 @@ const css: string = style[0][1];
 // render the html with local scoped id
 const html: string = require('!jade!./buttons.jade')(style.locals);
 
-// variables for easy access
 const body: HTMLElement = document.body;
 
 // add the style from main.sass
-let styleTag: HTMLElement = document.createElement('style');
-styleTag.innerHTML = css;
-body.appendChild(styleTag);
-
+addHTMLToElement('style', css, body);
 // add the update button
-let buttons: HTMLElement = document.createElement('div');
-buttons.innerHTML = html;
-body.appendChild(buttons);
+addHTMLToElement('div', html, body);
 
-let updateButton: Element = document.getElementById(style.locals.komica_helper).children[0];
+// the added buttons at the right
+const newButtons: HTMLElement = document.getElementById(style.locals.komica_helper);
+
+// get the first button
+let updateButton: Element = newButtons.children[0];
 
 // create callback function
-const clickCallback: () => Promise<number> = createUpdateCallback(url, /pixmicat\.php/.test(url), document);
+const clickCallback: () => Promise<number> = createUpdateCallback(url, /pixmicat\.php/.test(url), document, newButtons);
+
+// store the id of setTimeout in the click event below for later clearTimeout
+let timeout: number = 0;
 
 // add the click event listner to the update button
 updateButton.addEventListener('click', function(event) {
     event.preventDefault();
+
     // only invoke update function if it is not updating
     if (!(/disabledAnchor/.test(this.className))) {
         this.className += ' disabledAnchor';
         this.innerHTML = '更新中..';
+
+        // remove any timeout that is started before
+        if (timeout) {
+            clearTimeout(timeout);
+        }
         clickCallback().then((diff: number) => {
+
+            // remove the "disabledAnchor" class
             let classes: string[] = this.className.split(' ');
             classes.splice(classes.length - 1, 1);
             this.className = classes.join(' ');
 
-            // update the text, showing the difference
-            this.innerHTML = `更新${diff === 0 ? '' : `(+${diff})`}`;
+            return new Promise<void>((resolve) => {
+                if (diff) {
+
+                    // if there are new thread, show the diff and reset after 5 seconds
+                    this.innerHTML = `更新(+${diff})`;
+                    timeout = setTimeout(resolve, 5000);
+                } else {
+
+                    // reset immediately
+                    resolve();
+                }
+            });
+        }).then(() => {
+
+            // reset the button text
+            this.innerHTML = '更新';
         });
     } else {
         console.log('waiting');
     }
 });
+
+// bind all the hover events on quote element
+const replies: NodeListOf<Element> = document.getElementsByClassName('resquote');
+for (let i: number = 0; i < replies.length; i++) {
+    bindReply(replies[i], newButtons);
+}
