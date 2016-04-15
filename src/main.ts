@@ -38,7 +38,7 @@ const clickCallback: () => Promise<number> = createUpdateCallback(url, /pixmicat
 let timeout: number = 0;
 
 // add the click event listner to the update button
-updateButton.addEventListener('click', function(event) {
+updateButton.addEventListener('click', function(event: Event) {
     event.preventDefault();
 
     // only invoke update function if it is not updating
@@ -57,7 +57,7 @@ updateButton.addEventListener('click', function(event) {
             classes.splice(classes.length - 1, 1);
             this.className = classes.join(' ');
 
-            return new Promise<void>((resolve) => {
+            return new Promise<void>((resolve: () => void) => {
                 if (diff) {
 
                     // if there are new thread, show the diff and reset after 5 seconds

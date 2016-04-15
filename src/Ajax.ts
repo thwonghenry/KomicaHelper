@@ -15,7 +15,7 @@ class Ajax {
     }
 
     start(): Promise<string> {
-        const onLoad = new Promise<string>((resolve: (string) => any, reject: () => any) => {
+        const onLoad = new Promise<string>((resolve: (response: string) => any, reject: () => any) => {
             this.xhr.onreadystatechange = () => {
                 const state: number = this.xhr.readyState;
                 if (state === XMLHttpRequest.DONE) {

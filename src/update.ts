@@ -51,7 +51,7 @@ export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDo
                 }
 
                 // return the diff value
-                return new Promise<number>((resolve: (number) => void) => {
+                return new Promise<number>((resolve: (diff: number) => void) => {
                     resolve(diff);
                 });
             }, () => console.log('rejected'));
@@ -71,8 +71,8 @@ export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDo
                 for (let i: number = 0; i < replies.length; i++) {
                     bindReply(replies[i], floatsParent);
                 }
-                
-                return new Promise<number>((resolve: (number) => void) => {
+
+                return new Promise<number>((resolve: (diff: number) => void) => {
                     resolve(0);
                 });
             }, () => console.log('rejected'));
