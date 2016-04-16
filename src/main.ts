@@ -32,7 +32,7 @@ const newButtons: HTMLElement = document.getElementById(style.locals.komica_help
 let updateButton: Element = newButtons.children[0];
 
 // create callback function
-const clickCallback: () => Promise<number> = createUpdateCallback(url, /pixmicat\.php/.test(url), document, newButtons);
+const clickCallback: () => Promise<number> = createUpdateCallback(url, /\?res=/.test(url), document, newButtons);
 
 // store the id of setTimeout in the click event below for later clearTimeout
 let timeout: number = 0;
@@ -80,7 +80,10 @@ updateButton.addEventListener('click', function(event: Event) {
 });
 
 // bind all the hover events on quote element
-const replies: NodeListOf<Element> = document.getElementsByClassName('resquote');
-for (let i: number = 0; i < replies.length; i++) {
-    bindReply(replies[i], newButtons);
+const qlinks: NodeListOf<Element> = document.getElementsByClassName('qlink');
+for (let i: number = 0; i < qlinks.length; i++) {
+    const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[i];
+    if (/.*#r[0-9]*.*/.test(qlink.href)) {
+        bindReply(qlink, newButtons);
+    }
 }

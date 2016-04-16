@@ -2,7 +2,7 @@
 import { Ajax } from './Ajax';
 import {bindReply} from './replyBinder.ts'
 
-export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDocument, floatsParent: HTMLElement): () => Promise<number> {
+export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDocument, floatsParent: HTMLElement = document.body): () => Promise<number> {
     const ajax: Ajax = new Ajax('get', url);
     const implementation: DOMImplementation = doc.implementation;
     const newDoc: HTMLDocument = implementation.createHTMLDocument("Temp");
@@ -41,10 +41,13 @@ export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDo
                         oldThreads.insertBefore(newChildren[i], oldChildren[oldChildren.length - 1 - j]);
 
                         // if the reply contains quote, bind the hover event
-                        const elementList: NodeListOf<Element> = doc.querySelectorAll(`${newChildren[i].id} .resquote`);
-                        if (elementList) {
-                            for (let k: number = 0; k < elementList.length; k++) {
-                                bindReply(elementList[k], floatsParent);
+                        const qlinks: NodeListOf<Element> = doc.querySelectorAll(`${newChildren[i].id} .qlink`);
+                        if (qlinks) {
+                            for (let k: number = 0; k < qlinks.length; k++) {
+                                const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[k];
+                                if (/.*#r[0-9]*.*/.test(qlink.href)) {
+                                    bindReply(qlink, floatsParent);
+                                }
                             }
                         }
                     }
@@ -67,9 +70,12 @@ export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDo
                 oldThreads.innerHTML = newThreads.innerHTML;
 
                 // add all the hover events to the quote
-                const replies: NodeListOf<Element> = document.getElementsByClassName('resquote');
-                for (let i: number = 0; i < replies.length; i++) {
-                    bindReply(replies[i], floatsParent);
+                const qlinks: NodeListOf<Element> = document.getElementsByClassName('qlink');
+                for (let i: number = 0; i < qlinks.length; i++) {
+                    const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[i];
+                    if (/.*#r[0-9]*.*/.test(qlink.href)) {
+                        bindReply(qlink, floatsParent);
+                    }
                 }
 
                 return new Promise<number>((resolve: (diff: number) => void) => {
