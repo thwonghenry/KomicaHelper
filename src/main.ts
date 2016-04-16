@@ -32,7 +32,8 @@ const newButtons: HTMLElement = document.getElementById(style.locals.komica_help
 let updateButton: Element = newButtons.children[0];
 
 // create callback function
-const clickCallback: () => Promise<number> = createUpdateCallback(url, /\?res=/.test(url), document, newButtons);
+const isThread: boolean = /\?res=/.test(url);
+const clickCallback: () => Promise<number> = createUpdateCallback(url, isThread, document, newButtons);
 
 // store the id of setTimeout in the click event below for later clearTimeout
 let timeout: number = 0;
@@ -83,7 +84,8 @@ updateButton.addEventListener('click', function(event: Event) {
 const qlinks: NodeListOf<Element> = document.getElementsByClassName('qlink');
 for (let i: number = 0; i < qlinks.length; i++) {
     const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[i];
-    if (/.*#r[0-9]*.*/.test(qlink.href)) {
+    let regex: RegExp;
+    if (/^((?!page_num).)*#r[0-9]*/.test(qlink.href)) {
         bindReply(qlink, newButtons);
     }
 }

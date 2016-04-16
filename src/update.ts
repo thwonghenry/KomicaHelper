@@ -73,7 +73,7 @@ export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDo
                 const qlinks: NodeListOf<Element> = document.getElementsByClassName('qlink');
                 for (let i: number = 0; i < qlinks.length; i++) {
                     const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[i];
-                    if (/.*#r[0-9]*.*/.test(qlink.href)) {
+                    if (/^((?!page_num).)*#r[0-9]*/.test(qlink.href)) {
                         bindReply(qlink, floatsParent);
                     }
                 }

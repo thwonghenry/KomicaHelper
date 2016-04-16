@@ -39,8 +39,7 @@
 - Hide post/thread/reply by keywords / click / ID
 - Figure out a pattern to support multiple boards easily
 - Cache images, view on hover
-- Float reply/new thread area
-- Load replies in home page without redirect
+- Float reply/new thread creator area
 - Highlight the same ID in a thread
 - In a reply, show which replies quoted it
 - Setting page
