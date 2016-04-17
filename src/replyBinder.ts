@@ -16,31 +16,34 @@ export function bindReply(anchor: HTMLAnchorElement, floatsParent: HTMLElement =
 
         // common function for after ajax loading or normal operation
         const stickReply = (reply: HTMLElement): void => {
+            let clone: HTMLElement;
+            if (reply) {
+                // clone the reply element, prevent duplicate ids and add float class
+                clone = <HTMLElement> reply.cloneNode(true);
+                clone.removeAttribute('id');
 
-            // clone the reply element, prevent duplicate ids and add float class
-            let clone: HTMLElement = <HTMLElement> reply.cloneNode(true);
-            clone.id = '';
+                // if the reply is the post, add the reply class
+                if (/threadpost/.test(clone.className)) {
+                    clone.className += ' reply';
 
-            // if the reply is the post, add the reply class
-            if (/threadpost/.test(clone.className)) {
-                clone.className += ' reply';
-                
-                // remove the warn text
-                const toplevel: HTMLElement = <HTMLElement> clone.children[0];
-                const children: HTMLCollection = toplevel.children;
-                const warnSpan: Element = children[children.length - 2];
-                if (warnSpan.tagName.toLowerCase() === 'span') {
-                    toplevel.removeChild(warnSpan);
+                    // remove the warn text
+                    const toplevel: HTMLElement = <HTMLElement> clone.children[0];
+                    const children: HTMLCollection = toplevel.children;
+                    const warnSpan: Element = children[children.length - 2];
+                    if (warnSpan.tagName.toLowerCase() === 'span') {
+                        toplevel.removeChild(warnSpan);
+                    }
                 }
-            }
-            clone.className += ' floatingReply';
+                clone.className += ' floatingReply';
 
-            // position it near the quote anchor point element
-            const rect: ClientRect = this.getBoundingClientRect();
-            clone.setAttribute('style', `left: ${Math.round(rect.left + rect.width) }px; top: ${Math.round(rect.top) }px;`);
-            floatsParent.appendChild(clone);
+                // position it near the quote anchor point element
+                const rect: ClientRect = this.getBoundingClientRect();
+                clone.setAttribute('style', `left: ${Math.round(rect.left + rect.width) }px; top: ${Math.round(rect.top) }px;`);
+                floatsParent.appendChild(clone);
+            }
 
             // bind the mouseout event that destroy the clone element
+            // if clone is undefined, still need it to remove "hovering" attribute
             function removeElement(): void {
                 if (clone) {
                     floatsParent.removeChild(clone);
@@ -98,10 +101,7 @@ export function bindReply(anchor: HTMLAnchorElement, floatsParent: HTMLElement =
                 });
             }
         }
-        if (target) {
-            stickReply(target);
-        }
-
+        stickReply(target);
         // set custom hovering attribute for after ajax loading
         this.setAttribute('hovering', 'true');
     });
