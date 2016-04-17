@@ -1,8 +1,8 @@
 // update function after clicking update button
 import { Ajax } from './Ajax';
-import {bindReply} from './replyBinder.ts'
+import {bindReply} from './replyBinder'
 
-export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDocument, floatsParent: HTMLElement = document.body): () => Promise<number> {
+export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDocument, floatsParent: HTMLElement = document.body, config: Config): () => Promise<number> {
     const ajax: Ajax = new Ajax('get', url);
     const implementation: DOMImplementation = doc.implementation;
     const newDoc: HTMLDocument = implementation.createHTMLDocument("Temp");
@@ -45,7 +45,7 @@ export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDo
                         if (qlinks) {
                             for (let k: number = 0; k < qlinks.length; k++) {
                                 const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[k];
-                                if (/.*#r[0-9]*.*/.test(qlink.href)) {
+                                if (config.quote.test(qlink.href)) {
                                     bindReply(qlink, floatsParent);
                                 }
                             }
@@ -73,7 +73,7 @@ export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDo
                 const qlinks: NodeListOf<Element> = document.getElementsByClassName('qlink');
                 for (let i: number = 0; i < qlinks.length; i++) {
                     const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[i];
-                    if (/^((?!page_num).)*#r[0-9]*/.test(qlink.href)) {
+                    if (config.quote.test(qlink.href)) {
                         bindReply(qlink, floatsParent);
                     }
                 }

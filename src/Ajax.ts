@@ -1,13 +1,10 @@
 import {Promise} from 'es6-promise';
 
-interface Ajax {
-    method: string;
-    url: string;
-    xhr: XMLHttpRequest;
-    start(): Promise<string>;
-}
+class Ajax implements _Ajax {
+    method: string
+    url: string
+    xhr: XMLHttpRequest
 
-class Ajax {
     constructor(method: string, url: string) {
         this.method = method;
         this.url = url;

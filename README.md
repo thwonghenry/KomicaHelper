@@ -37,7 +37,6 @@
 - Support update push posts
 - Better date representation
 - Hide post/thread/reply by keywords / click / ID
-- Figure out a pattern to support multiple boards easily
 - Cache images, view on hover
 - Float reply/new thread creator area
 - Highlight the same ID in a thread

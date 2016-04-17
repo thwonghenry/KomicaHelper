@@ -1,5 +1,6 @@
-import {createUpdateCallback} from './update.ts'
-import {bindReply} from './replyBinder.ts'
+import {createUpdateCallback} from './update'
+import {bindReply} from './replyBinder'
+import {getConfigByURL} from './config'
 
 // a function that add html as DOM node to element
 function addHTMLToElement(tag: string, html: string, element: HTMLElement): void {
@@ -31,9 +32,11 @@ const newButtons: HTMLElement = document.getElementById(style.locals.komica_help
 // get the first button
 let updateButton: Element = newButtons.children[0];
 
+const config: Config = getConfigByURL(url);
+
 // create callback function
 const isThread: boolean = /\?res=/.test(url);
-const clickCallback: () => Promise<number> = createUpdateCallback(url, isThread, document, newButtons);
+const clickCallback: () => Promise<number> = createUpdateCallback(url, isThread, document, newButtons, config);
 
 // store the id of setTimeout in the click event below for later clearTimeout
 let timeout: number = 0;
@@ -84,8 +87,7 @@ updateButton.addEventListener('click', function(event: Event) {
 const qlinks: NodeListOf<Element> = document.getElementsByClassName('qlink');
 for (let i: number = 0; i < qlinks.length; i++) {
     const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[i];
-    let regex: RegExp;
-    if (/^((?!page_num).)*#r[0-9]*/.test(qlink.href)) {
+    if (config.quote.test(qlink.href)) {
         bindReply(qlink, newButtons);
     }
 }

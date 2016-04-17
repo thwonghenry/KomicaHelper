@@ -13,10 +13,12 @@
     ],
     "files": [
         "src/Ajax.ts",
+        "src/config.ts",
         "src/main.ts",
         "src/replyBinder.ts",
         "src/update.ts",
         "typings/es6-promise/es6-promise.d.ts",
+        "typings/komicaHelper.d.ts",
         "typings/require.d.ts"
     ],
     "atom": {
