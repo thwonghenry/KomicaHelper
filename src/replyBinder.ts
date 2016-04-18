@@ -2,7 +2,7 @@ import {Ajax} from './Ajax';
 
 let cache: { [name: string]: HTMLDocument; } = {};
 let getting: { [name: string]: boolean } = {};
-export function bindReply(anchor: HTMLAnchorElement, floatsParent: HTMLElement = document.body): void {
+export function bindReply(anchor: HTMLAnchorElement, floatsParent: HTMLElement = document.body, locals: LocalStyle): void {
 
     // get all the quote element, a quote span may have multiple quote anchor points
     anchor.addEventListener('mouseover', function() {
@@ -34,7 +34,7 @@ export function bindReply(anchor: HTMLAnchorElement, floatsParent: HTMLElement =
                         toplevel.removeChild(warnSpan);
                     }
                 }
-                clone.className += ' floatingReply';
+                clone.className += ` ${locals.floatingReply}`;
 
                 // position it near the quote anchor point element
                 const rect: ClientRect = this.getBoundingClientRect();

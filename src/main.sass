@@ -1,25 +1,24 @@
-:local(#komica_helper)
-    .noDecor
-        text-decoration: none
+:local(#komicaHelper)
+    position: fixed
+    top: 40%
+    right: 0px
 
-    .updateButtons
-        position: fixed
-        top: 40%
-        right: 0px
-
-    .disabledAnchor
+    :local(.disabledAnchor)
         pointer-events: none
         cursor: default
         color: gray
 
-    .threadButtons
+    :local(.threadButtons)
         background:none
         color: BBB
         text-decoration: none
         border-bottom: 2px solid silver
         margin-bottom: 6px
 
-    .floatingReply
+    :local(.floatingReply)
         position: fixed
         border: 2px solid black
         box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.9)
+
+:local(#update), :local(#expand), :local(#contract)
+    text-decoration: none

@@ -1,6 +1,7 @@
 import {createUpdateCallback} from './update'
 import {bindReply} from './replyBinder'
 import {getConfigByURL} from './config'
+import {bindImg} from './imgBinder'
 
 // a function that add html as DOM node to element
 function addHTMLToElement(tag: string, html: string, element: HTMLElement): void {
@@ -15,9 +16,10 @@ const url: string = window.location.href;
 // import assests
 const style = require('!css!sass!./main.sass');
 const css: string = style[0][1];
+const locals: LocalStyle = style.locals;
 
 // render the html with local scoped id
-const html: string = require('!jade!./buttons.jade')(style.locals);
+const html: string = require('!jade!./buttons.jade')(locals);
 
 const body: HTMLElement = document.body;
 
@@ -27,19 +29,42 @@ addHTMLToElement('style', css, body);
 addHTMLToElement('div', html, body);
 
 // the added buttons at the right
-const newButtons: HTMLElement = document.getElementById(style.locals.komica_helper);
+const newButtons: HTMLElement = document.getElementById(locals.komicaHelper);
 
 // get the first button
-let updateButton: Element = newButtons.children[0];
+let updateButton: HTMLAnchorElement = <HTMLAnchorElement> document.getElementById(locals.update);
+let expandButton: HTMLAnchorElement = <HTMLAnchorElement> document.getElementById(locals.expand);
+let contractButton: HTMLAnchorElement = <HTMLAnchorElement> document.getElementById(locals.contract);
 
 const config: Config = getConfigByURL(url);
 
 // create callback function
 const isThread: boolean = /\?res=/.test(url);
-const clickCallback: () => Promise<number> = createUpdateCallback(url, isThread, document, newButtons, config);
+const clickCallback: () => Promise<number> = createUpdateCallback(url, isThread, document, newButtons, config, locals);
 
 // store the id of setTimeout in the click event below for later clearTimeout
 let timeout: number = 0;
+
+let buttons: HTMLButtonElement[] = [];
+const imgs: NodeListOf<Element> = document.getElementsByClassName('img');
+
+// common function to insert elements to the thread
+function injectThreadList () {
+    // bind all the hover events on quote element
+    const qlinks: NodeListOf<Element> = document.getElementsByClassName('qlink');
+    for (let i: number = 0; i < qlinks.length; i++) {
+        const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[i];
+        if (config.quote.test(qlink.href)) {
+            bindReply(qlink, newButtons, locals);
+        }
+    }
+
+    // inject the image button and store it to a list
+    for (let i: number = 0; i < imgs.length; i++) {
+        const img: HTMLImageElement = <HTMLImageElement> imgs[i];
+        buttons.push(bindImg(img));
+    }
+}
 
 // add the click event listner to the update button
 updateButton.addEventListener('click', function(event: Event) {
@@ -47,7 +72,7 @@ updateButton.addEventListener('click', function(event: Event) {
 
     // only invoke update function if it is not updating
     if (!(/disabledAnchor/.test(this.className))) {
-        this.className += ' disabledAnchor';
+        this.className += ` ${locals.disabledAnchor}`;
         this.innerHTML = '更新中..';
 
         // remove any timeout that is started before
@@ -74,7 +99,9 @@ updateButton.addEventListener('click', function(event: Event) {
                 }
             });
         }).then(() => {
-
+            if (!isThread) {
+                injectThreadList();
+            }
             // reset the button text
             this.innerHTML = '更新';
         });
@@ -83,11 +110,26 @@ updateButton.addEventListener('click', function(event: Event) {
     }
 });
 
-// bind all the hover events on quote element
-const qlinks: NodeListOf<Element> = document.getElementsByClassName('qlink');
-for (let i: number = 0; i < qlinks.length; i++) {
-    const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[i];
-    if (config.quote.test(qlink.href)) {
-        bindReply(qlink, newButtons);
+injectThreadList();
+
+expandButton.addEventListener('click', function (event: Event) {
+    event.preventDefault();
+    // click all the enlarge button
+    for (let i: number = 0; i < imgs.length; i++) {
+        const button: HTMLButtonElement = buttons[i];
+        if (button.innerHTML === '放大') {
+            button.click();
+        }
     }
-}
+});
+
+contractButton.addEventListener('click', function (event: Event) {
+    event.preventDefault();
+    // click all the contract button
+    for (let i: number = 0; i < imgs.length; i++) {
+        const button: HTMLButtonElement = buttons[i];
+        if (button.innerHTML === '縮小') {
+            button.click();
+        }
+    }
+});

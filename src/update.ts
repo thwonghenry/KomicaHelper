@@ -2,7 +2,7 @@
 import { Ajax } from './Ajax';
 import {bindReply} from './replyBinder'
 
-export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDocument, floatsParent: HTMLElement = document.body, config: Config): () => Promise<number> {
+export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDocument, floatsParent: HTMLElement = document.body, config: Config, locals: LocalStyle): () => Promise<number> {
     const ajax: Ajax = new Ajax('get', url);
     const implementation: DOMImplementation = doc.implementation;
     const newDoc: HTMLDocument = implementation.createHTMLDocument("Temp");
@@ -46,7 +46,7 @@ export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDo
                             for (let k: number = 0; k < qlinks.length; k++) {
                                 const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[k];
                                 if (config.quote.test(qlink.href)) {
-                                    bindReply(qlink, floatsParent);
+                                    bindReply(qlink, floatsParent, locals);
                                 }
                             }
                         }
@@ -74,7 +74,7 @@ export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDo
                 for (let i: number = 0; i < qlinks.length; i++) {
                     const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[i];
                     if (config.quote.test(qlink.href)) {
-                        bindReply(qlink, floatsParent);
+                        bindReply(qlink, floatsParent, locals);
                     }
                 }
 
