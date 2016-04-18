@@ -1,6 +1,11 @@
 interface Config {
-    match: RegExp,
-    quote: RegExp
+    match: RegExp;
+    quote: RegExp;
+    getThreads: (doc: Document) => HTMLElement;
+    getReplies: (doc: Document) => HTMLElement;
+    getThumbnailSize: (img: HTMLImageElement) => ThumbnailSize;
+    enlargeThumbnail: (img: HTMLImageElement) => void;
+    setThumbnailSize: (img: HTMLImageElement, size: ThumbnailSize) => void;
 }
 
 interface _Ajax {
@@ -22,4 +27,9 @@ interface LocalStyle {
     threadButtons: string;
     floatingReply: string;
 
+}
+
+interface ThumbnailSize {
+    width: number;
+    height: number;
 }

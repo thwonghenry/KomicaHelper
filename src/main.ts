@@ -46,23 +46,26 @@ const clickCallback: () => Promise<number> = createUpdateCallback(url, isThread,
 let timeout: number = 0;
 
 let buttons: HTMLButtonElement[] = [];
-const imgs: NodeListOf<Element> = document.getElementsByClassName('img');
-
+let imgs: NodeListOf<Element>;
+let qlinks: NodeListOf<Element>;
 // common function to insert elements to the thread
 function injectThreadList () {
     // bind all the hover events on quote element
-    const qlinks: NodeListOf<Element> = document.getElementsByClassName('qlink');
-    for (let i: number = 0; i < qlinks.length; i++) {
-        const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[i];
-        if (config.quote.test(qlink.href)) {
-            bindReply(qlink, newButtons, locals);
+    qlinks = document.getElementsByClassName('qlink');
+    if (qlinks) {
+        for (let i: number = 0; i < qlinks.length; i++) {
+            const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[i];
+            if (config.quote.test(qlink.href)) {
+                bindReply(qlink, newButtons, locals);
+            }
         }
     }
 
     // inject the image button and store it to a list
+    imgs = document.getElementsByTagName('img');
     for (let i: number = 0; i < imgs.length; i++) {
         const img: HTMLImageElement = <HTMLImageElement> imgs[i];
-        buttons.push(bindImg(img));
+        buttons.push(bindImg(img, config));
     }
 }
 

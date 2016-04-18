@@ -1,4 +1,4 @@
-export function bindImg(img: HTMLImageElement): HTMLButtonElement {
+export function bindImg(img: HTMLImageElement, config: Config): HTMLButtonElement {
     // create the button element for image function
     let button: HTMLButtonElement = document.createElement('button');
     button.innerHTML = '放大';
@@ -10,8 +10,11 @@ export function bindImg(img: HTMLImageElement): HTMLButtonElement {
     // indicate whether the image is loaded
     let loaded = false;
 
+    // use for breaking line between the enlarged image and the reply
+    let br: HTMLBRElement = document.createElement('br');
+
     // save the size of the thumbnail for restoring later
-    const size = img.getAttribute('style');
+    const size: ThumbnailSize = config.getThumbnailSize(img);
     button.addEventListener('click', function(event: Event) {
         event.preventDefault();
 
@@ -19,7 +22,8 @@ export function bindImg(img: HTMLImageElement): HTMLButtonElement {
         if (button.innerHTML === '放大') {
             // common function
             function enlarge() {
-                img.setAttribute('style', 'width: 100%;');
+                config.enlargeThumbnail(img);
+                anchor.parentNode.insertBefore(br, button);
                 button.innerHTML = '縮小';
             }
             // if the image is not loaded before, load it
@@ -43,7 +47,8 @@ export function bindImg(img: HTMLImageElement): HTMLButtonElement {
             }
         } else if (button.innerHTML === '縮小') {
             // restore the image and button
-            img.setAttribute('style', size);
+            config.setThumbnailSize(img, size);
+            anchor.parentNode.removeChild(br);
             button.innerHTML = '放大';
         }
     });

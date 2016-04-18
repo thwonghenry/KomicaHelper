@@ -9,17 +9,18 @@ export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDo
     let div: HTMLElement = doc.createElement('div');
     newDoc.body.appendChild(div);
 
-    let newThreads: HTMLElement;
-    let oldThreads: HTMLElement;
+    let newElements: HTMLElement;
+    let oldElements: HTMLElement;
     let newChildren: HTMLCollection;
     let oldChildren: HTMLCollection;
 
+    const getElements: (doc: Document) => HTMLElement = isThread ? config.getThreads : config.getReplies;
     function initialize(htmlstring: string) {
         div.innerHTML = htmlstring;
-        newThreads = newDoc.getElementById('threads');
-        oldThreads = doc.getElementById('threads');
-        newChildren = newThreads.children;
-        oldChildren = oldThreads.children;
+        newElements = getElements(newDoc);
+        oldElements = getElements(doc);
+        newChildren = newElements.children;
+        oldChildren = oldElements.children;
     }
 
     if (isThread) {
@@ -38,7 +39,7 @@ export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDo
                     if (lastReply.id === newChildren[i].id) {
                         break;
                     } else {
-                        oldThreads.insertBefore(newChildren[i], oldChildren[oldChildren.length - 1 - j]);
+                        oldElements.insertBefore(newChildren[i], oldChildren[oldChildren.length - 1 - j]);
 
                         // if the reply contains quote, bind the hover event
                         const qlinks: NodeListOf<Element> = doc.querySelectorAll(`${newChildren[i].id} .qlink`);
@@ -67,7 +68,7 @@ export function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDo
 
                 // TODO: design a more efficient way to do the belows
                 // update the whole page
-                oldThreads.innerHTML = newThreads.innerHTML;
+                oldElements.innerHTML = newElements.innerHTML;
 
                 // add all the hover events to the quote
                 const qlinks: NodeListOf<Element> = document.getElementsByClassName('qlink');

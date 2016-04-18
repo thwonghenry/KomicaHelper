@@ -2,6 +2,7 @@
 ## Features
 - Update the threads and replies without refreshing
 - Display the quoted reply near the quote ID when hovered
+- Enlarge the thumbnail by clicking button
 - More to come..
 
 ## Supported boards:
@@ -10,11 +11,11 @@
 ## ___Partially___ supported boards that contain bugs
 - 漫畫, 綜合二, 三次實況, COSPLAY, 綜合學術, [http://study.mykomica.org/*](http://study.mykomica.org/*), 香港板, 笑話, 歐美動畫, New Age, 戀愛, 政治, 耳機, 手機, 髮型, 家政, 讀書筆記, 安價, 短片二, 彈幕, 音樂遊戲, 網頁遊戲, RPG Maker, Steam, CosmicBreak, Elsword, DNF, DOTA2, GW2, LOL, Minecraft, PAD, PSO2, SDGO, StarCraft, WOW, 白貓Project, 流亡黯道 PoE, 新瑪奇英雄傳, 艦隊收藏, 魔物獵人, 爐石戰記, 星空幻想, 東方, 龍騎士07, 反逆, 廢怯少女, 禁書, 遊戲王, 女王之刃, Digimon, IM@S, LoveLive!, Pokemon, Saki, Capcom, KOEI, 偶像, AKB48, 角色配對, 催淚, 正太, 3D, MMD, SOHO, 動物綜合, 網頁設計: javascript injected element reset after update
 - [http://2cat.org/~*](http://2cat.org/~*): applied twice
+- [http://homu.komica.org/*](http://homu.komica.org/*), [http://pink.komica.org/*](http://pink.komica.org/*): only image enlargement
 - 投票所: inner pages also loaded the script
 - 巫女: cannot update home page
 
 ## Not supported boards for now
-- [http://homu.komica.org/*](http://homu.komica.org/*), [http://pink.komica.org/*](http://pink.komica.org/*) (need full injection)
 - Figure/GK
 - 治癒系
 - 萌貳
