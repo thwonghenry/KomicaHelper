@@ -33,7 +33,7 @@ function getThumbnailSizeByStyle(img: HTMLImageElement): ThumbnailSize {
 
 function enlargeThumbnailByStyle(img: HTMLImageElement): void {
     'use strict';
-    img.setAttribute('style', 'maxwidth: 100%; float: none;');
+    img.setAttribute('style', 'max-width: 100%; float: none;');
 }
 
 function setThumbnailSizeByStyle(img: HTMLImageElement, size: ThumbnailSize): void {
@@ -51,7 +51,7 @@ function getThumbnailSizeByAttribute(img: HTMLImageElement): ThumbnailSize {
 
 function enlargeThumbnailByAttribute(img: HTMLImageElement): void {
     'use strict';
-    img.setAttribute('maxwidth', '100%');
+    img.setAttribute('max-width', '100%');
     img.removeAttribute('height');
     img.removeAttribute('width');
     img.removeAttribute('align');
