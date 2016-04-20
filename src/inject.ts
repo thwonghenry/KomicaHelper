@@ -9,7 +9,7 @@ export function injectThreadList(qlinks: NodeListOf<Element>, imgs: NodeListOf<E
     if (qlinks) {
         for (let i: number = 0; i < qlinks.length; i++) {
             const qlink: HTMLAnchorElement = qlinks[i] as HTMLAnchorElement;
-            if (config.quote.test(qlink.href)) {
+            if (config.quote && config.quote.test(qlink.href)) {
                 bindReplyToQuote(qlink, doc, menuButtons, floatClass);
             }
         }

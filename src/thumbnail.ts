@@ -18,6 +18,10 @@ export function bindThumbnail(img: HTMLImageElement, config: Config, doc: Docume
 
     // save the size of the thumbnail for restoring later
     const size: ThumbnailSize = config.getThumbnailSize(img);
+    if (!size) {
+        console.error('Error when getting the size of thumbnail');
+        return;
+    }
     button.addEventListener('click', function(event: Event): void {
         event.preventDefault();
 

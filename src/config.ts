@@ -105,7 +105,7 @@ const configs: Config[] = [
     }, {
         darkStyle: require('!css!sass!./styles/dark/homu.sass')[0][1],
         enlargeThumbnail: enlargeThumbnailByAttribute,
-        getCreateNewElement: getElementById.bind(undefined, 'form', 0),
+        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
         getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
         getThreads: getElementByTagNameIndex.bind(undefined, 'body', 0),
         getThumbnailSize: getThumbnailSizeByAttribute,

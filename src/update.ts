@@ -17,19 +17,18 @@ function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDocument,
     // decide whether the document is a thread list or a reply list
     const getElements: (doc: Document) => HTMLElement = isThread ? config.getThreads : config.getReplies;
 
-    function initialize(newDoc: Document): void {
-        newElements = getElements(newDoc);
-        oldElements = getElements(doc);
-        newChildren = newElements.children;
-        oldChildren = oldElements.children;
-    }
-
     if (isThread) {
         return function(): Promise<number> {
             return ajax.start().then(
                 (newDoc: Document) => {
-                    // create a new doc to plug in the ajax result
-                    initialize(newDoc);
+                    newElements = getElements(newDoc);
+                    oldElements = getElements(doc);
+                    if (!newElements || !oldElements) {
+                        console.error('Error when getting the document of ajax result');
+                        return;
+                    }
+                    newChildren = newElements.children;
+                    oldChildren = oldElements.children;
                     const diff: number = newChildren.length - oldChildren.length;
 
                     // compare the difference on the number of threads reply
@@ -49,7 +48,7 @@ function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDocument,
                             }
                             for (let k: number = 0; k < qlinks.length; k++) {
                                 const qlink: HTMLAnchorElement = qlinks[k] as HTMLAnchorElement;
-                                if (config.quote.test(qlink.href)) {
+                                if (config.quote && config.quote.test(qlink.href)) {
                                     bindReplyToQuote(qlink, doc, floatsParent, floatClass);
                                 }
                             }
@@ -69,7 +68,14 @@ function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDocument,
             return ajax.start().then(
                 (newDoc: Document) => {
                     // create a new doc to plug in the ajax result
-                    initialize(newDoc);
+                    newElements = getElements(newDoc);
+                    oldElements = getElements(doc);
+                    if (!newElements || !oldElements) {
+                        console.error('Error when getting the document of ajax result');
+                        return;
+                    }
+                    newChildren = newElements.children;
+                    oldChildren = oldElements.children;
 
                     // update the whole page
                     oldElements.innerHTML = newElements.innerHTML;
@@ -78,7 +84,7 @@ function createUpdateCallback(url: string, isThread: boolean, doc: HTMLDocument,
                     const qlinks: NodeListOf<Element> = doc.getElementsByClassName('qlink');
                     for (let i: number = 0; i < qlinks.length; i++) {
                         const qlink: HTMLAnchorElement = qlinks[i] as HTMLAnchorElement;
-                        if (config.quote.test(qlink.href)) {
+                        if (config.quote && config.quote.test(qlink.href)) {
                             bindReplyToQuote(qlink, doc, floatsParent, floatClass);
                         }
                     }

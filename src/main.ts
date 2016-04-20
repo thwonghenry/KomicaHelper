@@ -57,9 +57,11 @@ function initialize(): void {
 
     // bind the post button event
     const createNewForm: HTMLElement = config.getCreateNewElement(document);
-    createNewForm.className += `${locals.createNew} ${locals.hidden}`;
-    const createButton: HTMLAnchorElement = document.getElementById(locals.create) as HTMLAnchorElement;
-    bindPostButton(locals.hidden, createButton, createNewForm);
+    if (createNewForm) {
+        createNewForm.className += `${locals.createNew} ${locals.hidden}`;
+        const createButton: HTMLAnchorElement = document.getElementById(locals.create) as HTMLAnchorElement;
+        bindPostButton(locals.hidden, createButton, createNewForm);
+    }
 
     // bind the night mode toggle event
     const nightButton: HTMLAnchorElement = document.getElementById(locals.night) as HTMLAnchorElement;
