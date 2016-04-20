@@ -1,5 +1,3 @@
-import {Promise} from 'es6-promise';
-
 class Ajax {
     private method: string;
     private url: string;
