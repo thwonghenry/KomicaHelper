@@ -21,6 +21,10 @@ module.exports = {
 
     // Add the loader for .ts files.
     module: {
+        preLoaders: [{
+            test: /\.ts$/,
+            loader: "tslint"
+        }],
         loaders: [{
             test: /\.ts$/,
             loader: 'ts'

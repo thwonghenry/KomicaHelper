@@ -1,138 +1,82 @@
-import {createUpdateCallback} from './update'
-import {bindReply} from './replyBinder'
-import {getConfigByURL} from './config'
-import {bindImg} from './imgBinder'
+import {bindUpdateButton} from './update';
+import {getConfigByURL} from './config';
+import {bindThumbnailControlButtons} from './thumbnail';
+import {injectThreadList} from './inject';
+import {bindPostButton} from './postform';
+import {bindNightModeButton} from './nightmode';
 
 // a function that add html as DOM node to element
 function addHTMLToElement(tag: string, html: string, element: HTMLElement): void {
-    let node = document.createElement(tag);
+    'use strict';
+    let node: HTMLElement = document.createElement(tag);
     node.innerHTML = html;
     element.appendChild(node);
 }
 
-// initialize ajax updator
-const url: string = window.location.href;
+function initialize(): void {
+    'use strict';
+    const url: string = window.location.href;
+    const isThread: boolean = /\?res=/.test(url);
 
-// import assests
-const style = require('!css!sass!./main.sass');
-const css: string = style[0][1];
-const locals: LocalStyle = style.locals;
+    // import assests
+    const style: any = require('!css!sass!./styles/main.sass');
+    const css: string = style[0][1];
+    const locals: LocalStyle = style.locals;
 
-// render the html with local scoped id
-const html: string = require('!jade!./buttons.jade')(locals);
+    // render the menu buttons with local scoped id
+    locals.newString = isThread ? '新回覆' : '新主題';
+    const html: string = require('!jade!./templates/buttons.jade')(locals);
 
-const body: HTMLElement = document.body;
+    const body: HTMLElement = document.body;
 
-// add the style from main.sass
-addHTMLToElement('style', css, body);
-// add the update button
-addHTMLToElement('div', html, body);
+    // add the style from main.sass
+    addHTMLToElement('style', css, body);
+    // add the update button
+    addHTMLToElement('div', html, body);
 
-// the added buttons at the right
-const newButtons: HTMLElement = document.getElementById(locals.komicaHelper);
+    // the menu buttons at the right
+    const menuButtons: HTMLElement = document.getElementById(locals.komicaHelper);
 
-// get the first button
-let updateButton: HTMLAnchorElement = <HTMLAnchorElement> document.getElementById(locals.update);
-let expandButton: HTMLAnchorElement = <HTMLAnchorElement> document.getElementById(locals.expand);
-let contractButton: HTMLAnchorElement = <HTMLAnchorElement> document.getElementById(locals.contract);
+    // load the config by url
+    const config: Config = getConfigByURL(url);
 
-const config: Config = getConfigByURL(url);
+    // bind the click button event
+    const updateButton: HTMLAnchorElement = document.getElementById(locals.update) as HTMLAnchorElement;
+    bindUpdateButton(url, isThread, document, menuButtons, config, locals, updateButton);
 
-// create callback function
-const isThread: boolean = /\?res=/.test(url);
-const clickCallback: () => Promise<number> = createUpdateCallback(url, isThread, document, newButtons, config, locals);
+    // inject neccessary element to the page
 
-// store the id of setTimeout in the click event below for later clearTimeout
-let timeout: number = 0;
+    const qlinks: NodeListOf<Element> = document.getElementsByClassName('qlink');
+    const imgs: NodeListOf<Element> = config.getThumbnails(document);
+    injectThreadList(qlinks, imgs, config, menuButtons, locals.floatingReply, document);
 
-let buttons: HTMLButtonElement[] = [];
-let imgs: NodeListOf<Element>;
-let qlinks: NodeListOf<Element>;
-// common function to insert elements to the thread
-function injectThreadList () {
-    // bind all the hover events on quote element
-    qlinks = document.getElementsByClassName('qlink');
-    if (qlinks) {
-        for (let i: number = 0; i < qlinks.length; i++) {
-            const qlink: HTMLAnchorElement = <HTMLAnchorElement> qlinks[i];
-            if (config.quote.test(qlink.href)) {
-                bindReply(qlink, newButtons, locals);
-            }
-        }
-    }
+    // bind all the thumbnail related menu buttons events
+    const expandButton: HTMLAnchorElement = document.getElementById(locals.expand) as HTMLAnchorElement;
+    const contractButton: HTMLAnchorElement = document.getElementById(locals.contract) as HTMLAnchorElement;
+    bindThumbnailControlButtons(expandButton, contractButton);
 
-    // inject the image button and store it to a list
-    imgs = document.getElementsByTagName('img');
-    for (let i: number = 0; i < imgs.length; i++) {
-        const img: HTMLImageElement = <HTMLImageElement> imgs[i];
-        buttons.push(bindImg(img, config));
-    }
+    // bind the post button event
+    const createNewForm: HTMLElement = config.getCreateNewElement(document);
+    createNewForm.className += `${locals.createNew} ${locals.hidden}`;
+    const createButton: HTMLAnchorElement = document.getElementById(locals.create) as HTMLAnchorElement;
+    bindPostButton(locals.hidden, createButton, createNewForm);
+
+    // bind the night mode toggle event
+    const nightButton: HTMLAnchorElement = document.getElementById(locals.night) as HTMLAnchorElement;
+    bindNightModeButton(document, config.darkStyle, nightButton);
 }
 
-// add the click event listner to the update button
-updateButton.addEventListener('click', function(event: Event) {
-    event.preventDefault();
+window.addEventListener('load', initialize);
 
-    // only invoke update function if it is not updating
-    if (!(/disabledAnchor/.test(this.className))) {
-        this.className += ` ${locals.disabledAnchor}`;
-        this.innerHTML = '更新中..';
-
-        // remove any timeout that is started before
-        if (timeout) {
-            clearTimeout(timeout);
-        }
-        clickCallback().then((diff: number) => {
-
-            // remove the "disabledAnchor" class
-            let classes: string[] = this.className.split(' ');
-            classes.splice(classes.length - 1, 1);
-            this.className = classes.join(' ');
-
-            return new Promise<void>((resolve: () => void) => {
-                if (diff) {
-
-                    // if there are new thread, show the diff and reset after 5 seconds
-                    this.innerHTML = `更新(+${diff})`;
-                    timeout = setTimeout(resolve, 5000);
-                } else {
-
-                    // reset immediately
-                    resolve();
-                }
-            });
-        }).then(() => {
-            if (!isThread) {
-                injectThreadList();
-            }
-            // reset the button text
-            this.innerHTML = '更新';
-        });
-    } else {
-        console.log('waiting');
-    }
-});
-
-injectThreadList();
-
-expandButton.addEventListener('click', function (event: Event) {
-    event.preventDefault();
-    // click all the enlarge button
-    for (let i: number = 0; i < imgs.length; i++) {
-        const button: HTMLButtonElement = buttons[i];
-        if (button.innerHTML === '放大') {
-            button.click();
-        }
-    }
-});
-
-contractButton.addEventListener('click', function (event: Event) {
-    event.preventDefault();
-    // click all the contract button
-    for (let i: number = 0; i < imgs.length; i++) {
-        const button: HTMLButtonElement = buttons[i];
-        if (button.innerHTML === '縮小') {
-            button.click();
-        }
-    }
-});
+// let mutationObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[], observer: MutationObserver) => {
+//     mutations.forEach((mutation: MutationRecord) => {
+//         if (mutation.removedNodes.length > 0) {
+//             console.log('hi');
+//             observer.disconnect();
+//         }
+//     });
+// });
+//
+// mutationObserver.observe(anchor.parentNode.parentNode, {
+//     childList: true,
+// });

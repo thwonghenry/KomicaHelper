@@ -14,12 +14,15 @@
     "files": [
         "src/Ajax.ts",
         "src/config.ts",
-        "src/imgBinder.ts",
+        "src/inject.ts",
         "src/main.ts",
-        "src/replyBinder.ts",
+        "src/nightmode.ts",
+        "src/postform.ts",
+        "src/quote.ts",
+        "src/thumbnail.ts",
         "src/update.ts",
         "typings/es6-promise/es6-promise.d.ts",
-        "typings/komicaHelper.d.ts",
+        "typings/komica-helper.d.ts",
         "typings/require.d.ts"
     ],
     "atom": {

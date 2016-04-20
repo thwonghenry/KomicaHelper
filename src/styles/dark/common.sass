@@ -1,0 +1,10 @@
+$bgcolor: #111
+$colordiff: #111
+$fontcolor: silver
+$alink: #6699FF
+$ahover: #FF9966
+$avisit: #99FF66
+$title: #B36666
+
+@function get-color-by-level($level)
+    @return $bgcolor + ($level - 1) * $colordiff

@@ -1,31 +1,35 @@
 import {Promise} from 'es6-promise';
 
-class Ajax implements _Ajax {
-    method: string
-    url: string
-    xhr: XMLHttpRequest
+class Ajax {
+    private method: string;
+    private url: string;
+    private xhr: XMLHttpRequest;
+    private type: string;
 
-    constructor(method: string, url: string) {
+    constructor(method: string, url: string, type?: string) {
         this.method = method;
         this.url = url;
         this.xhr = new XMLHttpRequest();
+        this.type = type;
     }
 
-    start(): Promise<string> {
-        const onLoad = new Promise<string>((resolve: (response: string) => any, reject: () => any) => {
-            this.xhr.onreadystatechange = () => {
-                const state: number = this.xhr.readyState;
-                if (state === XMLHttpRequest.DONE) {
-                    if (this.xhr.status === 200 || this.xhr.status === 304) {
-                        resolve(this.xhr.responseText);
-                    } else {
-                        reject();
-                    }
+    public start(): Promise<any> {
+        const onLoad: Promise<any> = new Promise<string>((resolve: (response: any) => any, reject: () => any) => {
+            this.xhr.onload = () => {
+                if (this.xhr.status === 200) {
+                    resolve(this.xhr.response);
+                } else {
+                    console.log('reject', this.xhr.status);
+                    reject();
                 }
-            }
+            };
+            this.xhr.onerror = reject;
         });
         this.xhr.open(this.method, this.url, true);
-        this.xhr.send(null);
+        if (this.type) {
+            this.xhr.responseType = this.type;
+        }
+        this.xhr.send();
         return onLoad;
     }
 }

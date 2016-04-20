@@ -2,7 +2,9 @@
 ## Features
 - Update the threads and replies without refreshing
 - Display the quoted reply near the quote ID when hovered
-- Enlarge the thumbnail by clicking button
+- Enlarge the thumbnail by clicking the button nearby
+- Show the form of creating new thread / reply with toggle button
+- Night mode toggle
 - More to come..
 
 ## Supported boards:
@@ -38,12 +40,9 @@
 - Support update push posts
 - Better date representation
 - Hide post/thread/reply by keywords / click / ID
-- Cache images, view on hover
-- Float reply/new thread creator area
 - Highlight the same ID in a thread
 - In a reply, show which replies quoted it
 - Setting page
-- Night mode / custom style
 - Support Firefox, Microsoft Edge and User Script
 
 ## TODO bugfix / performance improvement:
@@ -51,9 +50,15 @@
 - Threads with page switch are not updated properly
 - Load the script again after update the page
 - Videos cannot load after update the page
+- Some element is being replaced by some extensions
 
 ## How to build the chrome extension
 1. Make sure you have installed node.js and Google Chrome
 2. `npm i`
 3. `npm run build`
 4. Load the `build` folder as unpackaged extension in Google Chrome
+
+## Contribution guideline:
+- Only TypeScript, SASS and jade
+- The code must pass tslint with the config in this project without warnings (also no compile errors, of course)
+- All the type definitions must go into typings/komica-helper.d.ts
