@@ -502,7 +502,12 @@
 	    var nightButton = document.getElementById(locals.night);
 	    nightmode_1.bindNightModeButton(document, config.darkStyle, nightButton);
 	}
-	window.addEventListener('load', initialize);
+	if (document.readyState !== 'loading') {
+	    initialize();
+	}
+	else {
+	    document.addEventListener('DOMContentLoaded', initialize);
+	}
 	// let mutationObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[], observer: MutationObserver) => {
 	//     mutations.forEach((mutation: MutationRecord) => {
 	//         if (mutation.removedNodes.length > 0) {

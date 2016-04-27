@@ -1,3 +1,7 @@
 import initializeThumbnails from '../src/thumbnail';
 
-window.addEventListener('load', initializeThumbnails.bind(undefined));
+if (document.readyState !== 'loading') {
+    initializeThumbnails();
+} else {
+    document.addEventListener('DOMContentLoaded', initializeThumbnails.bind(undefined));
+}

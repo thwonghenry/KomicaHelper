@@ -1,6 +1,6 @@
 const path = require('path');
 const entryPath = path.resolve(__dirname, 'entries');
-const buildPath = path.resolve(__dirname, 'build');
+const chromeBuildPath = path.resolve(__dirname, 'chrome');
 const scriptPath = path.resolve(__dirname, 'userscripts');
 const webpack = require('webpack');
 
@@ -15,7 +15,7 @@ module.exports = [{
     },
 
     output: {
-        path: buildPath,
+        path: chromeBuildPath,
         filename: 'main.js'
     },
 

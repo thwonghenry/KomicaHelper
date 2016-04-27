@@ -501,7 +501,12 @@
 
 	"use strict";
 	var quote_1 = __webpack_require__(6);
-	window.addEventListener('load', quote_1.default.bind(undefined));
+	if (document.readyState !== 'loading') {
+	    quote_1.default();
+	}
+	else {
+	    document.addEventListener('DOMContentLoaded', quote_1.default.bind(undefined));
+	}
 
 
 /***/ },

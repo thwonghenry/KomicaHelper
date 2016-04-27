@@ -1,3 +1,7 @@
 import initializeQLinks from '../src/quote';
 
-window.addEventListener('load', initializeQLinks.bind(undefined));
+if (document.readyState !== 'loading') {
+    initializeQLinks();
+} else {
+    document.addEventListener('DOMContentLoaded', initializeQLinks.bind(undefined));
+}

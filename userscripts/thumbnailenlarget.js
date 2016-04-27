@@ -449,7 +449,12 @@
 
 	"use strict";
 	var thumbnail_1 = __webpack_require__(7);
-	window.addEventListener('load', thumbnail_1.default.bind(undefined));
+	if (document.readyState !== 'loading') {
+	    thumbnail_1.default();
+	}
+	else {
+	    document.addEventListener('DOMContentLoaded', thumbnail_1.default.bind(undefined));
+	}
 
 
 /***/ }
