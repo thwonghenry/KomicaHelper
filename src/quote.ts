@@ -116,7 +116,7 @@ export default function initializeQuotes(config: Config = getConfigByURL(window.
     floatsParent: HTMLElement = document.body): void {
 
     'use strict';
-    const style: any = require('!css!sass!./styles/quote.sass');
+    const style: any = require('!css!sass!../styles/quote.sass');
     const css: string = style[0][1];
     const locals: LocalStyle = style.locals;
 

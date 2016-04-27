@@ -140,7 +140,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var index_1 = __webpack_require__(16);
+	var index_1 = __webpack_require__(17);
 	function getElementById(id, doc) {
 	    'use strict';
 	    return doc.getElementById(id);
@@ -449,7 +449,7 @@
 	var thumbnail_2 = __webpack_require__(4);
 	var quote_1 = __webpack_require__(14);
 	var replyupdate_1 = __webpack_require__(15);
-	var threadupdate_1 = __webpack_require__(17);
+	var threadupdate_1 = __webpack_require__(16);
 	// a function that add html as DOM node to element
 	function addHTMLToElement(tag, html, element) {
 	    'use strict';
@@ -526,7 +526,7 @@
 
 
 	// module
-	exports.push([module.i, "html{background-color:#111;color:silver}a:link{color:#69f}a:hover{color:#f96}a:visited{color:#9f6}hr{border-color:#555}h1{color:#b36666}.reply{background-color:#222}.reply_hl{background-color:#333}.Form_bg{color:maroon}#postform_main{background-color:#444}", ""]);
+	exports.push([module.i, "html {\n  background-color: #111;\n  color: silver; }\n\na:link {\n  color: #6699FF; }\n\na:hover {\n  color: #FF9966; }\n\na:visited {\n  color: #99FF66; }\n\nhr {\n  border-color: #555555; }\n\nh1 {\n  color: #B36666; }\n\n.reply {\n  background-color: #222222; }\n\n.reply_hl {\n  background-color: #333333; }\n\n.Form_bg {\n  color: #800000; }\n\n#postform_main {\n  background-color: #444444; }\n", ""]);
 
 	// exports
 
@@ -540,7 +540,7 @@
 
 
 	// module
-	exports.push([module.i, "body{background-color:#111;color:silver}a:link{color:#69f}a:hover{color:#f96}a:visited{color:#9f6}td[bgColor=\"#F0E0D6\"],td[bgColor=\"#FFFFEE\"]{background-color:#222}td[bgColor=\"#eeaa88\"]{color:maroon}td[bgColor=\"#DDDDEE\"]{background-color:#453877}td[bgColor=\"#EEDDDD\"]{background-color:#333}hr{border-color:#555}font[size=\"5\"]{color:#b36666}center form{background-color:#444}", ""]);
+	exports.push([module.i, "body {\n  background-color: #111;\n  color: silver; }\n\na:link {\n  color: #6699FF; }\n\na:hover {\n  color: #FF9966; }\n\na:visited {\n  color: #99FF66; }\n\ntd[bgColor=\"#F0E0D6\"], td[bgColor=\"#FFFFEE\"] {\n  background-color: #222222; }\n\ntd[bgColor=\"#eeaa88\"] {\n  color: #800000; }\n\ntd[bgColor=\"#DDDDEE\"] {\n  background-color: #453877; }\n\ntd[bgColor=\"#EEDDDD\"] {\n  background-color: #333333; }\n\nhr {\n  border-color: #555555; }\n\nfont[size=\"5\"] {\n  color: #B36666; }\n\ncenter form {\n  background-color: #444444; }\n", ""]);
 
 	// exports
 
@@ -554,20 +554,20 @@
 
 
 	// module
-	exports.push([module.i, "#_2eGUfheU43xPZ0YQ95zjtc{position:fixed;top:40%;right:0}#_2eGUfheU43xPZ0YQ95zjtc ._3EO74nCLLSW2JFmOtb8Vk3{pointer-events:none;cursor:default;color:gray}#_2eGUfheU43xPZ0YQ95zjtc ._2KvFhudmobGZ7LsfCJObhJ{color:BBB;text-decoration:none;border-bottom:2px solid silver;margin-bottom:6px}#_1B3e95UCgnr5h4Yz5MYMmL,#_1XTpEdNo2Eqvzxv94tQTSz,#_2oOS8NI8XGX9610LYKZePt,#_14vfGXL7114oxyLpxp5UoB,#u3PQhoWzmvTQ9Uy2fWpO_{text-decoration:none}._37_oXwTPzLfm7xIy15z_fR{padding-top:30px;position:fixed;width:100%;height:33%;overflow-y:scroll;bottom:0;background-color:#ffc}._1IQ-zN1OjjPN-FYkSJRD43{display:none}", ""]);
+	exports.push([module.i, "#_2RKIDvBZ-c75YVkbPE3upo {\n  position: fixed;\n  top: 40%;\n  right: 0px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._239Ry-eeiEXoNyd-zFwfxk {\n    pointer-events: none;\n    cursor: default;\n    color: gray; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2HQO3DDkC7XaudXT9Urjzk {\n    color: BBB;\n    text-decoration: none;\n    border-bottom: 2px solid silver;\n    margin-bottom: 6px; }\n\n#pHE21zpZzvEWryqHMcJf1, #_2jg1ulKVXlhO3Zu-TeZl0r, #Gll4U5FrCKtIYknK7gnl, #_3yiPF3pDE9AowCnbJAuLBR, #_1abk3Qff5m62ALvruCfPMy {\n  text-decoration: none; }\n\n.I6AE-xvSCc1fgKb0IIeZ1 {\n  padding-top: 30px;\n  position: fixed;\n  width: 100%;\n  height: 33%;\n  overflow-y: scroll;\n  bottom: 0px;\n  background-color: #FFFFCC; }\n\n.GaQAlOZMcLKMCu9NhOOLT {\n  display: none; }\n", ""]);
 
 	// exports
 	exports.locals = {
-		"komicaHelper": "_2eGUfheU43xPZ0YQ95zjtc",
-		"disabledAnchor": "_3EO74nCLLSW2JFmOtb8Vk3",
-		"threadButtons": "_2KvFhudmobGZ7LsfCJObhJ",
-		"update": "_14vfGXL7114oxyLpxp5UoB",
-		"expand": "u3PQhoWzmvTQ9Uy2fWpO_",
-		"contract": "_1XTpEdNo2Eqvzxv94tQTSz",
-		"create": "_1B3e95UCgnr5h4Yz5MYMmL",
-		"night": "_2oOS8NI8XGX9610LYKZePt",
-		"createNew": "_37_oXwTPzLfm7xIy15z_fR",
-		"hidden": "_1IQ-zN1OjjPN-FYkSJRD43"
+		"komicaHelper": "_2RKIDvBZ-c75YVkbPE3upo",
+		"disabledAnchor": "_239Ry-eeiEXoNyd-zFwfxk",
+		"threadButtons": "_2HQO3DDkC7XaudXT9Urjzk",
+		"update": "pHE21zpZzvEWryqHMcJf1",
+		"expand": "_2jg1ulKVXlhO3Zu-TeZl0r",
+		"contract": "Gll4U5FrCKtIYknK7gnl",
+		"create": "_3yiPF3pDE9AowCnbJAuLBR",
+		"night": "_1abk3Qff5m62ALvruCfPMy",
+		"createNew": "I6AE-xvSCc1fgKb0IIeZ1",
+		"hidden": "GaQAlOZMcLKMCu9NhOOLT"
 	};
 
 /***/ },
@@ -579,11 +579,11 @@
 
 
 	// module
-	exports.push([module.i, "._1Sft7RO8pKq7IlUlwvKnFx{position:fixed;border:2px solid #000;box-shadow:2px 2px 2px 2px rgba(0,0,0,.9)}", ""]);
+	exports.push([module.i, "._1BwsIm2EUmmPCSaK5mocad {\n  position: fixed;\n  border: 2px solid black;\n  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.9); }\n", ""]);
 
 	// exports
 	exports.locals = {
-		"floatingReply": "_1Sft7RO8pKq7IlUlwvKnFx"
+		"floatingReply": "_1BwsIm2EUmmPCSaK5mocad"
 	};
 
 /***/ },
@@ -1168,20 +1168,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var def = __webpack_require__(6)[0][1];
-	var homu = __webpack_require__(7)[0][1];
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = {
-	    default: def,
-	    homu: homu,
-	};
-
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
 	// update function after clicking update button
 	var Ajax_1 = __webpack_require__(1);
 	function createUpdateCallback(url, doc, floatsParent, config, floatClass) {
@@ -1260,6 +1246,20 @@
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = bindUpdateButton;
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var def = __webpack_require__(6)[0][1];
+	var homu = __webpack_require__(7)[0][1];
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = {
+	    default: def,
+	    homu: homu,
+	};
 
 
 /***/ },

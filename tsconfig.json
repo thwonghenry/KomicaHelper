@@ -9,7 +9,8 @@
     ],
     "filesGlob": [
         "src/**/*.ts",
-        "typings/**/*.ts"
+        "typings/**/*.ts",
+        "entries/**/*.ts"
     ],
     "compileOnSave": false,
     "buildOnSave": false,
