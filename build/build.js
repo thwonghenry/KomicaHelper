@@ -1,1 +1,1096 @@
-!function(e){function t(r){if(n[r])return n[r].exports;var o=n[r]={exports:{},id:r,loaded:!1};return e[r].call(o.exports,o,o.exports,t),o.loaded=!0,o.exports}var n={};return t.m=e,t.c=n,t.p="",t(0)}([function(e,t,n){e.exports=n(12)},function(e,t){e.exports=function(){var e=[];return e.toString=function(){for(var e=[],t=0;t<this.length;t++){var n=this[t];n[2]?e.push("@media "+n[2]+"{"+n[1]+"}"):e.push(n[1])}return e.join("")},e.i=function(t,n){"string"==typeof t&&(t=[[null,t,""]]);for(var r={},o=0;o<this.length;o++){var i=this[o][0];"number"==typeof i&&(r[i]=!0)}for(o=0;o<t.length;o++){var a=t[o];"number"==typeof a[0]&&r[a[0]]||(n&&!a[2]?a[2]=n:n&&(a[2]="("+a[2]+") and ("+n+")"),e.push(a))}},e}},function(e,t,n){t=e.exports=n(1)(),t.push([e.id,'body{background-color:#111;color:silver}a:link{color:#69f}a:hover{color:#f96}a:visited{color:#9f6}td[bgColor="#F0E0D6"],td[bgColor="#FFFFEE"]{background-color:#222}td[bgColor="#eeaa88"]{color:maroon}td[bgColor="#DDDDEE"]{background-color:#453877}td[bgColor="#EEDDDD"]{background-color:#333}hr{border-color:#555}font[size="5"]{color:#b36666}center form{background-color:#444}',""])},function(e,t){"use strict";var n=function(){function e(e,t,n){this.method=e,this.url=t,this.xhr=new XMLHttpRequest,this.type=n}return e.prototype.start=function(){var e=this,t=new Promise(function(t,n){e.xhr.onload=function(){200===e.xhr.status?t(e.xhr.response):(console.log("reject",e.xhr.status),n())},e.xhr.onerror=n});return this.xhr.open(this.method,this.url,!0),this.type&&(this.xhr.responseType=this.type),this.xhr.send(),t},e}();t.Ajax=n},function(e,t,n){"use strict";function r(e,t,n,r,a,l){if(e)for(var s=0;s<e.length;s++){var u=e[s];n.quote&&n.quote.test(u.href)&&o.bindReplyToQuote(u,l,r,a)}i.resetButtons();for(var s=0;s<t.length;s++){var c=t[s];i.bindThumbnail(c,n,l)}}var o=n(5),i=n(6);t.injectThreadList=r},function(e,t,n){"use strict";function r(e,t,n,r){function o(){i&&r.removeChild(i),i=void 0,e.removeAttribute("hovering"),e.removeEventListener("mouseout",o)}var i;if(t){if(i=t.cloneNode(!0),i.removeAttribute("id"),/threadpost/.test(i.className)){i.className+=" reply";var a=i.children[0],l=a.children,s=l[l.length-2];"span"===s.tagName.toLowerCase()&&a.removeChild(s)}i.className+=" "+n;var u=e.getBoundingClientRect();i.setAttribute("style","left: "+Math.round(u.left+u.width)+"px; top: "+Math.round(u.top)+"px;"),r.appendChild(i)}e.addEventListener("mouseout",o)}function o(e,t,n,o){void 0===n&&(n=t.body);var s=e.href.match(/.*#r([0-9]*).*/);if(s&&!(s.length<2)){var u=s[1];e.addEventListener("mouseover",function(){var e=this,s=t.getElementById("r"+u);if(!s){var c=this.href.match(/.res=([0-9]*).*/);if(!c||2!==c.length)return;var d=c[1];if(a[d]||l[d])a[d]&&(s=a[d].getElementById("r"+u));else{l[d]=!0,this.setAttribute("style","cursor: wait;");var h=new i.Ajax("get",this.href,"document");h.start().then(function(t){a[d]=t,delete l[d],e.removeAttribute("style"),e.getAttribute("hovering")&&r(e,t.getElementById("r"+u),o,n)})}}r(this,s,o,n),this.setAttribute("hovering","true")})}}var i=n(3),a={},l={};t.bindReplyToQuote=o},function(e,t){"use strict";function n(e,t,n){var r=n.createElement("button");r.innerHTML="放大";var o=e.parentNode;o.parentNode.insertBefore(r,o.nextSibling);var a=!1,l=n.createElement("br"),s=t.getThumbnailSize(e);return s?(r.addEventListener("click",function(n){function i(){t.enlargeThumbnail(e),o.parentNode.insertBefore(l,r),r.innerHTML="縮小"}function u(){a=!0,r.removeAttribute("disabled"),e.removeEventListener("load",u),i()}n.preventDefault(),"放大"===r.innerHTML?a?i():(r.innerHTML="載入中...",r.setAttribute("disabled",""),e.addEventListener("load",u),e.src=o.href):"縮小"===r.innerHTML&&(t.setThumbnailSize(e,s),o.parentNode.removeChild(l),r.innerHTML="放大")}),void i.push(r)):void console.error("Error when getting the size of thumbnail")}function r(){i=[]}function o(e,t){e.addEventListener("click",function(e){e.preventDefault();for(var t=0;t<i.length;t++){var n=i[t];"放大"===n.innerHTML&&n.click()}}),t.addEventListener("click",function(e){e.preventDefault();for(var t=0;t<i.length;t++){var n=i[t];"縮小"===n.innerHTML&&n.click()}})}var i=[];t.bindThumbnail=n,t.resetButtons=r,t.bindThumbnailControlButtons=o},function(e,t,n){t=e.exports=n(1)(),t.push([e.id,"html{background-color:#111;color:silver}a:link{color:#69f}a:hover{color:#f96}a:visited{color:#9f6}hr{border-color:#555}h1{color:#b36666}.reply{background-color:#222}.reply_hl{background-color:#333}.Form_bg{color:maroon}#postform_main{background-color:#444}",""])},function(e,t,n){t=e.exports=n(1)(),t.push([e.id,"#_2eGUfheU43xPZ0YQ95zjtc{position:fixed;top:40%;right:0}#_2eGUfheU43xPZ0YQ95zjtc ._3EO74nCLLSW2JFmOtb8Vk3{pointer-events:none;cursor:default;color:gray}#_2eGUfheU43xPZ0YQ95zjtc ._2KvFhudmobGZ7LsfCJObhJ{color:BBB;text-decoration:none;border-bottom:2px solid silver;margin-bottom:6px}#_2eGUfheU43xPZ0YQ95zjtc ._2aT6ysW3C7hMv4kjzCeeBy{position:fixed;border:2px solid #000;box-shadow:2px 2px 2px 2px rgba(0,0,0,.9)}#_1B3e95UCgnr5h4Yz5MYMmL,#_1XTpEdNo2Eqvzxv94tQTSz,#_2oOS8NI8XGX9610LYKZePt,#_14vfGXL7114oxyLpxp5UoB,#u3PQhoWzmvTQ9Uy2fWpO_{text-decoration:none}._37_oXwTPzLfm7xIy15z_fR{padding-top:30px;position:fixed;width:100%;height:33%;overflow-y:scroll;bottom:0;background-color:#ffc}._1IQ-zN1OjjPN-FYkSJRD43{display:none}",""]),t.locals={komicaHelper:"_2eGUfheU43xPZ0YQ95zjtc",disabledAnchor:"_3EO74nCLLSW2JFmOtb8Vk3",threadButtons:"_2KvFhudmobGZ7LsfCJObhJ",floatingReply:"_2aT6ysW3C7hMv4kjzCeeBy",update:"_14vfGXL7114oxyLpxp5UoB",expand:"u3PQhoWzmvTQ9Uy2fWpO_",contract:"_1XTpEdNo2Eqvzxv94tQTSz",create:"_1B3e95UCgnr5h4Yz5MYMmL",night:"_2oOS8NI8XGX9610LYKZePt",createNew:"_37_oXwTPzLfm7xIy15z_fR",hidden:"_1IQ-zN1OjjPN-FYkSJRD43"}},function(e,t,n){var r=n(10);e.exports=function(e){var t,n=[],o=e||{};return function(e,o,i,a,l,s,u){n.push("<div"+r.attr("id",a,!0,!0)+'><a href="#"'+r.attr("id",u,!0,!0)+'>更新</a><br><a href="#"'+r.attr("id",i,!0,!0)+'>放大所有圖片</a><br><a href="#"'+r.attr("id",e,!0,!0)+'>縮小所有圖片</a><br><a href="#"'+r.attr("id",o,!0,!0)+">"+r.escape(null==(t=l)?"":t)+'</a><br><a href="#"'+r.attr("id",s,!0,!0)+">夜間模式</a></div>")}.call(this,"contract"in o?o.contract:"undefined"!=typeof contract?contract:void 0,"create"in o?o.create:"undefined"!=typeof create?create:void 0,"expand"in o?o.expand:"undefined"!=typeof expand?expand:void 0,"komicaHelper"in o?o.komicaHelper:"undefined"!=typeof komicaHelper?komicaHelper:void 0,"newString"in o?o.newString:"undefined"!=typeof newString?newString:void 0,"night"in o?o.night:"undefined"!=typeof night?night:void 0,"update"in o?o.update:"undefined"!=typeof update?update:void 0),n.join("")}},function(e,t,n){"use strict";function r(e){return null!=e&&""!==e}function o(e){return(Array.isArray(e)?e.map(o):e&&"object"==typeof e?Object.keys(e).filter(function(t){return e[t]}):[e]).filter(r).join(" ")}function i(e){return l[e]||e}function a(e){var t=String(e).replace(s,i);return t===""+e?e:t}t.merge=function u(e,t){if(1===arguments.length){for(var n=e[0],o=1;o<e.length;o++)n=u(n,e[o]);return n}var i=e["class"],a=t["class"];(i||a)&&(i=i||[],a=a||[],Array.isArray(i)||(i=[i]),Array.isArray(a)||(a=[a]),e["class"]=i.concat(a).filter(r));for(var l in t)"class"!=l&&(e[l]=t[l]);return e},t.joinClasses=o,t.cls=function(e,n){for(var r=[],i=0;i<e.length;i++)n&&n[i]?r.push(t.escape(o([e[i]]))):r.push(o(e[i]));var a=o(r);return a.length?' class="'+a+'"':""},t.style=function(e){return e&&"object"==typeof e?Object.keys(e).map(function(t){return t+":"+e[t]}).join(";"):e},t.attr=function(e,n,r,o){return"style"===e&&(n=t.style(n)),"boolean"==typeof n||null==n?n?" "+(o?e:e+'="'+e+'"'):"":0==e.indexOf("data")&&"string"!=typeof n?(-1!==JSON.stringify(n).indexOf("&")&&console.warn("Since Jade 2.0.0, ampersands (`&`) in data attributes will be escaped to `&amp;`"),n&&"function"==typeof n.toISOString&&console.warn("Jade will eliminate the double quotes around dates in ISO form after 2.0.0")," "+e+"='"+JSON.stringify(n).replace(/'/g,"&apos;")+"'"):r?(n&&"function"==typeof n.toISOString&&console.warn("Jade will stringify dates in ISO form after 2.0.0")," "+e+'="'+t.escape(n)+'"'):(n&&"function"==typeof n.toISOString&&console.warn("Jade will stringify dates in ISO form after 2.0.0")," "+e+'="'+n+'"')},t.attrs=function(e,n){var r=[],i=Object.keys(e);if(i.length)for(var a=0;a<i.length;++a){var l=i[a],s=e[l];"class"==l?(s=o(s))&&r.push(" "+l+'="'+s+'"'):r.push(t.attr(l,s,!1,n))}return r.join("")};var l={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"},s=/[&<>"]/g;t.escape=a,t.rethrow=function c(e,t,r,o){if(!(e instanceof Error))throw e;if(!("undefined"==typeof window&&t||o))throw e.message+=" on line "+r,e;try{o=o||n(16).readFileSync(t,"utf8")}catch(i){c(e,null,r)}var a=3,l=o.split("\n"),s=Math.max(r-a,0),u=Math.min(l.length,r+a),a=l.slice(s,u).map(function(e,t){var n=t+s+1;return(n==r?"  > ":"    ")+n+"| "+e}).join("\n");throw e.path=t,e.message=(t||"Jade")+":"+r+"\n"+a+"\n\n"+e.message,e},t.DebugItem=function(e,t){this.lineno=e,this.filename=t}},function(e,t,n){"use strict";function r(e,t){return t.getElementById(e)}function o(e,t){return t.getElementsByTagName(e)}function i(e,t,n){var r=o(e,n);return r?r[t]:void 0}function a(e,t){return t.querySelectorAll(e)}function l(e){var t=e.style;return{height:parseInt(t.height,10),width:parseInt(t.width,10)}}function s(e){e.setAttribute("style","max-width: 95%; float: none;")}function u(e,t){e.setAttribute("style","width: "+t.width+"px; height: "+t.height+"px")}function c(e){return{height:e.height,width:e.width}}function d(e){e.setAttribute("style","max-width: 95%;"),e.removeAttribute("height"),e.removeAttribute("width"),e.removeAttribute("align")}function h(e,t){e.removeAttribute("style"),e.width=t.width,e.height=t.height,e.align="left"}function f(e,t){for(var n in t)e.hasOwnProperty(n)||(console.log("extending",n),e[n]=t[n])}function g(e){for(var t=0;t<p.length;t++){var n=p[t];if(n.match.test(e))return f(n,m),n}return console.log("using default config"),m}var m={darkStyle:n(7)[0][1],enlargeThumbnail:s,getCreateNewElement:r.bind(void 0,"postform_main"),getReplies:r.bind(void 0,"threads"),getThreads:r.bind(void 0,"threads"),getThumbnailSize:l,getThumbnails:a.bind(void 0,"#threads img"),match:/.*/,quote:/^((?!page_num).)*#r[0-9]*/,setThumbnailSize:u},p=[{match:/http:\/\/.*\.mykomica\.org.*/,quote:/.*#r[0-9]*/},{darkStyle:n(2)[0][1],enlargeThumbnail:d,getCreateNewElement:i.bind(void 0,"form",0),getReplies:i.bind(void 0,"form",1),getThreads:i.bind(void 0,"form",1),getThumbnailSize:c,getThumbnails:o.bind(void 0,"img"),match:/http:\/\/homu\.komica\.org.*/,quote:/.*#r[0-9]*/,setThumbnailSize:h},{darkStyle:n(2)[0][1],enlargeThumbnail:d,getCreateNewElement:i.bind(void 0,"form",0),getReplies:i.bind(void 0,"form",1),getThreads:i.bind(void 0,"body",0),getThumbnailSize:c,getThumbnails:o.bind(void 0,"img"),match:/http:\/\/pink\.komica\.org.*/,quote:/.*#r[0-9]*/,setThumbnailSize:h}];t.getConfigByURL=g},function(e,t,n){"use strict";function r(e,t,n){var r=document.createElement(e);r.innerHTML=t,n.appendChild(r)}function o(){var e=window.location.href,t=/\?res=/.test(e),o=n(8),d=o[0][1],h=o.locals;h.newString=t?"新回覆":"新主題";var f=n(9)(h),g=document.body;r("style",d,g),r("div",f,g);var m=document.getElementById(h.komicaHelper),p=a.getConfigByURL(e),v=document.getElementById(h.update);i.bindUpdateButton(e,t,document,m,p,h,v);var b=document.getElementsByClassName("qlink"),y=p.getThumbnails(document);s.injectThreadList(b,y,p,m,h.floatingReply,document);var x=document.getElementById(h.expand),T=document.getElementById(h.contract);l.bindThumbnailControlButtons(x,T);var w=p.getCreateNewElement(document);if(w){w.className+=h.createNew+" "+h.hidden;var E=document.getElementById(h.create);u.bindPostButton(h.hidden,E,w)}var L=document.getElementById(h.night);c.bindNightModeButton(document,p.darkStyle,L)}var i=n(15),a=n(11),l=n(6),s=n(4),u=n(14),c=n(13);window.addEventListener("load",o)},function(e,t){"use strict";function n(e,t,n){var o=e.createElement("style");o.innerHTML=t,r&&e.body.appendChild(o),n.addEventListener("click",function(t){t.preventDefault(),r?e.body.removeChild(o):e.body.appendChild(o),r=!r,localStorage&&localStorage.setItem("night",r?"true":"false")})}var r=localStorage&&"true"===localStorage.getItem("night");t.bindNightModeButton=n},function(e,t){"use strict";function n(e,t,n){t.addEventListener("click",function(t){if(t.preventDefault(),r){var o=n.className.split(" ");o.splice(o.length-1,1),n.className=o.join(" ")}else n.className+=" "+e;r=!r})}var r=!0;t.bindPostButton=n},function(e,t,n){"use strict";function r(e,t,n,r,o,l){void 0===r&&(r=n.body);var s,u,c,d,h=new i.Ajax("get",e,"document"),f=t?o.getThreads:o.getReplies;return t?function(){return h.start().then(function(e){if(s=f(e),u=f(n),!s||!u)return void console.error("Error when getting the document of ajax result");c=s.children,d=u.children;for(var t=c.length-d.length,i=d[d.length-2],h=c.length-2,g=0;h>=0&&i.id!==c[h].id;h--,g++){u.insertBefore(c[h],d[d.length-1-g]);var m=n.querySelectorAll(c[h].id+" .qlink");if(m)for(var p=0;p<m.length;p++){var v=m[p];o.quote&&o.quote.test(v.href)&&a.bindReplyToQuote(v,n,r,l)}}return new Promise(function(e){e(t)})},function(){return console.log("rejected")})}:function(){return h.start().then(function(e){if(s=f(e),u=f(n),!s||!u)return void console.error("Error when getting the document of ajax result");c=s.children,d=u.children,u.innerHTML=s.innerHTML;for(var t=n.getElementsByClassName("qlink"),i=0;i<t.length;i++){var h=t[i];o.quote&&o.quote.test(h.href)&&a.bindReplyToQuote(h,n,r,l)}return new Promise(function(e){e(0)})},function(){return console.log("rejected")})}}function o(e,t,n,o,i,a,s){var u=r(e,t,n,o,i,a.floatingReply),c=0;s.addEventListener("click",function(e){var r=this;e.preventDefault(),/disabledAnchor/.test(this.className)?console.log("waiting"):(this.className+=" "+a.disabledAnchor,this.innerHTML="更新中..",c&&clearTimeout(c),u().then(function(e){var t=r.className.split(" ");return t.splice(t.length-1,1),r.className=t.join(" "),new Promise(function(t){e?(r.innerHTML="更新(+"+e+")",c=setTimeout(t,5e3)):t()})}).then(function(){if(!t){var e=n.getElementsByClassName("qlink"),s=i.getThumbnails(n);l.injectThreadList(e,s,i,o,a.floatingReply,n)}r.innerHTML="更新"}))})}var i=n(3),a=n(5),l=n(4);t.bindUpdateButton=o},function(e,t){}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Ajax = (function () {
+	    function Ajax(method, url, type) {
+	        this.method = method;
+	        this.url = url;
+	        this.xhr = new XMLHttpRequest();
+	        this.type = type;
+	    }
+	    Ajax.prototype.start = function () {
+	        var _this = this;
+	        var onLoad = new Promise(function (resolve, reject) {
+	            _this.xhr.onload = function () {
+	                if (_this.xhr.status === 200) {
+	                    resolve(_this.xhr.response);
+	                }
+	                else {
+	                    console.log('reject', _this.xhr.status);
+	                    reject();
+	                }
+	            };
+	            _this.xhr.onerror = reject;
+	        });
+	        this.xhr.open(this.method, this.url, true);
+	        if (this.type) {
+	            this.xhr.responseType = this.type;
+	        }
+	        this.xhr.send();
+	        return onLoad;
+	    };
+	    return Ajax;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = Ajax;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var quote_1 = __webpack_require__(3);
+	var thumbnail_1 = __webpack_require__(4);
+	function injectThreadList(qlinks, imgs, config, menuButtons, floatClass, doc) {
+	    'use strict';
+	    // bind all the hover events on quote element
+	    if (qlinks) {
+	        for (var i = 0; i < qlinks.length; i++) {
+	            var qlink = qlinks[i];
+	            if (config.quote && config.quote.test(qlink.href)) {
+	                quote_1.bindReplyToQuote(qlink, doc, menuButtons, floatClass);
+	            }
+	        }
+	    }
+	    thumbnail_1.resetButtons();
+	    // inject the image button and store it to a list
+	    for (var i = 0; i < imgs.length; i++) {
+	        var img = imgs[i];
+	        thumbnail_1.bindThumbnail(img, config, doc);
+	    }
+	}
+	exports.injectThreadList = injectThreadList;
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var Ajax_1 = __webpack_require__(1);
+	// a function that stick the reply element near the quote
+	function stickReply(quote, reply, floatClass, floatsParent) {
+	    'use strict';
+	    var clone;
+	    if (reply) {
+	        // clone the reply element, prevent duplicate ids and add float class
+	        clone = reply.cloneNode(true);
+	        clone.removeAttribute('id');
+	        // if the reply is the post, add the reply class
+	        if (/threadpost/.test(clone.className)) {
+	            clone.className += ' reply';
+	            // remove the warn text
+	            var toplevel = clone.children[0];
+	            var children = toplevel.children;
+	            var warnSpan = children[children.length - 2];
+	            if (warnSpan.tagName.toLowerCase() === 'span') {
+	                toplevel.removeChild(warnSpan);
+	            }
+	        }
+	        clone.className += " " + floatClass;
+	        // position it near the reply element
+	        var rect = quote.getBoundingClientRect();
+	        clone.setAttribute('style', "left: " + Math.round(rect.left + rect.width) + "px; top: " + Math.round(rect.top) + "px;");
+	        floatsParent.appendChild(clone);
+	    }
+	    // bind the mouseout event that destroy the clone element
+	    // if clone is undefined, still need it to remove "hovering" attribute
+	    function removeElement() {
+	        if (clone) {
+	            floatsParent.removeChild(clone);
+	        }
+	        clone = undefined;
+	        quote.removeAttribute('hovering');
+	        quote.removeEventListener('mouseout', removeElement);
+	    }
+	    quote.addEventListener('mouseout', removeElement);
+	}
+	// the threads cache
+	var cache = {};
+	// the locks of ajax call for thread document
+	var getting = {};
+	function bindReplyToQuote(anchor, doc, floatsParent, floatClass) {
+	    'use strict';
+	    if (floatsParent === void 0) { floatsParent = doc.body; }
+	    // get all the quote element, a quote span may have multiple quote anchor points
+	    var matched = anchor.href.match(/.*#r([0-9]*).*/);
+	    if (!matched || matched.length < 2) {
+	        return;
+	    }
+	    var targetID = matched[1];
+	    anchor.addEventListener('mouseover', function () {
+	        var _this = this;
+	        var target = doc.getElementById("r" + targetID);
+	        if (!target) {
+	            // if the reply is hide inside the thread
+	            // get the thread ID
+	            var threadIDmatch = this.href.match(/.res=([0-9]*).*/);
+	            if (!threadIDmatch || threadIDmatch.length !== 2) {
+	                return;
+	            }
+	            var threadID_1 = threadIDmatch[1];
+	            // check if the thread is cached and the target is in the cache
+	            if (!cache[threadID_1] && !getting[threadID_1]) {
+	                // lock the ajax attempt
+	                getting[threadID_1] = true;
+	                // set the cursor pointing this quote to loading animation
+	                this.setAttribute('style', 'cursor: wait;');
+	                // start ajax loading the thread
+	                var ajax = new Ajax_1.default('get', this.href, 'document');
+	                ajax.start().then(function (newDoc) {
+	                    cache[threadID_1] = newDoc;
+	                    // unlock ajax attempt
+	                    delete getting[threadID_1];
+	                    // remove loading animation
+	                    _this.removeAttribute('style');
+	                    // if this quote is still hovered, stick the reply immediately
+	                    if (_this.getAttribute('hovering')) {
+	                        stickReply(_this, newDoc.getElementById('r' + targetID), floatClass, floatsParent);
+	                    }
+	                });
+	            }
+	            else if (cache[threadID_1]) {
+	                target = cache[threadID_1].getElementById("r" + targetID);
+	            }
+	        }
+	        // stick the quoted reply near the quote
+	        stickReply(this, target, floatClass, floatsParent);
+	        // set custom hovering attribute for after ajax loading
+	        this.setAttribute('hovering', 'true');
+	    });
+	}
+	exports.bindReplyToQuote = bindReplyToQuote;
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var buttons = [];
+	function bindThumbnail(img, config, doc) {
+	    'use strict';
+	    // create the button element for image function
+	    var button = doc.createElement('button');
+	    button.innerHTML = '放大';
+	    // insert the button alongside with the image
+	    var anchor = img.parentNode;
+	    anchor.parentNode.insertBefore(button, anchor.nextSibling);
+	    // use for breaking line between the enlarged image and the reply
+	    var br = doc.createElement('br');
+	    // save the size of the thumbnail for restoring later
+	    var size = config.getThumbnailSize(img);
+	    if (!size) {
+	        console.error('Error when getting the size of thumbnail');
+	        return;
+	    }
+	    button.addEventListener('click', function (event) {
+	        event.preventDefault();
+	        // enlarge the image
+	        if (button.innerHTML === '放大') {
+	            img.src = anchor.href;
+	            config.enlargeThumbnail(img);
+	            anchor.parentNode.insertBefore(br, button);
+	            button.innerHTML = '縮小';
+	        }
+	        else if (button.innerHTML === '縮小') {
+	            // restore the image and button
+	            config.setThumbnailSize(img, size);
+	            anchor.parentNode.removeChild(br);
+	            button.innerHTML = '放大';
+	        }
+	    });
+	    buttons.push(button);
+	}
+	exports.bindThumbnail = bindThumbnail;
+	function resetButtons() {
+	    'use strict';
+	    // reset the button list by setting empty array
+	    buttons = [];
+	}
+	exports.resetButtons = resetButtons;
+	function bindThumbnailControlButtons(expandButton, contractButton) {
+	    'use strict';
+	    // bind the button that expand all unexpanded thumbnails
+	    expandButton.addEventListener('click', function (event) {
+	        event.preventDefault();
+	        // click all the enlarge button
+	        for (var i = 0; i < buttons.length; i++) {
+	            var button = buttons[i];
+	            if (button.innerHTML === '放大') {
+	                button.click();
+	            }
+	        }
+	    });
+	    // bind the button that expand all expanded thumbnails
+	    contractButton.addEventListener('click', function (event) {
+	        event.preventDefault();
+	        // click all the contract button
+	        for (var i = 0; i < buttons.length; i++) {
+	            var button = buttons[i];
+	            if (button.innerHTML === '縮小') {
+	                button.click();
+	            }
+	        }
+	    });
+	}
+	exports.bindThumbnailControlButtons = bindThumbnailControlButtons;
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var update_1 = __webpack_require__(15);
+	var config_1 = __webpack_require__(11);
+	var thumbnail_1 = __webpack_require__(4);
+	var inject_1 = __webpack_require__(2);
+	var postform_1 = __webpack_require__(13);
+	var nightmode_1 = __webpack_require__(12);
+	// a function that add html as DOM node to element
+	function addHTMLToElement(tag, html, element) {
+	    'use strict';
+	    var node = document.createElement(tag);
+	    node.innerHTML = html;
+	    element.appendChild(node);
+	}
+	function initialize() {
+	    'use strict';
+	    var url = window.location.href;
+	    var isThread = /\?res=/.test(url);
+	    // import assests
+	    var style = __webpack_require__(8);
+	    var css = style[0][1];
+	    var locals = style.locals;
+	    // render the menu buttons with local scoped id
+	    locals.newString = isThread ? '新回覆' : '新主題';
+	    var html = __webpack_require__(9)(locals);
+	    var body = document.body;
+	    // add the style from main.sass
+	    addHTMLToElement('style', css, body);
+	    // add the update button
+	    addHTMLToElement('div', html, body);
+	    // the menu buttons at the right
+	    var menuButtons = document.getElementById(locals.komicaHelper);
+	    // load the config by url
+	    var config = config_1.getConfigByURL(url);
+	    // bind the click button event
+	    var updateButton = document.getElementById(locals.update);
+	    update_1.bindUpdateButton(url, isThread, document, menuButtons, config, locals, updateButton);
+	    // inject neccessary element to the page
+	    var qlinks = document.getElementsByClassName('qlink');
+	    var imgs = config.getThumbnails(document);
+	    inject_1.injectThreadList(qlinks, imgs, config, menuButtons, locals.floatingReply, document);
+	    // bind all the thumbnail related menu buttons events
+	    var expandButton = document.getElementById(locals.expand);
+	    var contractButton = document.getElementById(locals.contract);
+	    thumbnail_1.bindThumbnailControlButtons(expandButton, contractButton);
+	    // bind the post button event
+	    var createNewForm = config.getCreateNewElement(document);
+	    if (createNewForm) {
+	        createNewForm.className += locals.createNew + " " + locals.hidden;
+	        var createButton = document.getElementById(locals.create);
+	        postform_1.bindPostButton(locals.hidden, createButton, createNewForm);
+	    }
+	    // bind the night mode toggle event
+	    var nightButton = document.getElementById(locals.night);
+	    nightmode_1.bindNightModeButton(document, config.darkStyle, nightButton);
+	}
+	window.addEventListener('load', initialize);
+	// let mutationObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[], observer: MutationObserver) => {
+	//     mutations.forEach((mutation: MutationRecord) => {
+	//         if (mutation.removedNodes.length > 0) {
+	//             console.log('hi');
+	//             observer.disconnect();
+	//         }
+	//     });
+	// });
+	//
+	// mutationObserver.observe(anchor.parentNode.parentNode, {
+	//     childList: true,
+	// });
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(0)();
+	// imports
+
+
+	// module
+	exports.push([module.i, "html{background-color:#111;color:silver}a:link{color:#69f}a:hover{color:#f96}a:visited{color:#9f6}hr{border-color:#555}h1{color:#b36666}.reply{background-color:#222}.reply_hl{background-color:#333}.Form_bg{color:maroon}#postform_main{background-color:#444}", ""]);
+
+	// exports
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(0)();
+	// imports
+
+
+	// module
+	exports.push([module.i, "body{background-color:#111;color:silver}a:link{color:#69f}a:hover{color:#f96}a:visited{color:#9f6}td[bgColor=\"#F0E0D6\"],td[bgColor=\"#FFFFEE\"]{background-color:#222}td[bgColor=\"#eeaa88\"]{color:maroon}td[bgColor=\"#DDDDEE\"]{background-color:#453877}td[bgColor=\"#EEDDDD\"]{background-color:#333}hr{border-color:#555}font[size=\"5\"]{color:#b36666}center form{background-color:#444}", ""]);
+
+	// exports
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(0)();
+	// imports
+
+
+	// module
+	exports.push([module.i, "#_2eGUfheU43xPZ0YQ95zjtc{position:fixed;top:40%;right:0}#_2eGUfheU43xPZ0YQ95zjtc ._3EO74nCLLSW2JFmOtb8Vk3{pointer-events:none;cursor:default;color:gray}#_2eGUfheU43xPZ0YQ95zjtc ._2KvFhudmobGZ7LsfCJObhJ{color:BBB;text-decoration:none;border-bottom:2px solid silver;margin-bottom:6px}#_2eGUfheU43xPZ0YQ95zjtc ._2aT6ysW3C7hMv4kjzCeeBy{position:fixed;border:2px solid #000;box-shadow:2px 2px 2px 2px rgba(0,0,0,.9)}#_1B3e95UCgnr5h4Yz5MYMmL,#_1XTpEdNo2Eqvzxv94tQTSz,#_2oOS8NI8XGX9610LYKZePt,#_14vfGXL7114oxyLpxp5UoB,#u3PQhoWzmvTQ9Uy2fWpO_{text-decoration:none}._37_oXwTPzLfm7xIy15z_fR{padding-top:30px;position:fixed;width:100%;height:33%;overflow-y:scroll;bottom:0;background-color:#ffc}._1IQ-zN1OjjPN-FYkSJRD43{display:none}", ""]);
+
+	// exports
+	exports.locals = {
+		"komicaHelper": "_2eGUfheU43xPZ0YQ95zjtc",
+		"disabledAnchor": "_3EO74nCLLSW2JFmOtb8Vk3",
+		"threadButtons": "_2KvFhudmobGZ7LsfCJObhJ",
+		"floatingReply": "_2aT6ysW3C7hMv4kjzCeeBy",
+		"update": "_14vfGXL7114oxyLpxp5UoB",
+		"expand": "u3PQhoWzmvTQ9Uy2fWpO_",
+		"contract": "_1XTpEdNo2Eqvzxv94tQTSz",
+		"create": "_1B3e95UCgnr5h4Yz5MYMmL",
+		"night": "_2oOS8NI8XGX9610LYKZePt",
+		"createNew": "_37_oXwTPzLfm7xIy15z_fR",
+		"hidden": "_1IQ-zN1OjjPN-FYkSJRD43"
+	};
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var jade = __webpack_require__(10);
+
+	module.exports = function template(locals) {
+	var buf = [];
+	var jade_mixins = {};
+	var jade_interp;
+	;var locals_for_with = (locals || {});(function (contract, create, expand, komicaHelper, newString, night, update) {
+	buf.push("<div" + (jade.attr("id", komicaHelper, true, true)) + "><a href=\"#\"" + (jade.attr("id", update, true, true)) + ">更新</a><br><a href=\"#\"" + (jade.attr("id", expand, true, true)) + ">放大所有圖片</a><br><a href=\"#\"" + (jade.attr("id", contract, true, true)) + ">縮小所有圖片</a><br><a href=\"#\"" + (jade.attr("id", create, true, true)) + ">" + (jade.escape((jade_interp = newString) == null ? '' : jade_interp)) + "</a><br><a href=\"#\"" + (jade.attr("id", night, true, true)) + ">夜間模式</a></div>");}.call(this,"contract" in locals_for_with?locals_for_with.contract:typeof contract!=="undefined"?contract:undefined,"create" in locals_for_with?locals_for_with.create:typeof create!=="undefined"?create:undefined,"expand" in locals_for_with?locals_for_with.expand:typeof expand!=="undefined"?expand:undefined,"komicaHelper" in locals_for_with?locals_for_with.komicaHelper:typeof komicaHelper!=="undefined"?komicaHelper:undefined,"newString" in locals_for_with?locals_for_with.newString:typeof newString!=="undefined"?newString:undefined,"night" in locals_for_with?locals_for_with.night:typeof night!=="undefined"?night:undefined,"update" in locals_for_with?locals_for_with.update:typeof update!=="undefined"?update:undefined));;return buf.join("");
+	}
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	/**
+	 * Merge two attribute objects giving precedence
+	 * to values in object `b`. Classes are special-cased
+	 * allowing for arrays and merging/joining appropriately
+	 * resulting in a string.
+	 *
+	 * @param {Object} a
+	 * @param {Object} b
+	 * @return {Object} a
+	 * @api private
+	 */
+
+	exports.merge = function merge(a, b) {
+	  if (arguments.length === 1) {
+	    var attrs = a[0];
+	    for (var i = 1; i < a.length; i++) {
+	      attrs = merge(attrs, a[i]);
+	    }
+	    return attrs;
+	  }
+	  var ac = a['class'];
+	  var bc = b['class'];
+
+	  if (ac || bc) {
+	    ac = ac || [];
+	    bc = bc || [];
+	    if (!Array.isArray(ac)) ac = [ac];
+	    if (!Array.isArray(bc)) bc = [bc];
+	    a['class'] = ac.concat(bc).filter(nulls);
+	  }
+
+	  for (var key in b) {
+	    if (key != 'class') {
+	      a[key] = b[key];
+	    }
+	  }
+
+	  return a;
+	};
+
+	/**
+	 * Filter null `val`s.
+	 *
+	 * @param {*} val
+	 * @return {Boolean}
+	 * @api private
+	 */
+
+	function nulls(val) {
+	  return val != null && val !== '';
+	}
+
+	/**
+	 * join array as classes.
+	 *
+	 * @param {*} val
+	 * @return {String}
+	 */
+	exports.joinClasses = joinClasses;
+	function joinClasses(val) {
+	  return (Array.isArray(val) ? val.map(joinClasses) :
+	    (val && typeof val === 'object') ? Object.keys(val).filter(function (key) { return val[key]; }) :
+	    [val]).filter(nulls).join(' ');
+	}
+
+	/**
+	 * Render the given classes.
+	 *
+	 * @param {Array} classes
+	 * @param {Array.<Boolean>} escaped
+	 * @return {String}
+	 */
+	exports.cls = function cls(classes, escaped) {
+	  var buf = [];
+	  for (var i = 0; i < classes.length; i++) {
+	    if (escaped && escaped[i]) {
+	      buf.push(exports.escape(joinClasses([classes[i]])));
+	    } else {
+	      buf.push(joinClasses(classes[i]));
+	    }
+	  }
+	  var text = joinClasses(buf);
+	  if (text.length) {
+	    return ' class="' + text + '"';
+	  } else {
+	    return '';
+	  }
+	};
+
+
+	exports.style = function (val) {
+	  if (val && typeof val === 'object') {
+	    return Object.keys(val).map(function (style) {
+	      return style + ':' + val[style];
+	    }).join(';');
+	  } else {
+	    return val;
+	  }
+	};
+	/**
+	 * Render the given attribute.
+	 *
+	 * @param {String} key
+	 * @param {String} val
+	 * @param {Boolean} escaped
+	 * @param {Boolean} terse
+	 * @return {String}
+	 */
+	exports.attr = function attr(key, val, escaped, terse) {
+	  if (key === 'style') {
+	    val = exports.style(val);
+	  }
+	  if ('boolean' == typeof val || null == val) {
+	    if (val) {
+	      return ' ' + (terse ? key : key + '="' + key + '"');
+	    } else {
+	      return '';
+	    }
+	  } else if (0 == key.indexOf('data') && 'string' != typeof val) {
+	    if (JSON.stringify(val).indexOf('&') !== -1) {
+	      console.warn('Since Jade 2.0.0, ampersands (`&`) in data attributes ' +
+	                   'will be escaped to `&amp;`');
+	    };
+	    if (val && typeof val.toISOString === 'function') {
+	      console.warn('Jade will eliminate the double quotes around dates in ' +
+	                   'ISO form after 2.0.0');
+	    }
+	    return ' ' + key + "='" + JSON.stringify(val).replace(/'/g, '&apos;') + "'";
+	  } else if (escaped) {
+	    if (val && typeof val.toISOString === 'function') {
+	      console.warn('Jade will stringify dates in ISO form after 2.0.0');
+	    }
+	    return ' ' + key + '="' + exports.escape(val) + '"';
+	  } else {
+	    if (val && typeof val.toISOString === 'function') {
+	      console.warn('Jade will stringify dates in ISO form after 2.0.0');
+	    }
+	    return ' ' + key + '="' + val + '"';
+	  }
+	};
+
+	/**
+	 * Render the given attributes object.
+	 *
+	 * @param {Object} obj
+	 * @param {Object} escaped
+	 * @return {String}
+	 */
+	exports.attrs = function attrs(obj, terse){
+	  var buf = [];
+
+	  var keys = Object.keys(obj);
+
+	  if (keys.length) {
+	    for (var i = 0; i < keys.length; ++i) {
+	      var key = keys[i]
+	        , val = obj[key];
+
+	      if ('class' == key) {
+	        if (val = joinClasses(val)) {
+	          buf.push(' ' + key + '="' + val + '"');
+	        }
+	      } else {
+	        buf.push(exports.attr(key, val, false, terse));
+	      }
+	    }
+	  }
+
+	  return buf.join('');
+	};
+
+	/**
+	 * Escape the given string of `html`.
+	 *
+	 * @param {String} html
+	 * @return {String}
+	 * @api private
+	 */
+
+	var jade_encode_html_rules = {
+	  '&': '&amp;',
+	  '<': '&lt;',
+	  '>': '&gt;',
+	  '"': '&quot;'
+	};
+	var jade_match_html = /[&<>"]/g;
+
+	function jade_encode_char(c) {
+	  return jade_encode_html_rules[c] || c;
+	}
+
+	exports.escape = jade_escape;
+	function jade_escape(html){
+	  var result = String(html).replace(jade_match_html, jade_encode_char);
+	  if (result === '' + html) return html;
+	  else return result;
+	};
+
+	/**
+	 * Re-throw the given `err` in context to the
+	 * the jade in `filename` at the given `lineno`.
+	 *
+	 * @param {Error} err
+	 * @param {String} filename
+	 * @param {String} lineno
+	 * @api private
+	 */
+
+	exports.rethrow = function rethrow(err, filename, lineno, str){
+	  if (!(err instanceof Error)) throw err;
+	  if ((typeof window != 'undefined' || !filename) && !str) {
+	    err.message += ' on line ' + lineno;
+	    throw err;
+	  }
+	  try {
+	    str = str || __webpack_require__(16).readFileSync(filename, 'utf8')
+	  } catch (ex) {
+	    rethrow(err, null, lineno)
+	  }
+	  var context = 3
+	    , lines = str.split('\n')
+	    , start = Math.max(lineno - context, 0)
+	    , end = Math.min(lines.length, lineno + context);
+
+	  // Error context
+	  var context = lines.slice(start, end).map(function(line, i){
+	    var curr = i + start + 1;
+	    return (curr == lineno ? '  > ' : '    ')
+	      + curr
+	      + '| '
+	      + line;
+	  }).join('\n');
+
+	  // Alter exception message
+	  err.path = filename;
+	  err.message = (filename || 'Jade') + ':' + lineno
+	    + '\n' + context + '\n\n' + err.message;
+	  throw err;
+	};
+
+	exports.DebugItem = function DebugItem(lineno, filename) {
+	  this.lineno = lineno;
+	  this.filename = filename;
+	}
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var index_1 = __webpack_require__(14);
+	function getElementById(id, doc) {
+	    'use strict';
+	    return doc.getElementById(id);
+	}
+	function getElementsByTagName(tag, doc) {
+	    'use strict';
+	    return doc.getElementsByTagName(tag);
+	}
+	function getElementByTagNameIndex(tag, index, doc) {
+	    'use strict';
+	    var tags = getElementsByTagName(tag, doc);
+	    if (tags) {
+	        return tags[index];
+	    }
+	    return undefined;
+	}
+	function getElementsByQuery(query, doc) {
+	    'use strict';
+	    return doc.querySelectorAll(query);
+	}
+	function getThumbnailSizeByStyle(img) {
+	    'use strict';
+	    var style = img.style;
+	    return {
+	        height: parseInt(style.height, 10),
+	        width: parseInt(style.width, 10),
+	    };
+	}
+	function enlargeThumbnailByStyle(img) {
+	    'use strict';
+	    img.setAttribute('style', 'max-width: 95%; float: none;');
+	}
+	function setThumbnailSizeByStyle(img, size) {
+	    'use strict';
+	    img.setAttribute('style', "width: " + size.width + "px; height: " + size.height + "px");
+	}
+	function getThumbnailSizeByAttribute(img) {
+	    'use strict';
+	    return {
+	        height: img.height,
+	        width: img.width,
+	    };
+	}
+	function enlargeThumbnailByAttribute(img) {
+	    'use strict';
+	    img.setAttribute('style', 'max-width: 95%;');
+	    img.removeAttribute('height');
+	    img.removeAttribute('width');
+	    img.removeAttribute('align');
+	}
+	function setThumbnailSizeByAttribute(img, size) {
+	    'use strict';
+	    img.removeAttribute('style');
+	    img.width = size.width;
+	    img.height = size.height;
+	    img.align = 'left';
+	}
+	function extendConfig(oldConfig, newConfig) {
+	    'use strict';
+	    for (var key in newConfig) {
+	        if (!oldConfig.hasOwnProperty(key)) {
+	            console.log('extending', key);
+	            oldConfig[key] = newConfig[key];
+	        }
+	    }
+	}
+	var defaultConfig = {
+	    darkStyle: index_1.default.default,
+	    enlargeThumbnail: enlargeThumbnailByStyle,
+	    getCreateNewElement: getElementById.bind(undefined, 'postform_main'),
+	    getReplies: getElementById.bind(undefined, 'threads'),
+	    getThreads: getElementById.bind(undefined, 'threads'),
+	    getThumbnailSize: getThumbnailSizeByStyle,
+	    getThumbnails: getElementsByQuery.bind(undefined, '#threads img'),
+	    match: /.*/,
+	    quote: /^((?!page_num).)*#r[0-9]*/,
+	    setThumbnailSize: setThumbnailSizeByStyle,
+	};
+	var configs = [
+	    {
+	        match: /http:\/\/.*\.mykomica\.org.*/,
+	        quote: /.*#r[0-9]*/,
+	    }, {
+	        darkStyle: index_1.default.homu,
+	        enlargeThumbnail: enlargeThumbnailByAttribute,
+	        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
+	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
+	        getThreads: getElementByTagNameIndex.bind(undefined, 'form', 1),
+	        getThumbnailSize: getThumbnailSizeByAttribute,
+	        getThumbnails: getElementsByTagName.bind(undefined, 'img'),
+	        match: /http:\/\/homu\.komica\.org.*/,
+	        quote: /.*#r[0-9]*/,
+	        setThumbnailSize: setThumbnailSizeByAttribute,
+	    }, {
+	        darkStyle: index_1.default.homu,
+	        enlargeThumbnail: enlargeThumbnailByAttribute,
+	        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
+	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
+	        getThreads: getElementByTagNameIndex.bind(undefined, 'body', 0),
+	        getThumbnailSize: getThumbnailSizeByAttribute,
+	        getThumbnails: getElementsByTagName.bind(undefined, 'img'),
+	        match: /http:\/\/pink\.komica\.org.*/,
+	        quote: /.*#r[0-9]*/,
+	        setThumbnailSize: setThumbnailSizeByAttribute,
+	    },
+	];
+	function getConfigByURL(url) {
+	    'use strict';
+	    for (var i = 0; i < configs.length; i++) {
+	        var config = configs[i];
+	        if (config.match.test(url)) {
+	            extendConfig(config, defaultConfig);
+	            return config;
+	        }
+	    }
+	    console.log('using default config');
+	    return defaultConfig;
+	}
+	exports.getConfigByURL = getConfigByURL;
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	"use strict";
+	// get the night mode state from local storage
+	var isNight = localStorage && localStorage.getItem('night') === 'true';
+	function bindNightModeButton(doc, darkStyle, nightButton) {
+	    'use strict';
+	    // create the night mode style element
+	    var nightStyle = doc.createElement('style');
+	    nightStyle.innerHTML = darkStyle;
+	    // recover the night mode state
+	    if (isNight) {
+	        doc.body.appendChild(nightStyle);
+	    }
+	    nightButton.addEventListener('click', function (event) {
+	        event.preventDefault();
+	        if (isNight) {
+	            doc.body.removeChild(nightStyle);
+	        }
+	        else {
+	            doc.body.appendChild(nightStyle);
+	        }
+	        // toggle the night mode state
+	        isNight = !isNight;
+	        if (localStorage) {
+	            // update the state to the local storage
+	            localStorage.setItem('night', isNight ? 'true' : 'false');
+	        }
+	    });
+	}
+	exports.bindNightModeButton = bindNightModeButton;
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	"use strict";
+	// bind the new post button
+	var isHiding = true;
+	function bindPostButton(hiddenClass, createButton, createNewForm) {
+	    'use strict';
+	    createButton.addEventListener('click', function (event) {
+	        event.preventDefault();
+	        if (isHiding) {
+	            // remove the 'hidden' class, show the post form
+	            var classNames = createNewForm.className.split(' ');
+	            classNames.splice(classNames.length - 1, 1);
+	            createNewForm.className = classNames.join(' ');
+	        }
+	        else {
+	            // add the 'hidden' class to hide the form
+	            createNewForm.className += " " + hiddenClass;
+	        }
+	        // toggle the state
+	        isHiding = !isHiding;
+	    });
+	}
+	exports.bindPostButton = bindPostButton;
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var def = __webpack_require__(6)[0][1];
+	var homu = __webpack_require__(7)[0][1];
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = {
+	    default: def,
+	    homu: homu,
+	};
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	// update function after clicking update button
+	var Ajax_1 = __webpack_require__(1);
+	var quote_1 = __webpack_require__(3);
+	var inject_1 = __webpack_require__(2);
+	function createUpdateCallback(url, isThread, doc, floatsParent, config, floatClass) {
+	    'use strict';
+	    if (floatsParent === void 0) { floatsParent = doc.body; }
+	    // initialize ajax object
+	    var ajax = new Ajax_1.default('get', url, 'document');
+	    var newElements;
+	    var oldElements;
+	    var newChildren;
+	    var oldChildren;
+	    // decide whether the document is a thread list or a reply list
+	    var getElements = isThread ? config.getThreads : config.getReplies;
+	    if (isThread) {
+	        return function () {
+	            return ajax.start().then(function (newDoc) {
+	                newElements = getElements(newDoc);
+	                oldElements = getElements(doc);
+	                if (!newElements || !oldElements) {
+	                    console.error('Error when getting the document of ajax result');
+	                    return;
+	                }
+	                newChildren = newElements.children;
+	                oldChildren = oldElements.children;
+	                var diff = newChildren.length - oldChildren.length;
+	                // compare the difference on the number of threads reply
+	                var lastReply = oldChildren[oldChildren.length - 2];
+	                // insert the new replys from bottom of the new list to the bottom of the old list
+	                for (var i = newChildren.length - 2, j = 0; i >= 0; i--, j++) {
+	                    if (lastReply.id === newChildren[i].id) {
+	                        break;
+	                    }
+	                    else {
+	                        oldElements.insertBefore(newChildren[i], oldChildren[oldChildren.length - 1 - j]);
+	                        // if the reply contains quote, bind the hover event
+	                        var qlinks = doc.querySelectorAll(newChildren[i].id + " .qlink");
+	                        if (!qlinks) {
+	                            continue;
+	                        }
+	                        for (var k = 0; k < qlinks.length; k++) {
+	                            var qlink = qlinks[k];
+	                            if (config.quote && config.quote.test(qlink.href)) {
+	                                quote_1.bindReplyToQuote(qlink, doc, floatsParent, floatClass);
+	                            }
+	                        }
+	                    }
+	                }
+	                // return the diff value
+	                return new Promise(function (resolve) {
+	                    resolve(diff);
+	                });
+	            }, function () { return console.log('rejected'); });
+	        };
+	    }
+	    else {
+	        return function () {
+	            return ajax.start().then(function (newDoc) {
+	                // create a new doc to plug in the ajax result
+	                newElements = getElements(newDoc);
+	                oldElements = getElements(doc);
+	                if (!newElements || !oldElements) {
+	                    console.error('Error when getting the document of ajax result');
+	                    return;
+	                }
+	                newChildren = newElements.children;
+	                oldChildren = oldElements.children;
+	                // update the whole page
+	                oldElements.innerHTML = newElements.innerHTML;
+	                // add all the hover events to the quote
+	                var qlinks = doc.getElementsByClassName('qlink');
+	                for (var i = 0; i < qlinks.length; i++) {
+	                    var qlink = qlinks[i];
+	                    if (config.quote && config.quote.test(qlink.href)) {
+	                        quote_1.bindReplyToQuote(qlink, doc, floatsParent, floatClass);
+	                    }
+	                }
+	                // return the diff value
+	                return new Promise(function (resolve) {
+	                    resolve(0);
+	                });
+	            }, function () { return console.log('rejected'); });
+	        };
+	    }
+	}
+	function bindUpdateButton(url, isThread, doc, menuButtons, config, locals, updateButton) {
+	    'use strict';
+	    // create callback function
+	    var clickCallback = createUpdateCallback(url, isThread, doc, menuButtons, config, locals.floatingReply);
+	    // store the id of setTimeout in the click event below for later clearTimeout
+	    var timeout = 0;
+	    updateButton.addEventListener('click', function (event) {
+	        var _this = this;
+	        event.preventDefault();
+	        // only invoke update function if it is not updating
+	        if (!(/disabledAnchor/.test(this.className))) {
+	            this.className += " " + locals.disabledAnchor;
+	            this.innerHTML = '更新中..';
+	            // remove any timeout that is started before
+	            if (timeout) {
+	                clearTimeout(timeout);
+	            }
+	            clickCallback().then(function (diff) {
+	                // remove the "disabledAnchor" class
+	                var classes = _this.className.split(' ');
+	                classes.splice(classes.length - 1, 1);
+	                _this.className = classes.join(' ');
+	                return new Promise(function (resolve) {
+	                    if (diff) {
+	                        // if there are new thread, show the diff and reset after 5 seconds
+	                        _this.innerHTML = "\u66F4\u65B0(+" + diff + ")";
+	                        timeout = setTimeout(resolve, 5000);
+	                    }
+	                    else {
+	                        // reset immediately
+	                        resolve();
+	                    }
+	                });
+	            }).then(function () {
+	                if (!isThread) {
+	                    var qlinks = doc.getElementsByClassName('qlink');
+	                    var imgs = config.getThumbnails(doc);
+	                    inject_1.injectThreadList(qlinks, imgs, config, menuButtons, locals.floatingReply, doc);
+	                }
+	                // reset the button text
+	                _this.innerHTML = '更新';
+	            });
+	        }
+	        else {
+	            console.log('waiting');
+	        }
+	    });
+	}
+	exports.bindUpdateButton = bindUpdateButton;
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	/* (ignored) */
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(5);
+
+
+/***/ }
+/******/ ]);

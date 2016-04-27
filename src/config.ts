@@ -1,3 +1,5 @@
+import nightStyles from './styles/dark/index';
+
 function getElementById(id: string, doc: Document): HTMLElement {
     'use strict';
     return doc.getElementById(id);
@@ -76,7 +78,7 @@ function extendConfig(oldConfig: Config, newConfig: Config): void {
 }
 
 const defaultConfig: DefaultConfig = {
-    darkStyle: require('!css!sass!./styles/dark/default.sass')[0][1],
+    darkStyle: nightStyles.default,
     enlargeThumbnail: enlargeThumbnailByStyle,
     getCreateNewElement: getElementById.bind(undefined, 'postform_main'),
     getReplies: getElementById.bind(undefined, 'threads'),
@@ -93,7 +95,7 @@ const configs: Config[] = [
         match: /http:\/\/.*\.mykomica\.org.*/,
         quote: /.*#r[0-9]*/,
     }, {
-        darkStyle: require('!css!sass!./styles/dark/homu.sass')[0][1],
+        darkStyle: nightStyles.homu,
         enlargeThumbnail: enlargeThumbnailByAttribute,
         getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
         getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
@@ -104,7 +106,7 @@ const configs: Config[] = [
         quote: /.*#r[0-9]*/,
         setThumbnailSize: setThumbnailSizeByAttribute,
     }, {
-        darkStyle: require('!css!sass!./styles/dark/homu.sass')[0][1],
+        darkStyle: nightStyles.homu,
         enlargeThumbnail: enlargeThumbnailByAttribute,
         getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
         getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),

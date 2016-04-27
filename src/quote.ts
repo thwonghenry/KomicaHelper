@@ -1,4 +1,4 @@
-import {Ajax} from './Ajax';
+import Ajax from './Ajax';
 
 // a function that stick the reply element near the quote
 function stickReply(quote: HTMLElement, reply: HTMLElement, floatClass: string, floatsParent: HTMLElement): void {

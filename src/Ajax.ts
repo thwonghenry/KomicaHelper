@@ -1,4 +1,4 @@
-class Ajax {
+export default class Ajax {
     private method: string;
     private url: string;
     private xhr: XMLHttpRequest;
@@ -31,5 +31,3 @@ class Ajax {
         return onLoad;
     }
 }
-
-export { Ajax };

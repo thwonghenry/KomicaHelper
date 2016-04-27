@@ -45,11 +45,9 @@ module.exports = {
         plugins: ['transform-runtime']
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
+        new webpack.LoaderOptionsPlugin({
+            minimize: true,
+            debug: false
         }),
-        new webpack.optimize.OccurenceOrderPlugin()
     ],
 };

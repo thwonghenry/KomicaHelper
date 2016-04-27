@@ -10,9 +10,6 @@ export function bindThumbnail(img: HTMLImageElement, config: Config, doc: Docume
     let anchor: HTMLAnchorElement = img.parentNode as HTMLAnchorElement;
     anchor.parentNode.insertBefore(button, anchor.nextSibling);
 
-    // indicate whether the image is loaded
-    let loaded: boolean = false;
-
     // use for breaking line between the enlarged image and the reply
     let br: HTMLBRElement = doc.createElement('br');
 
@@ -22,36 +19,16 @@ export function bindThumbnail(img: HTMLImageElement, config: Config, doc: Docume
         console.error('Error when getting the size of thumbnail');
         return;
     }
+
     button.addEventListener('click', function(event: Event): void {
         event.preventDefault();
 
         // enlarge the image
         if (button.innerHTML === '放大') {
-            // common function
-            function enlarge(): void {
-                config.enlargeThumbnail(img);
-                anchor.parentNode.insertBefore(br, button);
-                button.innerHTML = '縮小';
-            }
-            // if the image is not loaded before, load it
-            if (!loaded) {
-                // enlarge the image only after loading the image;
-                function onLoad(): void {
-                    loaded = true;
-                    button.removeAttribute('disabled');
-                    img.removeEventListener('load', onLoad);
-                    enlarge();
-                }
-                // disable the button before loading
-                button.innerHTML = '載入中...';
-                button.setAttribute('disabled', '');
-                img.addEventListener('load', onLoad);
-
-                // load the image
-                img.src = anchor.href;
-            } else {
-                enlarge();
-            }
+            img.src = anchor.href;
+            config.enlargeThumbnail(img);
+            anchor.parentNode.insertBefore(br, button);
+            button.innerHTML = '縮小';
         } else if (button.innerHTML === '縮小') {
             // restore the image and button
             config.setThumbnailSize(img, size);

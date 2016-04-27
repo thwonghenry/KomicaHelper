@@ -1,5 +1,5 @@
 // update function after clicking update button
-import { Ajax } from './Ajax';
+import Ajax from './Ajax';
 import {bindReplyToQuote} from './quote';
 import {injectThreadList} from './inject';
 
