@@ -37,7 +37,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -140,134 +140,194 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var quote_1 = __webpack_require__(3);
-	var thumbnail_1 = __webpack_require__(4);
-	function injectThreadList(qlinks, imgs, config, menuButtons, floatClass, doc) {
+	var index_1 = __webpack_require__(16);
+	function getElementById(id, doc) {
 	    'use strict';
-	    // bind all the hover events on quote element
-	    if (qlinks) {
-	        for (var i = 0; i < qlinks.length; i++) {
-	            var qlink = qlinks[i];
-	            if (config.quote && config.quote.test(qlink.href)) {
-	                quote_1.bindReplyToQuote(qlink, doc, menuButtons, floatClass);
-	            }
+	    return doc.getElementById(id);
+	}
+	function getElementsByTagName(tag, doc) {
+	    'use strict';
+	    return doc.getElementsByTagName(tag);
+	}
+	function getElementByTagNameIndex(tag, index, doc) {
+	    'use strict';
+	    var tags = getElementsByTagName(tag, doc);
+	    if (tags) {
+	        return tags[index];
+	    }
+	    return undefined;
+	}
+	function getElementsByClassName(className, doc) {
+	    'use strict';
+	    return doc.getElementsByClassName(className);
+	}
+	function getElementsByQuery(query, doc) {
+	    'use strict';
+	    return doc.querySelectorAll(query);
+	}
+	function getThumbnailSizeByStyle(img) {
+	    'use strict';
+	    var style = img.style;
+	    return {
+	        height: parseInt(style.height, 10),
+	        width: parseInt(style.width, 10),
+	    };
+	}
+	function enlargeThumbnailByStyle(img) {
+	    'use strict';
+	    img.setAttribute('style', 'max-width: 95%; float: none;');
+	}
+	function setThumbnailSizeByStyle(img, size) {
+	    'use strict';
+	    img.setAttribute('style', "width: " + size.width + "px; height: " + size.height + "px");
+	}
+	function getThumbnailSizeByAttribute(img) {
+	    'use strict';
+	    return {
+	        height: img.height,
+	        width: img.width,
+	    };
+	}
+	function enlargeThumbnailByAttribute(img) {
+	    'use strict';
+	    img.setAttribute('style', 'max-width: 95%;');
+	    img.removeAttribute('height');
+	    img.removeAttribute('width');
+	    img.removeAttribute('align');
+	}
+	function setThumbnailSizeByAttribute(img, size) {
+	    'use strict';
+	    img.removeAttribute('style');
+	    img.width = size.width;
+	    img.height = size.height;
+	    img.align = 'left';
+	}
+	function extendConfig(oldConfig, newConfig) {
+	    'use strict';
+	    for (var key in newConfig) {
+	        if (!oldConfig.hasOwnProperty(key)) {
+	            console.log('extending', key);
+	            oldConfig[key] = newConfig[key];
 	        }
 	    }
-	    thumbnail_1.resetButtons();
-	    // inject the image button and store it to a list
-	    for (var i = 0; i < imgs.length; i++) {
-	        var img = imgs[i];
-	        thumbnail_1.bindThumbnail(img, config, doc);
-	    }
 	}
-	exports.injectThreadList = injectThreadList;
+	var defaultConfig = {
+	    darkStyle: index_1.default.default,
+	    enlargeThumbnail: enlargeThumbnailByStyle,
+	    getCreateNewElement: getElementById.bind(undefined, 'postform_main'),
+	    getQLinks: getElementsByClassName.bind(undefined, 'qlink'),
+	    getReplies: getElementById.bind(undefined, 'threads'),
+	    getThreads: getElementById.bind(undefined, 'threads'),
+	    getThumbnailSize: getThumbnailSizeByStyle,
+	    getThumbnails: getElementsByQuery.bind(undefined, '#threads img'),
+	    isThread: /\?res=/,
+	    match: /.*/,
+	    quote: /^((?!page_num).)*#r[0-9]*/,
+	    setThumbnailSize: setThumbnailSizeByStyle,
+	};
+	var configs = [
+	    {
+	        match: /http:\/\/.*\.mykomica\.org.*/,
+	        quote: /.*#r[0-9]*/,
+	    }, {
+	        darkStyle: index_1.default.homu,
+	        enlargeThumbnail: enlargeThumbnailByAttribute,
+	        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
+	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
+	        getThreads: getElementByTagNameIndex.bind(undefined, 'form', 1),
+	        getThumbnailSize: getThumbnailSizeByAttribute,
+	        getThumbnails: getElementsByTagName.bind(undefined, 'img'),
+	        match: /http:\/\/homu\.komica\.org.*/,
+	        quote: /.*#r[0-9]*/,
+	        setThumbnailSize: setThumbnailSizeByAttribute,
+	    }, {
+	        darkStyle: index_1.default.homu,
+	        enlargeThumbnail: enlargeThumbnailByAttribute,
+	        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
+	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
+	        getThreads: getElementByTagNameIndex.bind(undefined, 'body', 0),
+	        getThumbnailSize: getThumbnailSizeByAttribute,
+	        getThumbnails: getElementsByTagName.bind(undefined, 'img'),
+	        match: /http:\/\/pink\.komica\.org.*/,
+	        quote: /.*#r[0-9]*/,
+	        setThumbnailSize: setThumbnailSizeByAttribute,
+	    },
+	];
+	function getConfigByURL(url) {
+	    'use strict';
+	    for (var i = 0; i < configs.length; i++) {
+	        var config = configs[i];
+	        if (config.match.test(url)) {
+	            extendConfig(config, defaultConfig);
+	            return config;
+	        }
+	    }
+	    console.log('using default config');
+	    return defaultConfig;
+	}
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = getConfigByURL;
 
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	"use strict";
-	var Ajax_1 = __webpack_require__(1);
-	// a function that stick the reply element near the quote
-	function stickReply(quote, reply, floatClass, floatsParent) {
-	    'use strict';
-	    var clone;
-	    if (reply) {
-	        // clone the reply element, prevent duplicate ids and add float class
-	        clone = reply.cloneNode(true);
-	        clone.removeAttribute('id');
-	        // if the reply is the post, add the reply class
-	        if (/threadpost/.test(clone.className)) {
-	            clone.className += ' reply';
-	            // remove the warn text
-	            var toplevel = clone.children[0];
-	            var children = toplevel.children;
-	            var warnSpan = children[children.length - 2];
-	            if (warnSpan.tagName.toLowerCase() === 'span') {
-	                toplevel.removeChild(warnSpan);
-	            }
-	        }
-	        clone.className += " " + floatClass;
-	        // position it near the reply element
-	        var rect = quote.getBoundingClientRect();
-	        clone.setAttribute('style', "left: " + Math.round(rect.left + rect.width) + "px; top: " + Math.round(rect.top) + "px;");
-	        floatsParent.appendChild(clone);
+	var DOMWatcher = (function () {
+	    function DOMWatcher(parent) {
+	        this.parent = parent;
 	    }
-	    // bind the mouseout event that destroy the clone element
-	    // if clone is undefined, still need it to remove "hovering" attribute
-	    function removeElement() {
-	        if (clone) {
-	            floatsParent.removeChild(clone);
-	        }
-	        clone = undefined;
-	        quote.removeAttribute('hovering');
-	        quote.removeEventListener('mouseout', removeElement);
-	    }
-	    quote.addEventListener('mouseout', removeElement);
-	}
-	// the threads cache
-	var cache = {};
-	// the locks of ajax call for thread document
-	var getting = {};
-	function bindReplyToQuote(anchor, doc, floatsParent, floatClass) {
-	    'use strict';
-	    if (floatsParent === void 0) { floatsParent = doc.body; }
-	    // get all the quote element, a quote span may have multiple quote anchor points
-	    var matched = anchor.href.match(/.*#r([0-9]*).*/);
-	    if (!matched || matched.length < 2) {
-	        return;
-	    }
-	    var targetID = matched[1];
-	    anchor.addEventListener('mouseover', function () {
+	    DOMWatcher.prototype.onUpdate = function (onUpdateCallback) {
+	        this.onUpdateCallback = onUpdateCallback;
+	    };
+	    DOMWatcher.prototype.onAddNode = function (onAddNodeCallback) {
+	        this.onAddNodeCallback = onAddNodeCallback;
+	    };
+	    DOMWatcher.prototype.onRemoveNode = function (onRemoveNodeCallback) {
+	        this.onRemoveNodeCallback = onRemoveNodeCallback;
+	    };
+	    DOMWatcher.prototype.start = function () {
 	        var _this = this;
-	        var target = doc.getElementById("r" + targetID);
-	        if (!target) {
-	            // if the reply is hide inside the thread
-	            // get the thread ID
-	            var threadIDmatch = this.href.match(/.res=([0-9]*).*/);
-	            if (!threadIDmatch || threadIDmatch.length !== 2) {
+	        var mutationObserver = new MutationObserver(function (mutations, observer) {
+	            if (_this.onUpdateCallback) {
+	                _this.onUpdateCallback();
+	            }
+	            if (!_this.onAddNodeCallback && !_this.onRemoveNodeCallback) {
 	                return;
 	            }
-	            var threadID_1 = threadIDmatch[1];
-	            // check if the thread is cached and the target is in the cache
-	            if (!cache[threadID_1] && !getting[threadID_1]) {
-	                // lock the ajax attempt
-	                getting[threadID_1] = true;
-	                // set the cursor pointing this quote to loading animation
-	                this.setAttribute('style', 'cursor: wait;');
-	                // start ajax loading the thread
-	                var ajax = new Ajax_1.default('get', this.href, 'document');
-	                ajax.start().then(function (newDoc) {
-	                    cache[threadID_1] = newDoc;
-	                    // unlock ajax attempt
-	                    delete getting[threadID_1];
-	                    // remove loading animation
-	                    _this.removeAttribute('style');
-	                    // if this quote is still hovered, stick the reply immediately
-	                    if (_this.getAttribute('hovering')) {
-	                        stickReply(_this, newDoc.getElementById('r' + targetID), floatClass, floatsParent);
+	            mutations.forEach(function (mutation) {
+	                // for all added nodes, bind the thumbnail to a button if exists
+	                if (_this.onAddNodeCallback) {
+	                    for (var i = 0; i < mutation.addedNodes.length; i++) {
+	                        _this.onAddNodeCallback(mutation.addedNodes[i]);
 	                    }
-	                });
-	            }
-	            else if (cache[threadID_1]) {
-	                target = cache[threadID_1].getElementById("r" + targetID);
-	            }
-	        }
-	        // stick the quoted reply near the quote
-	        stickReply(this, target, floatClass, floatsParent);
-	        // set custom hovering attribute for after ajax loading
-	        this.setAttribute('hovering', 'true');
-	    });
-	}
-	exports.bindReplyToQuote = bindReplyToQuote;
+	                }
+	                if (_this.onRemoveNodeCallback) {
+	                    for (var i = 0; i < mutation.removedNodes.length; i++) {
+	                        _this.onRemoveNodeCallback(mutation.removedNodes[i]);
+	                    }
+	                }
+	            });
+	        });
+	        // attach a DOM watcher on the parent element
+	        mutationObserver.observe(this.parent, {
+	            childList: true,
+	        });
+	    };
+	    return DOMWatcher;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = DOMWatcher;
 
 
 /***/ },
 /* 4 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	var config_1 = __webpack_require__(2);
+	var DOMWatcher_1 = __webpack_require__(3);
 	var buttons = [];
 	function bindThumbnail(img, config, doc) {
 	    'use strict';
@@ -307,6 +367,7 @@
 	function resetButtons() {
 	    'use strict';
 	    // reset the button list by setting empty array
+	    console.log('reset');
 	    buttons = [];
 	}
 	exports.resetButtons = resetButtons;
@@ -336,6 +397,44 @@
 	    });
 	}
 	exports.bindThumbnailControlButtons = bindThumbnailControlButtons;
+	function initializeThumbnails(config, isThread) {
+	    'use strict';
+	    if (config === void 0) { config = config_1.default(window.location.href); }
+	    if (isThread === void 0) { isThread = config.isThread.test(window.location.href); }
+	    // bind all the thumbnails to a button
+	    var imgs = config.getThumbnails(document);
+	    for (var i = 0; i < imgs.length; i++) {
+	        bindThumbnail(imgs[i], config, document);
+	    }
+	    // attach a DOM watcher on the main thread or thread list
+	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
+	    var domWatcher = new DOMWatcher_1.default(parent);
+	    domWatcher.onAddNode(function (element) {
+	        var reply = element;
+	        var id = reply.id;
+	        var clear = false;
+	        // if the element is text node, continue;
+	        if (!reply.setAttribute) {
+	            return;
+	        }
+	        if (!id) {
+	            reply.setAttribute('id', 'komica_helper_temp');
+	            id = reply.id;
+	            clear = true;
+	        }
+	        var img = document.querySelector("#" + id + " img");
+	        if (img) {
+	            bindThumbnail(img, config, document);
+	        }
+	        if (clear) {
+	            reply.removeAttribute('id');
+	        }
+	    });
+	    domWatcher.onUpdate(isThread ? undefined : resetButtons);
+	    domWatcher.start();
+	}
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = initializeThumbnails;
 
 
 /***/ },
@@ -343,12 +442,14 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var update_1 = __webpack_require__(15);
-	var config_1 = __webpack_require__(11);
+	var config_1 = __webpack_require__(2);
 	var thumbnail_1 = __webpack_require__(4);
-	var inject_1 = __webpack_require__(2);
 	var postform_1 = __webpack_require__(13);
 	var nightmode_1 = __webpack_require__(12);
+	var thumbnail_2 = __webpack_require__(4);
+	var quote_1 = __webpack_require__(14);
+	var replyupdate_1 = __webpack_require__(15);
+	var threadupdate_1 = __webpack_require__(17);
 	// a function that add html as DOM node to element
 	function addHTMLToElement(tag, html, element) {
 	    'use strict';
@@ -359,30 +460,33 @@
 	function initialize() {
 	    'use strict';
 	    var url = window.location.href;
-	    var isThread = /\?res=/.test(url);
 	    // import assests
 	    var style = __webpack_require__(8);
 	    var css = style[0][1];
 	    var locals = style.locals;
 	    // render the menu buttons with local scoped id
-	    locals.newString = isThread ? '新回覆' : '新主題';
-	    var html = __webpack_require__(9)(locals);
 	    var body = document.body;
-	    // add the style from main.sass
-	    addHTMLToElement('style', css, body);
+	    // load the config by url
+	    var config = config_1.default(url);
+	    var isThread = config.isThread.test(url);
+	    locals.newString = isThread ? '新回覆' : '新主題';
+	    var html = __webpack_require__(10)(locals);
 	    // add the update button
 	    addHTMLToElement('div', html, body);
+	    // add the style from main.sass
+	    addHTMLToElement('style', css, body);
 	    // the menu buttons at the right
 	    var menuButtons = document.getElementById(locals.komicaHelper);
-	    // load the config by url
-	    var config = config_1.getConfigByURL(url);
-	    // bind the click button event
+	    // bind the update button event
 	    var updateButton = document.getElementById(locals.update);
-	    update_1.bindUpdateButton(url, isThread, document, menuButtons, config, locals, updateButton);
-	    // inject neccessary element to the page
-	    var qlinks = document.getElementsByClassName('qlink');
-	    var imgs = config.getThumbnails(document);
-	    inject_1.injectThreadList(qlinks, imgs, config, menuButtons, locals.floatingReply, document);
+	    if (isThread) {
+	        replyupdate_1.default(url, document, menuButtons, config, locals, updateButton);
+	    }
+	    else {
+	        threadupdate_1.default(url, document, menuButtons, config, locals, updateButton);
+	    }
+	    thumbnail_2.default(config, isThread);
+	    quote_1.default(config, isThread, menuButtons);
 	    // bind all the thumbnail related menu buttons events
 	    var expandButton = document.getElementById(locals.expand);
 	    var contractButton = document.getElementById(locals.contract);
@@ -450,14 +554,13 @@
 
 
 	// module
-	exports.push([module.i, "#_2eGUfheU43xPZ0YQ95zjtc{position:fixed;top:40%;right:0}#_2eGUfheU43xPZ0YQ95zjtc ._3EO74nCLLSW2JFmOtb8Vk3{pointer-events:none;cursor:default;color:gray}#_2eGUfheU43xPZ0YQ95zjtc ._2KvFhudmobGZ7LsfCJObhJ{color:BBB;text-decoration:none;border-bottom:2px solid silver;margin-bottom:6px}#_2eGUfheU43xPZ0YQ95zjtc ._2aT6ysW3C7hMv4kjzCeeBy{position:fixed;border:2px solid #000;box-shadow:2px 2px 2px 2px rgba(0,0,0,.9)}#_1B3e95UCgnr5h4Yz5MYMmL,#_1XTpEdNo2Eqvzxv94tQTSz,#_2oOS8NI8XGX9610LYKZePt,#_14vfGXL7114oxyLpxp5UoB,#u3PQhoWzmvTQ9Uy2fWpO_{text-decoration:none}._37_oXwTPzLfm7xIy15z_fR{padding-top:30px;position:fixed;width:100%;height:33%;overflow-y:scroll;bottom:0;background-color:#ffc}._1IQ-zN1OjjPN-FYkSJRD43{display:none}", ""]);
+	exports.push([module.i, "#_2eGUfheU43xPZ0YQ95zjtc{position:fixed;top:40%;right:0}#_2eGUfheU43xPZ0YQ95zjtc ._3EO74nCLLSW2JFmOtb8Vk3{pointer-events:none;cursor:default;color:gray}#_2eGUfheU43xPZ0YQ95zjtc ._2KvFhudmobGZ7LsfCJObhJ{color:BBB;text-decoration:none;border-bottom:2px solid silver;margin-bottom:6px}#_1B3e95UCgnr5h4Yz5MYMmL,#_1XTpEdNo2Eqvzxv94tQTSz,#_2oOS8NI8XGX9610LYKZePt,#_14vfGXL7114oxyLpxp5UoB,#u3PQhoWzmvTQ9Uy2fWpO_{text-decoration:none}._37_oXwTPzLfm7xIy15z_fR{padding-top:30px;position:fixed;width:100%;height:33%;overflow-y:scroll;bottom:0;background-color:#ffc}._1IQ-zN1OjjPN-FYkSJRD43{display:none}", ""]);
 
 	// exports
 	exports.locals = {
 		"komicaHelper": "_2eGUfheU43xPZ0YQ95zjtc",
 		"disabledAnchor": "_3EO74nCLLSW2JFmOtb8Vk3",
 		"threadButtons": "_2KvFhudmobGZ7LsfCJObhJ",
-		"floatingReply": "_2aT6ysW3C7hMv4kjzCeeBy",
 		"update": "_14vfGXL7114oxyLpxp5UoB",
 		"expand": "u3PQhoWzmvTQ9Uy2fWpO_",
 		"contract": "_1XTpEdNo2Eqvzxv94tQTSz",
@@ -471,7 +574,23 @@
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(10);
+	exports = module.exports = __webpack_require__(0)();
+	// imports
+
+
+	// module
+	exports.push([module.i, "._1Sft7RO8pKq7IlUlwvKnFx{position:fixed;border:2px solid #000;box-shadow:2px 2px 2px 2px rgba(0,0,0,.9)}", ""]);
+
+	// exports
+	exports.locals = {
+		"floatingReply": "_1Sft7RO8pKq7IlUlwvKnFx"
+	};
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var jade = __webpack_require__(11);
 
 	module.exports = function template(locals) {
 	var buf = [];
@@ -482,7 +601,7 @@
 	}
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -702,7 +821,7 @@
 	    throw err;
 	  }
 	  try {
-	    str = str || __webpack_require__(16).readFileSync(filename, 'utf8')
+	    str = str || __webpack_require__(18).readFileSync(filename, 'utf8')
 	  } catch (ex) {
 	    rethrow(err, null, lineno)
 	  }
@@ -731,133 +850,6 @@
 	  this.lineno = lineno;
 	  this.filename = filename;
 	}
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var index_1 = __webpack_require__(14);
-	function getElementById(id, doc) {
-	    'use strict';
-	    return doc.getElementById(id);
-	}
-	function getElementsByTagName(tag, doc) {
-	    'use strict';
-	    return doc.getElementsByTagName(tag);
-	}
-	function getElementByTagNameIndex(tag, index, doc) {
-	    'use strict';
-	    var tags = getElementsByTagName(tag, doc);
-	    if (tags) {
-	        return tags[index];
-	    }
-	    return undefined;
-	}
-	function getElementsByQuery(query, doc) {
-	    'use strict';
-	    return doc.querySelectorAll(query);
-	}
-	function getThumbnailSizeByStyle(img) {
-	    'use strict';
-	    var style = img.style;
-	    return {
-	        height: parseInt(style.height, 10),
-	        width: parseInt(style.width, 10),
-	    };
-	}
-	function enlargeThumbnailByStyle(img) {
-	    'use strict';
-	    img.setAttribute('style', 'max-width: 95%; float: none;');
-	}
-	function setThumbnailSizeByStyle(img, size) {
-	    'use strict';
-	    img.setAttribute('style', "width: " + size.width + "px; height: " + size.height + "px");
-	}
-	function getThumbnailSizeByAttribute(img) {
-	    'use strict';
-	    return {
-	        height: img.height,
-	        width: img.width,
-	    };
-	}
-	function enlargeThumbnailByAttribute(img) {
-	    'use strict';
-	    img.setAttribute('style', 'max-width: 95%;');
-	    img.removeAttribute('height');
-	    img.removeAttribute('width');
-	    img.removeAttribute('align');
-	}
-	function setThumbnailSizeByAttribute(img, size) {
-	    'use strict';
-	    img.removeAttribute('style');
-	    img.width = size.width;
-	    img.height = size.height;
-	    img.align = 'left';
-	}
-	function extendConfig(oldConfig, newConfig) {
-	    'use strict';
-	    for (var key in newConfig) {
-	        if (!oldConfig.hasOwnProperty(key)) {
-	            console.log('extending', key);
-	            oldConfig[key] = newConfig[key];
-	        }
-	    }
-	}
-	var defaultConfig = {
-	    darkStyle: index_1.default.default,
-	    enlargeThumbnail: enlargeThumbnailByStyle,
-	    getCreateNewElement: getElementById.bind(undefined, 'postform_main'),
-	    getReplies: getElementById.bind(undefined, 'threads'),
-	    getThreads: getElementById.bind(undefined, 'threads'),
-	    getThumbnailSize: getThumbnailSizeByStyle,
-	    getThumbnails: getElementsByQuery.bind(undefined, '#threads img'),
-	    match: /.*/,
-	    quote: /^((?!page_num).)*#r[0-9]*/,
-	    setThumbnailSize: setThumbnailSizeByStyle,
-	};
-	var configs = [
-	    {
-	        match: /http:\/\/.*\.mykomica\.org.*/,
-	        quote: /.*#r[0-9]*/,
-	    }, {
-	        darkStyle: index_1.default.homu,
-	        enlargeThumbnail: enlargeThumbnailByAttribute,
-	        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
-	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
-	        getThreads: getElementByTagNameIndex.bind(undefined, 'form', 1),
-	        getThumbnailSize: getThumbnailSizeByAttribute,
-	        getThumbnails: getElementsByTagName.bind(undefined, 'img'),
-	        match: /http:\/\/homu\.komica\.org.*/,
-	        quote: /.*#r[0-9]*/,
-	        setThumbnailSize: setThumbnailSizeByAttribute,
-	    }, {
-	        darkStyle: index_1.default.homu,
-	        enlargeThumbnail: enlargeThumbnailByAttribute,
-	        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
-	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
-	        getThreads: getElementByTagNameIndex.bind(undefined, 'body', 0),
-	        getThumbnailSize: getThumbnailSizeByAttribute,
-	        getThumbnails: getElementsByTagName.bind(undefined, 'img'),
-	        match: /http:\/\/pink\.komica\.org.*/,
-	        quote: /.*#r[0-9]*/,
-	        setThumbnailSize: setThumbnailSizeByAttribute,
-	    },
-	];
-	function getConfigByURL(url) {
-	    'use strict';
-	    for (var i = 0; i < configs.length; i++) {
-	        var config = configs[i];
-	        if (config.match.test(url)) {
-	            extendConfig(config, defaultConfig);
-	            return config;
-	        }
-	    }
-	    console.log('using default config');
-	    return defaultConfig;
-	}
-	exports.getConfigByURL = getConfigByURL;
 
 
 /***/ },
@@ -928,13 +920,153 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var def = __webpack_require__(6)[0][1];
-	var homu = __webpack_require__(7)[0][1];
+	var Ajax_1 = __webpack_require__(1);
+	var config_1 = __webpack_require__(2);
+	var DOMWatcher_1 = __webpack_require__(3);
+	// a function that stick the reply element near the quote
+	function stickReply(quote, reply, floatClass, floatsParent) {
+	    'use strict';
+	    var clone;
+	    if (reply) {
+	        // clone the reply element, prevent duplicate ids and add float class
+	        clone = reply.cloneNode(true);
+	        clone.removeAttribute('id');
+	        // if the reply is the post, add the reply class
+	        if (/threadpost/.test(clone.className)) {
+	            clone.className += ' reply';
+	            // remove the warn text
+	            var toplevel = clone.children[0];
+	            var children = toplevel.children;
+	            var warnSpan = children[children.length - 2];
+	            if (warnSpan.tagName.toLowerCase() === 'span') {
+	                toplevel.removeChild(warnSpan);
+	            }
+	        }
+	        clone.className += " " + floatClass;
+	        // position it near the reply element
+	        var rect = quote.getBoundingClientRect();
+	        clone.setAttribute('style', "left: " + Math.round(rect.left + rect.width) + "px; top: " + Math.round(rect.top) + "px;");
+	        floatsParent.appendChild(clone);
+	    }
+	    // bind the mouseout event that destroy the clone element
+	    // if clone is undefined, still need it to remove "hovering" attribute
+	    function removeElement() {
+	        if (clone) {
+	            floatsParent.removeChild(clone);
+	        }
+	        clone = undefined;
+	        quote.removeAttribute('hovering');
+	        quote.removeEventListener('mouseout', removeElement);
+	    }
+	    quote.addEventListener('mouseout', removeElement);
+	}
+	// the threads cache
+	var cache = {};
+	// the locks of ajax call for thread document
+	var getting = {};
+	function bindReplyToQuote(anchor, doc, floatsParent, floatClass) {
+	    'use strict';
+	    if (floatsParent === void 0) { floatsParent = doc.body; }
+	    // get all the quote element, a quote span may have multiple quote anchor points
+	    var matched = anchor.href.match(/.*#r([0-9]*).*/);
+	    if (!matched || matched.length < 2) {
+	        return;
+	    }
+	    var targetID = matched[1];
+	    anchor.addEventListener('mouseover', function () {
+	        var _this = this;
+	        var target = doc.getElementById("r" + targetID);
+	        if (!target) {
+	            // if the reply is hide inside the thread
+	            // get the thread ID
+	            var threadIDmatch = this.href.match(/.res=([0-9]*).*/);
+	            if (!threadIDmatch || threadIDmatch.length !== 2) {
+	                return;
+	            }
+	            var threadID_1 = threadIDmatch[1];
+	            // check if the thread is cached and the target is in the cache
+	            if (!cache[threadID_1] && !getting[threadID_1]) {
+	                // lock the ajax attempt
+	                getting[threadID_1] = true;
+	                // set the cursor pointing this quote to loading animation
+	                this.setAttribute('style', 'cursor: wait;');
+	                // start ajax loading the thread
+	                var ajax = new Ajax_1.default('get', this.href, 'document');
+	                ajax.start().then(function (newDoc) {
+	                    cache[threadID_1] = newDoc;
+	                    // unlock ajax attempt
+	                    delete getting[threadID_1];
+	                    // remove loading animation
+	                    _this.removeAttribute('style');
+	                    // if this quote is still hovered, stick the reply immediately
+	                    if (_this.getAttribute('hovering')) {
+	                        stickReply(_this, newDoc.getElementById('r' + targetID), floatClass, floatsParent);
+	                    }
+	                });
+	            }
+	            else if (cache[threadID_1]) {
+	                target = cache[threadID_1].getElementById("r" + targetID);
+	            }
+	        }
+	        // stick the quoted reply near the quote
+	        stickReply(this, target, floatClass, floatsParent);
+	        // set custom hovering attribute for after ajax loading
+	        this.setAttribute('hovering', 'true');
+	    });
+	}
+	exports.bindReplyToQuote = bindReplyToQuote;
+	function initializeQuotes(config, isThread, floatsParent) {
+	    'use strict';
+	    if (config === void 0) { config = config_1.default(window.location.href); }
+	    if (isThread === void 0) { isThread = config.isThread.test(window.location.href); }
+	    if (floatsParent === void 0) { floatsParent = document.body; }
+	    var style = __webpack_require__(9);
+	    var css = style[0][1];
+	    var locals = style.locals;
+	    // append the style
+	    var styleTag = document.createElement('style');
+	    styleTag.innerHTML = css;
+	    document.body.appendChild(styleTag);
+	    var qlinks = config.getQLinks(document);
+	    if (qlinks) {
+	        for (var i = 0; i < qlinks.length; i++) {
+	            var qlink = qlinks[i];
+	            if (config.quote && config.quote.test(qlink.href)) {
+	                bindReplyToQuote(qlink, document, floatsParent, locals.floatingReply);
+	            }
+	        }
+	    }
+	    // attach a DOM watcher on the main thread or thread list
+	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
+	    var domWatcher = new DOMWatcher_1.default(parent);
+	    domWatcher.onAddNode(function (element) {
+	        var reply = element;
+	        var id = reply.id;
+	        var clear = false;
+	        // if the element is text node, return
+	        if (!reply.setAttribute) {
+	            return;
+	        }
+	        if (!id) {
+	            reply.setAttribute('id', 'komica_helper_temp');
+	            id = reply.id;
+	            clear = true;
+	        }
+	        var newQlinks = document.querySelectorAll("#" + id + " .qlink");
+	        if (newQlinks) {
+	            for (var j = 0; j < newQlinks.length; j++) {
+	                bindReplyToQuote(newQlinks[j], document, floatsParent, locals.floatingReply);
+	            }
+	        }
+	        if (clear) {
+	            reply.removeAttribute('id');
+	        }
+	    });
+	    domWatcher.start();
+	}
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = {
-	    default: def,
-	    homu: homu,
-	};
+	exports.default = initializeQuotes;
+	;
 
 
 /***/ },
@@ -944,9 +1076,7 @@
 	"use strict";
 	// update function after clicking update button
 	var Ajax_1 = __webpack_require__(1);
-	var quote_1 = __webpack_require__(3);
-	var inject_1 = __webpack_require__(2);
-	function createUpdateCallback(url, isThread, doc, floatsParent, config, floatClass) {
+	function createUpdateCallback(url, doc, floatsParent, config, floatClass) {
 	    'use strict';
 	    if (floatsParent === void 0) { floatsParent = doc.body; }
 	    // initialize ajax object
@@ -955,83 +1085,41 @@
 	    var oldElements;
 	    var newChildren;
 	    var oldChildren;
-	    // decide whether the document is a thread list or a reply list
-	    var getElements = isThread ? config.getThreads : config.getReplies;
-	    if (isThread) {
-	        return function () {
-	            return ajax.start().then(function (newDoc) {
-	                newElements = getElements(newDoc);
-	                oldElements = getElements(doc);
-	                if (!newElements || !oldElements) {
-	                    console.error('Error when getting the document of ajax result');
-	                    return;
+	    // get the method of obtaining replies
+	    var getElements = config.getReplies;
+	    return function () {
+	        return ajax.start().then(function (newDoc) {
+	            newElements = getElements(newDoc);
+	            oldElements = getElements(doc);
+	            if (!newElements || !oldElements) {
+	                console.error('Error when getting the document of ajax result');
+	                return;
+	            }
+	            newChildren = newElements.children;
+	            oldChildren = oldElements.children;
+	            var diff = newChildren.length - oldChildren.length;
+	            // compare the difference on the number of threads reply
+	            var lastReply = oldChildren[oldChildren.length - 2];
+	            // insert the new replys from bottom of the new list to the bottom of the old list
+	            for (var i = newChildren.length - 2, j = 0; i >= 0; i--, j++) {
+	                if (lastReply.id === newChildren[i].id) {
+	                    break;
 	                }
-	                newChildren = newElements.children;
-	                oldChildren = oldElements.children;
-	                var diff = newChildren.length - oldChildren.length;
-	                // compare the difference on the number of threads reply
-	                var lastReply = oldChildren[oldChildren.length - 2];
-	                // insert the new replys from bottom of the new list to the bottom of the old list
-	                for (var i = newChildren.length - 2, j = 0; i >= 0; i--, j++) {
-	                    if (lastReply.id === newChildren[i].id) {
-	                        break;
-	                    }
-	                    else {
-	                        oldElements.insertBefore(newChildren[i], oldChildren[oldChildren.length - 1 - j]);
-	                        // if the reply contains quote, bind the hover event
-	                        var qlinks = doc.querySelectorAll(newChildren[i].id + " .qlink");
-	                        if (!qlinks) {
-	                            continue;
-	                        }
-	                        for (var k = 0; k < qlinks.length; k++) {
-	                            var qlink = qlinks[k];
-	                            if (config.quote && config.quote.test(qlink.href)) {
-	                                quote_1.bindReplyToQuote(qlink, doc, floatsParent, floatClass);
-	                            }
-	                        }
-	                    }
+	                else {
+	                    oldElements.insertBefore(newChildren[i], oldChildren[oldChildren.length - 1 - j]);
 	                }
-	                // return the diff value
-	                return new Promise(function (resolve) {
-	                    resolve(diff);
-	                });
-	            }, function () { return console.log('rejected'); });
-	        };
-	    }
-	    else {
-	        return function () {
-	            return ajax.start().then(function (newDoc) {
-	                // create a new doc to plug in the ajax result
-	                newElements = getElements(newDoc);
-	                oldElements = getElements(doc);
-	                if (!newElements || !oldElements) {
-	                    console.error('Error when getting the document of ajax result');
-	                    return;
-	                }
-	                newChildren = newElements.children;
-	                oldChildren = oldElements.children;
-	                // update the whole page
-	                oldElements.innerHTML = newElements.innerHTML;
-	                // add all the hover events to the quote
-	                var qlinks = doc.getElementsByClassName('qlink');
-	                for (var i = 0; i < qlinks.length; i++) {
-	                    var qlink = qlinks[i];
-	                    if (config.quote && config.quote.test(qlink.href)) {
-	                        quote_1.bindReplyToQuote(qlink, doc, floatsParent, floatClass);
-	                    }
-	                }
-	                // return the diff value
-	                return new Promise(function (resolve) {
-	                    resolve(0);
-	                });
-	            }, function () { return console.log('rejected'); });
-	        };
-	    }
+	            }
+	            // return the diff value
+	            return new Promise(function (resolve) {
+	                resolve(diff);
+	            });
+	        }, function () { return console.log('rejected'); });
+	    };
 	}
-	function bindUpdateButton(url, isThread, doc, menuButtons, config, locals, updateButton) {
+	function bindUpdateButton(url, doc, menuButtons, config, locals, updateButton) {
 	    'use strict';
 	    // create callback function
-	    var clickCallback = createUpdateCallback(url, isThread, doc, menuButtons, config, locals.floatingReply);
+	    var clickCallback = createUpdateCallback(url, doc, menuButtons, config, locals.floatingReply);
 	    // store the id of setTimeout in the click event below for later clearTimeout
 	    var timeout = 0;
 	    updateButton.addEventListener('click', function (event) {
@@ -1062,11 +1150,6 @@
 	                    }
 	                });
 	            }).then(function () {
-	                if (!isThread) {
-	                    var qlinks = doc.getElementsByClassName('qlink');
-	                    var imgs = config.getThumbnails(doc);
-	                    inject_1.injectThreadList(qlinks, imgs, config, menuButtons, locals.floatingReply, doc);
-	                }
 	                // reset the button text
 	                _this.innerHTML = '更新';
 	            });
@@ -1076,17 +1159,117 @@
 	        }
 	    });
 	}
-	exports.bindUpdateButton = bindUpdateButton;
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = bindUpdateButton;
 
 
 /***/ },
 /* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var def = __webpack_require__(6)[0][1];
+	var homu = __webpack_require__(7)[0][1];
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = {
+	    default: def,
+	    homu: homu,
+	};
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	// update function after clicking update button
+	var Ajax_1 = __webpack_require__(1);
+	function createUpdateCallback(url, doc, floatsParent, config, floatClass) {
+	    'use strict';
+	    if (floatsParent === void 0) { floatsParent = doc.body; }
+	    // initialize ajax object
+	    var ajax = new Ajax_1.default('get', url, 'document');
+	    var newElements;
+	    var oldElements;
+	    var newChildren;
+	    var oldChildren;
+	    // get the method of obtaining threads
+	    var getElements = config.getThreads;
+	    return function () {
+	        return ajax.start().then(function (newDoc) {
+	            // create a new doc to plug in the ajax result
+	            newElements = getElements(newDoc);
+	            oldElements = getElements(doc);
+	            if (!newElements || !oldElements) {
+	                console.error('Error when getting the document of ajax result');
+	                return;
+	            }
+	            newChildren = newElements.children;
+	            oldChildren = oldElements.children;
+	            // update the whole page
+	            oldElements.innerHTML = newElements.innerHTML;
+	            // return the diff value
+	            return new Promise(function (resolve) {
+	                resolve(0);
+	            });
+	        }, function () { return console.log('rejected'); });
+	    };
+	}
+	function bindUpdateButton(url, doc, menuButtons, config, locals, updateButton) {
+	    'use strict';
+	    // create callback function
+	    var clickCallback = createUpdateCallback(url, doc, menuButtons, config, locals.floatingReply);
+	    // store the id of setTimeout in the click event below for later clearTimeout
+	    var timeout = 0;
+	    updateButton.addEventListener('click', function (event) {
+	        var _this = this;
+	        event.preventDefault();
+	        // only invoke update function if it is not updating
+	        if (!(/disabledAnchor/.test(this.className))) {
+	            this.className += " " + locals.disabledAnchor;
+	            this.innerHTML = '更新中..';
+	            // remove any timeout that is started before
+	            if (timeout) {
+	                clearTimeout(timeout);
+	            }
+	            clickCallback().then(function (diff) {
+	                // remove the "disabledAnchor" class
+	                var classes = _this.className.split(' ');
+	                classes.splice(classes.length - 1, 1);
+	                _this.className = classes.join(' ');
+	                return new Promise(function (resolve) {
+	                    if (diff) {
+	                        // if there are new thread, show the diff and reset after 5 seconds
+	                        _this.innerHTML = "\u66F4\u65B0(+" + diff + ")";
+	                        timeout = setTimeout(resolve, 5000);
+	                    }
+	                    else {
+	                        // reset immediately
+	                        resolve();
+	                    }
+	                });
+	            }).then(function () {
+	                // reset the button text
+	                _this.innerHTML = '更新';
+	            });
+	        }
+	        else {
+	            console.log('waiting');
+	        }
+	    });
+	}
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = bindUpdateButton;
+
+
+/***/ },
+/* 18 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(5);

@@ -3,7 +3,7 @@
     "rules": {
         "no-constant-condition": true,
         "align": [
-            true,
+            false,
             "parameters",
             "arguments",
             "statements"

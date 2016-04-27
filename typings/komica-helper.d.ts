@@ -9,6 +9,8 @@ interface Config {
     setThumbnailSize?: (img: HTMLImageElement, size: ThumbnailSize) => void;
     getCreateNewElement?: (doc: Document) => HTMLElement;
     darkStyle?: string;
+    isThread?: RegExp;
+    getQLinks?: (doc: Document) => NodeListOf<Element>;
     [key: string]: any; // indicate the compile that the key is a string for looping
 }
 
@@ -23,6 +25,8 @@ interface DefaultConfig extends Config {
     setThumbnailSize: (img: HTMLImageElement, size: ThumbnailSize) => void;
     getCreateNewElement: (doc: Document) => HTMLElement;
     darkStyle: string;
+    isThread: RegExp;
+    getQLinks: (doc: Document) => NodeListOf<Element>;
 }
 
 interface LocalStyle {

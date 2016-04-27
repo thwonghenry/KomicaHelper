@@ -19,6 +19,11 @@ function getElementByTagNameIndex(tag: string, index: number, doc: Document): HT
     return undefined;
 }
 
+function getElementsByClassName(className: string, doc: Document): NodeListOf<Element> {
+    'use strict';
+    return doc.getElementsByClassName(className);
+}
+
 function getElementsByQuery(query: string, doc: Document): NodeListOf<Element> {
     'use strict';
     return doc.querySelectorAll(query);
@@ -81,10 +86,12 @@ const defaultConfig: DefaultConfig = {
     darkStyle: nightStyles.default,
     enlargeThumbnail: enlargeThumbnailByStyle,
     getCreateNewElement: getElementById.bind(undefined, 'postform_main'),
+    getQLinks: getElementsByClassName.bind(undefined, 'qlink'),
     getReplies: getElementById.bind(undefined, 'threads'),
     getThreads: getElementById.bind(undefined, 'threads'),
     getThumbnailSize: getThumbnailSizeByStyle,
     getThumbnails: getElementsByQuery.bind(undefined, '#threads img'),
+    isThread: /\?res=/,
     match: /.*/,
     quote: /^((?!page_num).)*#r[0-9]*/,
     setThumbnailSize: setThumbnailSizeByStyle,
@@ -119,7 +126,7 @@ const configs: Config[] = [
     },
 ];
 
-export function getConfigByURL(url: string): Config {
+export default function getConfigByURL(url: string): Config {
     'use strict';
     for (let i: number = 0; i < configs.length; i++) {
         let config: Config = configs[i];

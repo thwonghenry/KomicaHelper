@@ -1,4 +1,6 @@
 import Ajax from './Ajax';
+import getConfigByURL from './config';
+import DOMWatcher from './DOMWatcher';
 
 // a function that stick the reply element near the quote
 function stickReply(quote: HTMLElement, reply: HTMLElement, floatClass: string, floatsParent: HTMLElement): void {
@@ -25,7 +27,7 @@ function stickReply(quote: HTMLElement, reply: HTMLElement, floatClass: string, 
 
         // position it near the reply element
         const rect: ClientRect = quote.getBoundingClientRect();
-        clone.setAttribute('style', `left: ${Math.round(rect.left + rect.width) }px; top: ${Math.round(rect.top) }px;`);
+        clone.setAttribute('style', `left: ${Math.round(rect.left + rect.width)}px; top: ${Math.round(rect.top)}px;`);
         floatsParent.appendChild(clone);
     }
 
@@ -108,3 +110,57 @@ export function bindReplyToQuote(anchor: HTMLAnchorElement, doc: Document, float
         this.setAttribute('hovering', 'true');
     });
 }
+
+export default function initializeQuotes(config: Config = getConfigByURL(window.location.href),
+    isThread: boolean = config.isThread.test(window.location.href),
+    floatsParent: HTMLElement = document.body): void {
+
+    'use strict';
+    const style: any = require('!css!sass!./styles/quote.sass');
+    const css: string = style[0][1];
+    const locals: LocalStyle = style.locals;
+
+    // append the style
+    let styleTag: HTMLElement = document.createElement('style');
+    styleTag.innerHTML = css;
+    document.body.appendChild(styleTag);
+
+    const qlinks: NodeListOf<Element> = config.getQLinks(document);
+    if (qlinks) {
+        for (let i: number = 0; i < qlinks.length; i++) {
+            const qlink: HTMLAnchorElement = qlinks[i] as HTMLAnchorElement;
+            if (config.quote && config.quote.test(qlink.href)) {
+                bindReplyToQuote(qlink, document, floatsParent, locals.floatingReply);
+            }
+        }
+    }
+    // attach a DOM watcher on the main thread or thread list
+    const parent: HTMLElement = isThread ? config.getReplies(document) : config.getThreads(document);
+
+    const domWatcher: DOMWatcher = new DOMWatcher(parent);
+
+    domWatcher.onAddNode((element: Node) => {
+        let reply: HTMLElement = element as HTMLElement;
+        let id: string = reply.id;
+        let clear: boolean = false;
+        // if the element is text node, return
+        if (!reply.setAttribute) {
+            return;
+        }
+        if (!id) {
+            reply.setAttribute('id', 'komica_helper_temp');
+            id = reply.id;
+            clear = true;
+        }
+        let newQlinks: NodeListOf<Element> = document.querySelectorAll(`#${id} .qlink`);
+        if (newQlinks) {
+            for (let j: number = 0; j < newQlinks.length; j++) {
+                bindReplyToQuote(newQlinks[j] as HTMLAnchorElement, document, floatsParent, locals.floatingReply);
+            }
+        }
+        if (clear) {
+            reply.removeAttribute('id');
+        }
+    });
+    domWatcher.start();
+};

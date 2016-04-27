@@ -1,3 +1,6 @@
+import getConfigByURL from './config';
+import DOMWatcher from './DOMWatcher';
+
 let buttons: HTMLButtonElement[] = [];
 
 export function bindThumbnail(img: HTMLImageElement, config: Config, doc: Document): void {
@@ -42,6 +45,7 @@ export function bindThumbnail(img: HTMLImageElement, config: Config, doc: Docume
 export function resetButtons(): void {
     'use strict';
     // reset the button list by setting empty array
+    console.log('reset');
     buttons = [];
 }
 
@@ -71,4 +75,44 @@ export function bindThumbnailControlButtons(expandButton: HTMLAnchorElement, con
             }
         }
     });
+}
+
+export default function initializeThumbnails(config: Config = getConfigByURL(window.location.href),
+    isThread: boolean = config.isThread.test(window.location.href)): void {
+
+    'use strict';
+    // bind all the thumbnails to a button
+    const imgs: NodeListOf<Element> = config.getThumbnails(document);
+    for (let i: number = 0; i < imgs.length; i++) {
+        bindThumbnail(imgs[i] as HTMLImageElement, config, document);
+    }
+
+    // attach a DOM watcher on the main thread or thread list
+    const parent: HTMLElement = isThread ? config.getReplies(document) : config.getThreads(document);
+
+    const domWatcher: DOMWatcher = new DOMWatcher(parent);
+    domWatcher.onAddNode((element: Node) => {
+        let reply: HTMLElement = element as HTMLElement;
+        let id: string = reply.id;
+        let clear: boolean = false;
+        // if the element is text node, continue;
+        if (!reply.setAttribute) {
+            return;
+        }
+        if (!id) {
+            reply.setAttribute('id', 'komica_helper_temp');
+            id = reply.id;
+            clear = true;
+        }
+        let img: HTMLImageElement = document.querySelector(`#${id} img`) as HTMLImageElement;
+        if (img) {
+            bindThumbnail(img, config, document);
+        }
+        if (clear) {
+            reply.removeAttribute('id');
+        }
+    });
+
+    domWatcher.onUpdate(isThread ? undefined : resetButtons);
+    domWatcher.start();
 }

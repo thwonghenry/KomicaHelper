@@ -1,9 +1,11 @@
-import {bindUpdateButton} from './update';
-import {getConfigByURL} from './config';
+import getConfigByURL from './config';
 import {bindThumbnailControlButtons} from './thumbnail';
-import {injectThreadList} from './inject';
 import {bindPostButton} from './postform';
 import {bindNightModeButton} from './nightmode';
+import initializeThumbnails from './thumbnail';
+import initializeQuotes from './quote';
+import bindReplyUpdate from './replyupdate';
+import bindThreadUpdate from './threadupdate';
 
 // a function that add html as DOM node to element
 function addHTMLToElement(tag: string, html: string, element: HTMLElement): void {
@@ -16,7 +18,6 @@ function addHTMLToElement(tag: string, html: string, element: HTMLElement): void
 function initialize(): void {
     'use strict';
     const url: string = window.location.href;
-    const isThread: boolean = /\?res=/.test(url);
 
     // import assests
     const style: any = require('!css!sass!./styles/main.sass');
@@ -24,31 +25,33 @@ function initialize(): void {
     const locals: LocalStyle = style.locals;
 
     // render the menu buttons with local scoped id
-    locals.newString = isThread ? '新回覆' : '新主題';
-    const html: string = require('!jade!./templates/buttons.jade')(locals);
 
     const body: HTMLElement = document.body;
 
-    // add the style from main.sass
-    addHTMLToElement('style', css, body);
+    // load the config by url
+    const config: Config = getConfigByURL(url);
+    const isThread: boolean = config.isThread.test(url);
+    locals.newString = isThread ? '新回覆' : '新主題';
+    const html: string = require('!jade!./templates/buttons.jade')(locals);
     // add the update button
     addHTMLToElement('div', html, body);
+
+    // add the style from main.sass
+    addHTMLToElement('style', css, body);
 
     // the menu buttons at the right
     const menuButtons: HTMLElement = document.getElementById(locals.komicaHelper);
 
-    // load the config by url
-    const config: Config = getConfigByURL(url);
-
-    // bind the click button event
+    // bind the update button event
     const updateButton: HTMLAnchorElement = document.getElementById(locals.update) as HTMLAnchorElement;
-    bindUpdateButton(url, isThread, document, menuButtons, config, locals, updateButton);
+    if (isThread) {
+        bindReplyUpdate(url, document, menuButtons, config, locals, updateButton);
+    } else {
+        bindThreadUpdate(url, document, menuButtons, config, locals, updateButton);
+    }
 
-    // inject neccessary element to the page
-
-    const qlinks: NodeListOf<Element> = document.getElementsByClassName('qlink');
-    const imgs: NodeListOf<Element> = config.getThumbnails(document);
-    injectThreadList(qlinks, imgs, config, menuButtons, locals.floatingReply, document);
+    initializeThumbnails(config, isThread);
+    initializeQuotes(config, isThread, menuButtons);
 
     // bind all the thumbnail related menu buttons events
     const expandButton: HTMLAnchorElement = document.getElementById(locals.expand) as HTMLAnchorElement;
