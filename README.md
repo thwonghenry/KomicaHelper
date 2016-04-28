@@ -38,8 +38,8 @@
 
 - Chrome:
   
-  - Download the [extension](https://github.com/thwonghenry/KomicaHelper/raw/master/build/chrome_extension/komicahelper.crx)
-  - Load it from Google Chrome
+  - Clone this repository
+  - Load [build/chrome_extension/komicahelper](build/chrome_extension/komicahelper) as unpackaged extension from Google Chrome
   - Done!
 
 - Userscript:
