@@ -1,4 +1,4 @@
-# Komica Helper - chrome extension for komica
+# Komica Helper - custom scripts written for komica
 
 ## Features
 
@@ -36,9 +36,17 @@
 
 ## How to use
 
-- Download <chrome.crx>
-- Load it from Google Chrome
-- Done!
+- Chrome:
+  
+  - Download the [extension](https://github.com/thwonghenry/KomicaHelper/raw/master/build/chrome_extension/komicahelper.crx)
+  - Load it from Google Chrome
+  - Done!
+
+- Userscript:
+
+  - Choose the function you want to use from [build/userscripts](build/userscripts)
+  - Load it from your userscripts loader in your browser
+  - Done!
 
 ## TODO features:
 
