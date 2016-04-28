@@ -1,3 +1,59 @@
+// ==UserScript==
+// @match http://2cat.or.tl/*/*
+// @match http://2cat.twbbs.org/*
+// @match http://*.mykomica.org/*
+// @match http://komica.yucie.net/*
+// @match http://gzone-anime.info/UnitedSites/*
+// @match http://www.dk.idv.tw/*
+// @match http://komica.dbfoxtw.me/*
+// @match http://www.netorare.org/*
+// @match http://2nyan.org/*
+// @match http://ningen.dreamhosters.com/*
+// @match http://miyarei.org/*
+// @match http://www.oreimo.net/*
+// @match http://moecorner.com/iboards/*
+// @match http://*.nagatoyuki.org/*
+// @match http://www.megurineluka.com/*
+// @match http://komica.chiisana.net/*
+// @match http://tehepero.org/komica/main/*
+// @match http://www.kagaminelen.org/*
+// @match http://komica.yucie.net/*
+// @match http://www.notomamiko.net/*
+// @match http://www.minorin.com/*
+// @match http://www.hiranoaya.org/*
+// @match http://fenrisulfr.org/*
+// @match http://komica.peroneko.org/*
+// @match http://www.wowhk.org/wowhk/*
+// @match http://acgspace.wsfun.com/*
+// @match http://strange-komica.com/*
+// @match http://www.hetalia.us/*
+// @match http://www.ayanamirei.org/*
+// @match http://idolma.ster.tw/*
+// @match http://www.karlsland.net/*
+// @match http://vocaloid.orzhk.net/*
+// @match http://www.gainax.org/*
+// @match http://mamiko.keyfans.net/*
+// @match http://kana.keyfans.net/*
+// @match http://www.kagaminerin.org/*
+// @match http://www.kagaminelen.org/*
+// @match http://alica.dreamhosters.com/*
+// @match http://p.komica.acg.club.tw/*
+// @match http://*.boguspix.com/*
+// @match http://kemono.wtako.net/*
+// @match http://broken.goodluck.com.tw/*
+// @match http://doujin2.acgmoe.com/*
+// @match http://spg-web.sytes.net/PasteChart/*
+// @match http://rthost.fam.cx/*
+// @match http://emc4.dreamhosters.com/*
+// @match http://futaba.anacel.com/*
+// @match http://k2slime.2nyan.org/*
+// @match http://homu.komica.org/*/*
+// @match http://pink.komica.org/*/*
+// @description A plugin that stick the quoted reply directly
+// @name Komica Quotes Linker
+// @namespace https://github.com/thwonghenry/KomicaHelper
+// ==/UserScript==
+
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};

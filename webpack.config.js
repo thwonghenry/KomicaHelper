@@ -1,13 +1,17 @@
 const path = require('path');
+const buildPath = path.resolve(__dirname, 'build');
 const entryPath = path.resolve(__dirname, 'entries');
-const chromeBuildPath = path.resolve(__dirname, 'chrome');
-const scriptPath = path.resolve(__dirname, 'userscripts');
+const chromeBuildPath = path.resolve(buildPath, 'chrome_extension/komicahelper');
+const userscriptsPath = path.resolve(buildPath, 'userscripts');
 const webpack = require('webpack');
 
+const metadata = require('./metadata.json');
+const PrependMetadata = require('./webpack_plugins/prependmetadata');
+
 module.exports = [{
-    name: 'chrome',
+    name: 'chrome-extension',
     entry: [
-        path.resolve(entryPath, 'main.ts'),
+        path.resolve(entryPath, 'komicahelper.ts'),
     ],
     // Currently we need to add '.ts' to the resolve.extensions array.
     resolve: {
@@ -39,21 +43,18 @@ module.exports = [{
 }, {
     name: 'userscripts',
     entry: {
-        // 'babel-polyfill',
         quotelinker: path.resolve(entryPath, 'quotelinker.ts'),
-        thumbnailenlarget: path.resolve(entryPath, 'thumbnailenlarger.ts')
+        thumbnailenlarger: path.resolve(entryPath, 'thumbnailenlarger.ts')
     },
-    // Currently we need to add '.ts' to the resolve.extensions array.
     resolve: {
         extensions: ['', '.ts', '.webpack.js', '.web.js', '.js']
     },
 
     output: {
-        path: scriptPath,
+        path: userscriptsPath,
         filename: '[name].js'
     },
 
-    // Add the loader for .ts files.
     module: {
         preLoaders: [{
             test: /\.ts$/,
@@ -69,5 +70,22 @@ module.exports = [{
             test: /\.sass$/,
             loader: 'css/locals!sass'
         }]
-    }
+    },
+
+    plugins: [
+        // run the custom metadata prepender
+        new PrependMetadata(metadata, [{
+            path: path.resolve(userscriptsPath, 'quotelinker.js'),
+            replace: {
+                name: 'Komica Quotes Linker',
+                description: 'A plugin that stick the quoted reply directly'
+            }
+        }, {
+            path: path.resolve(userscriptsPath, 'thumbnailenlarger.js'),
+            replace: {
+                name: 'Komica Thumbnails Enlarger',
+                description: 'A plugin that add enlarge button to all thumbnails'
+            }
+        }])
+    ]
 }];
