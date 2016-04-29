@@ -49,8 +49,8 @@
 // @match http://k2slime.2nyan.org/*
 // @match http://homu.komica.org/*/*
 // @match http://pink.komica.org/*/*
-// @description A plugin that add enlarge button to all thumbnails
-// @name Komica Thumbnails Enlarger
+// @description A plugin that add night mode style toggle
+// @name Komica Night Mode Toggle
 // @namespace https://github.com/thwonghenry/KomicaHelper
 // @version 0.1
 // ==/UserScript==
@@ -94,7 +94,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 21);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -722,211 +722,80 @@
 
 /***/ },
 /* 10 */,
-/* 11 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var DOMWatcher = (function () {
-	    function DOMWatcher(parent) {
-	        this.parent = parent;
-	    }
-	    // client attaches the event callback actively
-	    DOMWatcher.prototype.onUpdate = function (onUpdateCallback) {
-	        this.onUpdateCallback = onUpdateCallback;
-	    };
-	    DOMWatcher.prototype.onAddNode = function (onAddNodeCallback) {
-	        this.onAddNodeCallback = onAddNodeCallback;
-	    };
-	    DOMWatcher.prototype.onRemoveNode = function (onRemoveNodeCallback) {
-	        this.onRemoveNodeCallback = onRemoveNodeCallback;
-	    };
-	    // install the observer
-	    DOMWatcher.prototype.start = function () {
-	        var _this = this;
-	        var mutationObserver = new MutationObserver(function (mutations, observer) {
-	            if (_this.onUpdateCallback) {
-	                _this.onUpdateCallback();
-	            }
-	            // only continue if both event callback exists
-	            if (!_this.onAddNodeCallback && !_this.onRemoveNodeCallback) {
-	                return;
-	            }
-	            mutations.forEach(function (mutation) {
-	                // for each event type, trigger the callback
-	                if (_this.onAddNodeCallback) {
-	                    for (var i = 0; i < mutation.addedNodes.length; i++) {
-	                        _this.onAddNodeCallback(mutation.addedNodes[i]);
-	                    }
-	                }
-	                if (_this.onRemoveNodeCallback) {
-	                    for (var i = 0; i < mutation.removedNodes.length; i++) {
-	                        _this.onRemoveNodeCallback(mutation.removedNodes[i]);
-	                    }
-	                }
-	            });
-	        });
-	        // attach a DOM watcher on the parent element
-	        mutationObserver.observe(this.parent, {
-	            childList: true,
-	        });
-	    };
-	    return DOMWatcher;
-	}());
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = DOMWatcher;
-
-
-/***/ },
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */
+/* 11 */,
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var config_1 = __webpack_require__(1);
-	var DOMWatcher_1 = __webpack_require__(11);
-	var buttons = [];
-	function bindThumbnail(img, config, doc) {
+	// get the night mode state from local storage
+	var isNight = localStorage && localStorage.getItem('night') === 'true';
+	var darkStyle;
+	// bind the toggle button function
+	function bindNightModeButton(doc, nightButton) {
 	    'use strict';
-	    // create the button element for image function
-	    var button = doc.createElement('button');
-	    button.innerHTML = '放大';
-	    // insert the button alongside with the image
-	    var anchor = img.parentNode;
-	    anchor.parentNode.insertBefore(button, anchor.nextSibling);
-	    // use for breaking line between the enlarged image and the reply
-	    var br = doc.createElement('br');
-	    // save the size of the thumbnail for restoring later
-	    var size = config.getThumbnailSize(img);
-	    if (!size) {
-	        console.error('Error when getting the size of thumbnail');
-	        return;
+	    // create the night mode style element
+	    var nightStyle = doc.createElement('style');
+	    nightStyle.innerHTML = darkStyle;
+	    // recover the night mode state
+	    if (isNight) {
+	        doc.body.appendChild(nightStyle);
 	    }
-	    button.addEventListener('click', function (event) {
+	    nightButton.addEventListener('click', function (event) {
 	        event.preventDefault();
-	        // enlarge the image
-	        if (button.innerHTML === '放大') {
-	            img.src = anchor.href;
-	            config.enlargeThumbnail(img);
-	            anchor.parentNode.insertBefore(br, button);
-	            button.innerHTML = '縮小';
+	        if (isNight) {
+	            doc.body.removeChild(nightStyle);
 	        }
-	        else if (button.innerHTML === '縮小') {
-	            // restore the image and button
-	            config.setThumbnailSize(img, size);
-	            anchor.parentNode.removeChild(br);
-	            button.innerHTML = '放大';
+	        else {
+	            doc.body.appendChild(nightStyle);
 	        }
-	    });
-	    buttons.push(button);
-	}
-	function resetButtons() {
-	    'use strict';
-	    // reset the button list by setting empty array
-	    console.log('reset');
-	    buttons = [];
-	}
-	exports.resetButtons = resetButtons;
-	function bindThumbnailControlButtons(expandButton, contractButton) {
-	    'use strict';
-	    // bind the button that expand all unexpanded thumbnails
-	    expandButton.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        // click all the enlarge button
-	        for (var i = 0; i < buttons.length; i++) {
-	            var button = buttons[i];
-	            if (button.innerHTML === '放大') {
-	                button.click();
-	            }
-	        }
-	    });
-	    // bind the button that expand all expanded thumbnails
-	    contractButton.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        // click all the contract button
-	        for (var i = 0; i < buttons.length; i++) {
-	            var button = buttons[i];
-	            if (button.innerHTML === '縮小') {
-	                button.click();
-	            }
+	        // toggle the night mode state
+	        isNight = !isNight;
+	        if (localStorage) {
+	            // update the state to the local storage
+	            localStorage.setItem('night', isNight ? 'true' : 'false');
 	        }
 	    });
 	}
-	exports.bindThumbnailControlButtons = bindThumbnailControlButtons;
+	exports.bindNightModeButton = bindNightModeButton;
 	var url = window.location.href;
-	function initializeThumbnails(config, isThread) {
+	// initialize this module by providing the dark style of this board
+	function initializeNightMode(darkStyleString) {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(url); }
-	    if (isThread === void 0) { isThread = config.isThread.test(url); }
-	    // bind all the thumbnails to a button
-	    var imgs = config.getThumbnails(document);
-	    for (var i = 0; i < imgs.length; i++) {
-	        bindThumbnail(imgs[i], config, document);
-	    }
-	    // attach a DOM watcher on the main thread or thread list
-	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
-	    var domWatcher = new DOMWatcher_1.default(parent);
-	    domWatcher.onAddNode(function (element) {
-	        var reply = element;
-	        var id = reply.id;
-	        var clear = false;
-	        // if the element is text node, continue;
-	        if (!reply.setAttribute) {
-	            return;
-	        }
-	        // if no id to query, add a temporary id to the node
-	        if (!id) {
-	            reply.setAttribute('id', 'komica_helper_temp');
-	            id = reply.id;
-	            clear = true;
-	        }
-	        // query the thumbnail element
-	        var img = document.querySelector("#" + id + " img");
-	        if (img) {
-	            bindThumbnail(img, config, document);
-	        }
-	        // if a temporary id is added, clear it at the end
-	        if (clear) {
-	            reply.removeAttribute('id');
-	        }
-	    });
-	    domWatcher.onUpdate(isThread ? undefined : resetButtons);
-	    domWatcher.start();
+	    if (darkStyleString === void 0) { darkStyleString = config_1.default(url).darkStyle; }
+	    darkStyle = darkStyleString;
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = initializeThumbnails;
+	exports.default = initializeNightMode;
 
 
 /***/ },
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
 /* 18 */,
 /* 19 */,
 /* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var thumbnail_1 = __webpack_require__(17);
+	var nightmode_1 = __webpack_require__(12);
 	var injectmenu_1 = __webpack_require__(2);
 	function initialize() {
 	    'use strict';
-	    // inject menu buttons
+	    // inject the menu buttons
 	    var menuButtons = injectmenu_1.injectMenu();
-	    var expandAllButton = menuButtons.expandAllButton;
-	    var contractAllButton = menuButtons.contractAllButton;
-	    // enable contract and expand all buttons
+	    var nightModeButton = menuButtons.nightModeButton;
+	    // enable night mode toggle
 	    injectmenu_1.enableButtons({
-	        contractAllButton: true,
-	        expandAllButton: true,
+	        nightModeButton: true,
 	    });
-	    // initialize thumbnail enlarger
-	    thumbnail_1.default();
-	    thumbnail_1.bindThumbnailControlButtons(expandAllButton, contractAllButton);
+	    // initialize night mode toggle
+	    nightmode_1.default();
+	    nightmode_1.bindNightModeButton(document, nightModeButton);
 	}
 	if (document.readyState !== 'loading') {
 	    initialize();

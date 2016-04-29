@@ -4,88 +4,58 @@ import {bindPostButton} from '../src/postform';
 import {bindNightModeButton} from '../src/nightmode';
 import initializeThumbnails from '../src/thumbnail';
 import initializeQuotes from '../src/quote';
-import bindReplyUpdate from '../src/replyupdate';
-import bindThreadUpdate from '../src/threadupdate';
-
-// a function that add html as DOM node to element
-function addHTMLToElement(tag: string, html: string, element: HTMLElement): void {
-    'use strict';
-    let node: HTMLElement = document.createElement(tag);
-    node.innerHTML = html;
-    element.appendChild(node);
-}
+import initializePostform from '../src/postform';
+import initializeNightMode from '../src/nightmode';
+import bindReplyListUpdate from '../src/replylistupdate';
+import bindThreadListUpdate from '../src/threadlistupdate';
+import {injectMenu, enableButtons} from '../src/injectmenu';
+// import {getSetting, setSetting} from '../src/settingsync';
 
 function initialize(): void {
     'use strict';
     const url: string = window.location.href;
 
-    // import assests
-    const style: any = require('!css!sass!../styles/main.sass');
-    const css: string = style[0][1];
-    const locals: LocalStyle = style.locals;
-
-    // render the menu buttons with local scoped id
-
-    const body: HTMLElement = document.body;
-
-    // load the config by url
-    const config: Config = getConfigByURL(url);
+    const config: komicaHelper.Config = getConfigByURL(url);
     const isThread: boolean = config.isThread.test(url);
-    locals.newString = isThread ? '新回覆' : '新主題';
-    const html: string = require('!jade!../templates/buttons.jade')(locals);
-    // add the update button
-    addHTMLToElement('div', html, body);
+    // inject menu buttons
+    const menuButtons: komicaHelper.MenuButtons = injectMenu(config, isThread);
+    // enable all menu buttons
+    enableButtons();
 
-    // add the style from main.sass
-    addHTMLToElement('style', css, body);
-
-    // the menu buttons at the right
-    const menuButtons: HTMLElement = document.getElementById(locals.komicaHelper);
-
-    // bind the update button event
-    const updateButton: HTMLAnchorElement = document.getElementById(locals.update) as HTMLAnchorElement;
+    // bind the update button base on the page type
     if (isThread) {
-        bindReplyUpdate(url, document, menuButtons, config, locals, updateButton);
+        bindReplyListUpdate(url, document, menuButtons.menu, config, menuButtons.locals, menuButtons.updateButton);
     } else {
-        bindThreadUpdate(url, document, menuButtons, config, locals, updateButton);
+        bindThreadListUpdate(url, document, menuButtons.menu, config, menuButtons.locals, menuButtons.updateButton);
     }
 
+    // intialize thumbnails related function
     initializeThumbnails(config, isThread);
-    initializeQuotes(config, isThread, menuButtons);
+    bindThumbnailControlButtons(menuButtons.expandAllButton, menuButtons.contractAllButton);
 
-    // bind all the thumbnail related menu buttons events
-    const expandButton: HTMLAnchorElement = document.getElementById(locals.expand) as HTMLAnchorElement;
-    const contractButton: HTMLAnchorElement = document.getElementById(locals.contract) as HTMLAnchorElement;
-    bindThumbnailControlButtons(expandButton, contractButton);
+    // initialize reply sticker events
+    initializeQuotes(config, isThread, menuButtons.menu);
 
     // bind the post button event
-    const createNewForm: HTMLElement = config.getCreateNewElement(document);
-    if (createNewForm) {
-        createNewForm.className += `${locals.createNew} ${locals.hidden}`;
-        const createButton: HTMLAnchorElement = document.getElementById(locals.create) as HTMLAnchorElement;
-        bindPostButton(locals.hidden, createButton, createNewForm);
-    }
+    initializePostform(config);
+    bindPostButton(menuButtons.postformButton);
 
     // bind the night mode toggle event
-    const nightButton: HTMLAnchorElement = document.getElementById(locals.night) as HTMLAnchorElement;
-    bindNightModeButton(document, config.darkStyle, nightButton);
+    initializeNightMode(config.darkStyle);
+    bindNightModeButton(document, menuButtons.nightModeButton);
+
+    // setSetting({ komica_helper: '123' }, () => {
+    //     console.log('set done');
+    // });
 }
+
+// getSetting((setting: Object) => {
+//     console.log('setting');
+//     console.log(setting);
+// });
 
 if (document.readyState !== 'loading') {
     initialize();
 } else {
     document.addEventListener('DOMContentLoaded', initialize);
 }
-
-// let mutationObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[], observer: MutationObserver) => {
-//     mutations.forEach((mutation: MutationRecord) => {
-//         if (mutation.removedNodes.length > 0) {
-//             console.log('hi');
-//             observer.disconnect();
-//         }
-//     });
-// });
-//
-// mutationObserver.observe(anchor.parentNode.parentNode, {
-//     childList: true,
-// });

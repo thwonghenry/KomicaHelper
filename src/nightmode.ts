@@ -1,7 +1,11 @@
+import getConfigByURL from './config';
+
 // get the night mode state from local storage
 let isNight: boolean = localStorage && localStorage.getItem('night') === 'true';
+let darkStyle: string;
 
-export function bindNightModeButton(doc: Document, darkStyle: string, nightButton: HTMLAnchorElement): void {
+// bind the toggle button function
+export function bindNightModeButton(doc: Document, nightButton: HTMLAnchorElement): void {
     'use strict';
     // create the night mode style element
     let nightStyle: HTMLStyleElement = doc.createElement('style');
@@ -26,4 +30,11 @@ export function bindNightModeButton(doc: Document, darkStyle: string, nightButto
             localStorage.setItem('night', isNight ? 'true' : 'false');
         }
     });
+}
+
+const url: string = window.location.href;
+// initialize this module by providing the dark style of this board
+export default function initializeNightMode(darkStyleString: string = getConfigByURL(url).darkStyle): void {
+    'use strict';
+    darkStyle = darkStyleString;
 }

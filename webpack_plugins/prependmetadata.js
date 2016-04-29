@@ -30,6 +30,7 @@ function jsonToMetadata(json) {
         case 'description':
         case 'name':
         case 'namespace':
+        case 'version':
             metadata += '// @' + key + ' ' + json[key] + '\n';
             break;
         case 'matches':
@@ -47,14 +48,13 @@ function jsonToMetadata(json) {
 
 // the prepender constructor used in webpack config
 // takes a common metadata and an array of file settings
-function MetadataPrepender (commonMetadata, settings) {
+function MetadataPrepender(commonMetadata, settings) {
 
     // the apply method, takes webpack compiler
     const apply = (compiler) => {
 
         // only do job after the webpack build process end
         compiler.plugin('after-emit', (compilation, callback) => {
-
             // initialize the list of promise of prepend file
             let promises = [];
 
@@ -65,7 +65,6 @@ function MetadataPrepender (commonMetadata, settings) {
                 // extract the specific metadata for this file
                 let metadata = cloneObject(commonMetadata);
                 extendObject(metadata, setting.replace);
-
                 // make the prepend file process as a promise
                 promises.push(new Promise((resolve, reject) => {
                     prependFile(setting.path, jsonToMetadata(metadata), (error) => {
@@ -76,7 +75,6 @@ function MetadataPrepender (commonMetadata, settings) {
                     });
                 }));
             }
-
             // when all prepend file process ends, continue the webpack build process
             Promise.all(promises).then(() => {
                 callback();

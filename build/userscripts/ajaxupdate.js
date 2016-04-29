@@ -1,3 +1,60 @@
+// ==UserScript==
+// @match http://2cat.or.tl/*/*
+// @match http://2cat.twbbs.org/*
+// @match http://*.mykomica.org/*
+// @match http://komica.yucie.net/*
+// @match http://gzone-anime.info/UnitedSites/*
+// @match http://www.dk.idv.tw/*
+// @match http://komica.dbfoxtw.me/*
+// @match http://www.netorare.org/*
+// @match http://2nyan.org/*
+// @match http://ningen.dreamhosters.com/*
+// @match http://miyarei.org/*
+// @match http://www.oreimo.net/*
+// @match http://moecorner.com/iboards/*
+// @match http://*.nagatoyuki.org/*
+// @match http://www.megurineluka.com/*
+// @match http://komica.chiisana.net/*
+// @match http://tehepero.org/komica/main/*
+// @match http://www.kagaminelen.org/*
+// @match http://komica.yucie.net/*
+// @match http://www.notomamiko.net/*
+// @match http://www.minorin.com/*
+// @match http://www.hiranoaya.org/*
+// @match http://fenrisulfr.org/*
+// @match http://komica.peroneko.org/*
+// @match http://www.wowhk.org/wowhk/*
+// @match http://acgspace.wsfun.com/*
+// @match http://strange-komica.com/*
+// @match http://www.hetalia.us/*
+// @match http://www.ayanamirei.org/*
+// @match http://idolma.ster.tw/*
+// @match http://www.karlsland.net/*
+// @match http://vocaloid.orzhk.net/*
+// @match http://www.gainax.org/*
+// @match http://mamiko.keyfans.net/*
+// @match http://kana.keyfans.net/*
+// @match http://www.kagaminerin.org/*
+// @match http://www.kagaminelen.org/*
+// @match http://alica.dreamhosters.com/*
+// @match http://p.komica.acg.club.tw/*
+// @match http://*.boguspix.com/*
+// @match http://kemono.wtako.net/*
+// @match http://broken.goodluck.com.tw/*
+// @match http://doujin2.acgmoe.com/*
+// @match http://spg-web.sytes.net/PasteChart/*
+// @match http://rthost.fam.cx/*
+// @match http://emc4.dreamhosters.com/*
+// @match http://futaba.anacel.com/*
+// @match http://k2slime.2nyan.org/*
+// @match http://homu.komica.org/*/*
+// @match http://pink.komica.org/*/*
+// @description A plugin that update the list of replies or threads without refresh
+// @name Komica AJAX Updater
+// @namespace https://github.com/thwonghenry/KomicaHelper
+// @version 0.1
+// ==/UserScript==
+
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -37,7 +94,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 19);
+/******/ 	return __webpack_require__(__webpack_require__.s = 20);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -98,49 +155,11 @@
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var Ajax = (function () {
-	    function Ajax(method, url, type) {
-	        this.method = method;
-	        this.url = url;
-	        this.xhr = new XMLHttpRequest();
-	        this.type = type;
-	    }
-	    Ajax.prototype.start = function () {
-	        var _this = this;
-	        var onLoad = new Promise(function (resolve, reject) {
-	            _this.xhr.onload = function () {
-	                if (_this.xhr.status === 200) {
-	                    resolve(_this.xhr.response);
-	                }
-	                else {
-	                    console.log('reject', _this.xhr.status);
-	                    reject();
-	                }
-	            };
-	            _this.xhr.onerror = reject;
-	        });
-	        this.xhr.open(this.method, this.url, true);
-	        if (this.type) {
-	            this.xhr.responseType = this.type;
-	        }
-	        this.xhr.send();
-	        return onLoad;
-	    };
-	    return Ajax;
-	}());
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = Ajax;
-
-
-/***/ },
-/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var index_1 = __webpack_require__(17);
+	var index_1 = __webpack_require__(5);
+	// helper functions that used for binding
 	function getElementById(id, doc) {
 	    'use strict';
 	    return doc.getElementById(id);
@@ -211,10 +230,11 @@
 	        }
 	    }
 	}
+	// default config that is going to be extended
 	var defaultConfig = {
 	    darkStyle: index_1.default.default,
 	    enlargeThumbnail: enlargeThumbnailByStyle,
-	    getCreateNewElement: getElementById.bind(undefined, 'postform_main'),
+	    getPostformElement: getElementById.bind(undefined, 'postform_main'),
 	    getQLinks: getElementsByClassName.bind(undefined, 'qlink'),
 	    getReplies: getElementById.bind(undefined, 'threads'),
 	    getThreads: getElementById.bind(undefined, 'threads'),
@@ -225,6 +245,7 @@
 	    quote: /^((?!page_num).)*#r[0-9]*/,
 	    setThumbnailSize: setThumbnailSizeByStyle,
 	};
+	// config for different boards
 	var configs = [
 	    {
 	        match: /http:\/\/.*\.mykomica\.org.*/,
@@ -232,7 +253,7 @@
 	    }, {
 	        darkStyle: index_1.default.homu,
 	        enlargeThumbnail: enlargeThumbnailByAttribute,
-	        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
+	        getPostformElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
 	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
 	        getThreads: getElementByTagNameIndex.bind(undefined, 'form', 1),
 	        getThumbnailSize: getThumbnailSizeByAttribute,
@@ -243,7 +264,7 @@
 	    }, {
 	        darkStyle: index_1.default.homu,
 	        enlargeThumbnail: enlargeThumbnailByAttribute,
-	        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
+	        getPostformElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
 	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
 	        getThreads: getElementByTagNameIndex.bind(undefined, 'body', 0),
 	        getThumbnailSize: getThumbnailSizeByAttribute,
@@ -253,6 +274,7 @@
 	        setThumbnailSize: setThumbnailSizeByAttribute,
 	    },
 	];
+	// function that get config base on the url
 	function getConfigByURL(url) {
 	    'use strict';
 	    for (var i = 0; i < configs.length; i++) {
@@ -270,186 +292,11 @@
 
 
 /***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var DOMWatcher = (function () {
-	    function DOMWatcher(parent) {
-	        this.parent = parent;
-	    }
-	    DOMWatcher.prototype.onUpdate = function (onUpdateCallback) {
-	        this.onUpdateCallback = onUpdateCallback;
-	    };
-	    DOMWatcher.prototype.onAddNode = function (onAddNodeCallback) {
-	        this.onAddNodeCallback = onAddNodeCallback;
-	    };
-	    DOMWatcher.prototype.onRemoveNode = function (onRemoveNodeCallback) {
-	        this.onRemoveNodeCallback = onRemoveNodeCallback;
-	    };
-	    DOMWatcher.prototype.start = function () {
-	        var _this = this;
-	        var mutationObserver = new MutationObserver(function (mutations, observer) {
-	            if (_this.onUpdateCallback) {
-	                _this.onUpdateCallback();
-	            }
-	            if (!_this.onAddNodeCallback && !_this.onRemoveNodeCallback) {
-	                return;
-	            }
-	            mutations.forEach(function (mutation) {
-	                // for all added nodes, bind the thumbnail to a button if exists
-	                if (_this.onAddNodeCallback) {
-	                    for (var i = 0; i < mutation.addedNodes.length; i++) {
-	                        _this.onAddNodeCallback(mutation.addedNodes[i]);
-	                    }
-	                }
-	                if (_this.onRemoveNodeCallback) {
-	                    for (var i = 0; i < mutation.removedNodes.length; i++) {
-	                        _this.onRemoveNodeCallback(mutation.removedNodes[i]);
-	                    }
-	                }
-	            });
-	        });
-	        // attach a DOM watcher on the parent element
-	        mutationObserver.observe(this.parent, {
-	            childList: true,
-	        });
-	    };
-	    return DOMWatcher;
-	}());
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = DOMWatcher;
-
-
-/***/ },
-/* 4 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var config_1 = __webpack_require__(2);
-	var DOMWatcher_1 = __webpack_require__(3);
-	var buttons = [];
-	function bindThumbnail(img, config, doc) {
-	    'use strict';
-	    // create the button element for image function
-	    var button = doc.createElement('button');
-	    button.innerHTML = '放大';
-	    // insert the button alongside with the image
-	    var anchor = img.parentNode;
-	    anchor.parentNode.insertBefore(button, anchor.nextSibling);
-	    // use for breaking line between the enlarged image and the reply
-	    var br = doc.createElement('br');
-	    // save the size of the thumbnail for restoring later
-	    var size = config.getThumbnailSize(img);
-	    if (!size) {
-	        console.error('Error when getting the size of thumbnail');
-	        return;
-	    }
-	    button.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        // enlarge the image
-	        if (button.innerHTML === '放大') {
-	            img.src = anchor.href;
-	            config.enlargeThumbnail(img);
-	            anchor.parentNode.insertBefore(br, button);
-	            button.innerHTML = '縮小';
-	        }
-	        else if (button.innerHTML === '縮小') {
-	            // restore the image and button
-	            config.setThumbnailSize(img, size);
-	            anchor.parentNode.removeChild(br);
-	            button.innerHTML = '放大';
-	        }
-	    });
-	    buttons.push(button);
-	}
-	exports.bindThumbnail = bindThumbnail;
-	function resetButtons() {
-	    'use strict';
-	    // reset the button list by setting empty array
-	    console.log('reset');
-	    buttons = [];
-	}
-	exports.resetButtons = resetButtons;
-	function bindThumbnailControlButtons(expandButton, contractButton) {
-	    'use strict';
-	    // bind the button that expand all unexpanded thumbnails
-	    expandButton.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        // click all the enlarge button
-	        for (var i = 0; i < buttons.length; i++) {
-	            var button = buttons[i];
-	            if (button.innerHTML === '放大') {
-	                button.click();
-	            }
-	        }
-	    });
-	    // bind the button that expand all expanded thumbnails
-	    contractButton.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        // click all the contract button
-	        for (var i = 0; i < buttons.length; i++) {
-	            var button = buttons[i];
-	            if (button.innerHTML === '縮小') {
-	                button.click();
-	            }
-	        }
-	    });
-	}
-	exports.bindThumbnailControlButtons = bindThumbnailControlButtons;
-	function initializeThumbnails(config, isThread) {
-	    'use strict';
-	    if (config === void 0) { config = config_1.default(window.location.href); }
-	    if (isThread === void 0) { isThread = config.isThread.test(window.location.href); }
-	    // bind all the thumbnails to a button
-	    var imgs = config.getThumbnails(document);
-	    for (var i = 0; i < imgs.length; i++) {
-	        bindThumbnail(imgs[i], config, document);
-	    }
-	    // attach a DOM watcher on the main thread or thread list
-	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
-	    var domWatcher = new DOMWatcher_1.default(parent);
-	    domWatcher.onAddNode(function (element) {
-	        var reply = element;
-	        var id = reply.id;
-	        var clear = false;
-	        // if the element is text node, continue;
-	        if (!reply.setAttribute) {
-	            return;
-	        }
-	        if (!id) {
-	            reply.setAttribute('id', 'komica_helper_temp');
-	            id = reply.id;
-	            clear = true;
-	        }
-	        var img = document.querySelector("#" + id + " img");
-	        if (img) {
-	            bindThumbnail(img, config, document);
-	        }
-	        if (clear) {
-	            reply.removeAttribute('id');
-	        }
-	    });
-	    domWatcher.onUpdate(isThread ? undefined : resetButtons);
-	    domWatcher.start();
-	}
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = initializeThumbnails;
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var config_1 = __webpack_require__(2);
-	var thumbnail_1 = __webpack_require__(4);
-	var postform_1 = __webpack_require__(13);
-	var nightmode_1 = __webpack_require__(12);
-	var thumbnail_2 = __webpack_require__(4);
-	var quote_1 = __webpack_require__(14);
-	var replyupdate_1 = __webpack_require__(15);
-	var threadupdate_1 = __webpack_require__(16);
+	var config_1 = __webpack_require__(1);
 	// a function that add html as DOM node to element
 	function addHTMLToElement(tag, html, element) {
 	    'use strict';
@@ -457,73 +304,86 @@
 	    node.innerHTML = html;
 	    element.appendChild(node);
 	}
-	function initialize() {
+	var url = window.location.href;
+	// menu buttons
+	var menu;
+	var updateButton;
+	var expandAllButton;
+	var contractAllButton;
+	var postformButton;
+	var nightModeButton;
+	var locals;
+	// inject menu buttons
+	function injectMenu(config, isThread) {
 	    'use strict';
-	    var url = window.location.href;
+	    if (config === void 0) { config = config_1.default(url); }
+	    if (isThread === void 0) { isThread = config.isThread.test(url); }
 	    // import assests
-	    var style = __webpack_require__(8);
+	    var style = __webpack_require__(6);
 	    var css = style[0][1];
-	    var locals = style.locals;
-	    // render the menu buttons with local scoped id
-	    var body = document.body;
-	    // load the config by url
-	    var config = config_1.default(url);
-	    var isThread = config.isThread.test(url);
-	    locals.newString = isThread ? '新回覆' : '新主題';
-	    var html = __webpack_require__(10)(locals);
-	    // add the update button
-	    addHTMLToElement('div', html, body);
-	    // add the style from main.sass
-	    addHTMLToElement('style', css, body);
-	    // the menu buttons at the right
-	    var menuButtons = document.getElementById(locals.komicaHelper);
-	    // bind the update button event
-	    var updateButton = document.getElementById(locals.update);
-	    if (isThread) {
-	        replyupdate_1.default(url, document, menuButtons, config, locals, updateButton);
+	    locals = style.locals;
+	    menu = document.getElementById(locals.komicaHelper);
+	    // only inject menu if it not exists
+	    if (!menu) {
+	        // render the menu buttons with local scoped id
+	        var body = document.body;
+	        locals.newString = isThread ? '新回覆' : '新主題';
+	        var html = __webpack_require__(7)(locals);
+	        // add the menu buttons
+	        addHTMLToElement('div', html, body);
+	        // add the buttons style from main.sass
+	        addHTMLToElement('style', css, body);
+	        menu = document.getElementById(locals.komicaHelper);
 	    }
-	    else {
-	        threadupdate_1.default(url, document, menuButtons, config, locals, updateButton);
+	    // retrieve the menu buttons
+	    updateButton = document.getElementById(locals.update);
+	    expandAllButton = document.getElementById(locals.expand);
+	    contractAllButton = document.getElementById(locals.contract);
+	    postformButton = document.getElementById(locals.postform);
+	    nightModeButton = document.getElementById(locals.night);
+	    return {
+	        menu: menu, updateButton: updateButton, expandAllButton: expandAllButton, contractAllButton: contractAllButton, postformButton: postformButton, nightModeButton: nightModeButton, locals: locals,
+	    };
+	}
+	exports.injectMenu = injectMenu;
+	function enableButton(button) {
+	    'use strict';
+	    // remove the hiddenButton class
+	    var classNames = button.className.split(' ');
+	    var filtered = classNames.filter(function (className) { return className !== locals.hiddenButton; });
+	    button.className = filtered.join(' ');
+	}
+	// enable the selected menu buttons
+	function enableButtons(enables) {
+	    'use strict';
+	    if (enables === void 0) { enables = {
+	        contractAllButton: true,
+	        expandAllButton: true,
+	        nightModeButton: true,
+	        postformButton: true,
+	        updateButton: true,
+	    }; }
+	    if (enables.updateButton) {
+	        enableButton(updateButton);
 	    }
-	    thumbnail_2.default(config, isThread);
-	    quote_1.default(config, isThread, menuButtons);
-	    // bind all the thumbnail related menu buttons events
-	    var expandButton = document.getElementById(locals.expand);
-	    var contractButton = document.getElementById(locals.contract);
-	    thumbnail_1.bindThumbnailControlButtons(expandButton, contractButton);
-	    // bind the post button event
-	    var createNewForm = config.getCreateNewElement(document);
-	    if (createNewForm) {
-	        createNewForm.className += locals.createNew + " " + locals.hidden;
-	        var createButton = document.getElementById(locals.create);
-	        postform_1.bindPostButton(locals.hidden, createButton, createNewForm);
+	    if (enables.expandAllButton) {
+	        enableButton(expandAllButton);
 	    }
-	    // bind the night mode toggle event
-	    var nightButton = document.getElementById(locals.night);
-	    nightmode_1.bindNightModeButton(document, config.darkStyle, nightButton);
+	    if (enables.contractAllButton) {
+	        enableButton(contractAllButton);
+	    }
+	    if (enables.postformButton) {
+	        enableButton(postformButton);
+	    }
+	    if (enables.nightModeButton) {
+	        enableButton(nightModeButton);
+	    }
 	}
-	if (document.readyState !== 'loading') {
-	    initialize();
-	}
-	else {
-	    document.addEventListener('DOMContentLoaded', initialize);
-	}
-	// let mutationObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[], observer: MutationObserver) => {
-	//     mutations.forEach((mutation: MutationRecord) => {
-	//         if (mutation.removedNodes.length > 0) {
-	//             console.log('hi');
-	//             observer.disconnect();
-	//         }
-	//     });
-	// });
-	//
-	// mutationObserver.observe(anchor.parentNode.parentNode, {
-	//     childList: true,
-	// });
+	exports.enableButtons = enableButtons;
 
 
 /***/ },
-/* 6 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(0)();
@@ -537,7 +397,7 @@
 
 
 /***/ },
-/* 7 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(0)();
@@ -551,7 +411,21 @@
 
 
 /***/ },
-/* 8 */
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var def = __webpack_require__(3)[0][1];
+	var homu = __webpack_require__(4)[0][1];
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = {
+	    default: def,
+	    homu: homu,
+	};
+
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(0)();
@@ -559,54 +433,37 @@
 
 
 	// module
-	exports.push([module.i, "#_2RKIDvBZ-c75YVkbPE3upo {\n  position: fixed;\n  top: 40%;\n  right: 0px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._239Ry-eeiEXoNyd-zFwfxk {\n    pointer-events: none;\n    cursor: default;\n    color: gray; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2HQO3DDkC7XaudXT9Urjzk {\n    color: BBB;\n    text-decoration: none;\n    border-bottom: 2px solid silver;\n    margin-bottom: 6px; }\n\n#pHE21zpZzvEWryqHMcJf1, #_2jg1ulKVXlhO3Zu-TeZl0r, #Gll4U5FrCKtIYknK7gnl, #_3yiPF3pDE9AowCnbJAuLBR, #_1abk3Qff5m62ALvruCfPMy {\n  text-decoration: none; }\n\n.I6AE-xvSCc1fgKb0IIeZ1 {\n  padding-top: 30px;\n  position: fixed;\n  width: 100%;\n  height: 33%;\n  overflow-y: scroll;\n  bottom: 0px;\n  background-color: #FFFFCC; }\n\n.GaQAlOZMcLKMCu9NhOOLT {\n  display: none; }\n", ""]);
+	exports.push([module.i, "#_2RKIDvBZ-c75YVkbPE3upo {\n  position: fixed;\n  top: 40%;\n  right: 0px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._239Ry-eeiEXoNyd-zFwfxk {\n    pointer-events: none;\n    cursor: default;\n    color: gray; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2HQO3DDkC7XaudXT9Urjzk {\n    color: BBB;\n    text-decoration: none;\n    border-bottom: 2px solid silver;\n    margin-bottom: 6px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2bliZs_JXLzcFFvsue8m7Z {\n    display: none; }\n\n#pHE21zpZzvEWryqHMcJf1, #_2jg1ulKVXlhO3Zu-TeZl0r, #Gll4U5FrCKtIYknK7gnl, #_3sNxjFDihcy5wsRxcqmdTm, #_1abk3Qff5m62ALvruCfPMy {\n  text-decoration: none; }\n", ""]);
 
 	// exports
 	exports.locals = {
 		"komicaHelper": "_2RKIDvBZ-c75YVkbPE3upo",
 		"disabledAnchor": "_239Ry-eeiEXoNyd-zFwfxk",
 		"threadButtons": "_2HQO3DDkC7XaudXT9Urjzk",
+		"hiddenButton": "_2bliZs_JXLzcFFvsue8m7Z",
 		"update": "pHE21zpZzvEWryqHMcJf1",
 		"expand": "_2jg1ulKVXlhO3Zu-TeZl0r",
 		"contract": "Gll4U5FrCKtIYknK7gnl",
-		"create": "_3yiPF3pDE9AowCnbJAuLBR",
-		"night": "_1abk3Qff5m62ALvruCfPMy",
-		"createNew": "I6AE-xvSCc1fgKb0IIeZ1",
-		"hidden": "GaQAlOZMcLKMCu9NhOOLT"
+		"postform": "_3sNxjFDihcy5wsRxcqmdTm",
+		"night": "_1abk3Qff5m62ALvruCfPMy"
 	};
 
 /***/ },
-/* 9 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(0)();
-	// imports
-
-
-	// module
-	exports.push([module.i, "._1BwsIm2EUmmPCSaK5mocad {\n  position: fixed;\n  border: 2px solid black;\n  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.9); }\n", ""]);
-
-	// exports
-	exports.locals = {
-		"floatingReply": "_1BwsIm2EUmmPCSaK5mocad"
-	};
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var jade = __webpack_require__(11);
+	var jade = __webpack_require__(8);
 
 	module.exports = function template(locals) {
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (contract, create, expand, komicaHelper, newString, night, update) {
-	buf.push("<div" + (jade.attr("id", komicaHelper, true, true)) + "><a href=\"#\"" + (jade.attr("id", update, true, true)) + ">更新</a><br><a href=\"#\"" + (jade.attr("id", expand, true, true)) + ">放大所有圖片</a><br><a href=\"#\"" + (jade.attr("id", contract, true, true)) + ">縮小所有圖片</a><br><a href=\"#\"" + (jade.attr("id", create, true, true)) + ">" + (jade.escape((jade_interp = newString) == null ? '' : jade_interp)) + "</a><br><a href=\"#\"" + (jade.attr("id", night, true, true)) + ">夜間模式</a></div>");}.call(this,"contract" in locals_for_with?locals_for_with.contract:typeof contract!=="undefined"?contract:undefined,"create" in locals_for_with?locals_for_with.create:typeof create!=="undefined"?create:undefined,"expand" in locals_for_with?locals_for_with.expand:typeof expand!=="undefined"?expand:undefined,"komicaHelper" in locals_for_with?locals_for_with.komicaHelper:typeof komicaHelper!=="undefined"?komicaHelper:undefined,"newString" in locals_for_with?locals_for_with.newString:typeof newString!=="undefined"?newString:undefined,"night" in locals_for_with?locals_for_with.night:typeof night!=="undefined"?night:undefined,"update" in locals_for_with?locals_for_with.update:typeof update!=="undefined"?update:undefined));;return buf.join("");
+	;var locals_for_with = (locals || {});(function (contract, expand, hiddenButton, komicaHelper, newString, night, postform, update) {
+	buf.push("<div" + (jade.attr("id", komicaHelper, true, true)) + "><a href=\"#\"" + (jade.attr("id", update, true, true)) + (jade.cls([hiddenButton], [true])) + ">更新<br></a><a href=\"#\"" + (jade.attr("id", expand, true, true)) + (jade.cls([hiddenButton], [true])) + ">放大所有圖片<br></a><a href=\"#\"" + (jade.attr("id", contract, true, true)) + (jade.cls([hiddenButton], [true])) + ">縮小所有圖片<br></a><a href=\"#\"" + (jade.attr("id", postform, true, true)) + (jade.cls([hiddenButton], [true])) + ">" + (jade.escape((jade_interp = newString) == null ? '' : jade_interp)) + "<br></a><a href=\"#\"" + (jade.attr("id", night, true, true)) + (jade.cls([hiddenButton], [true])) + ">夜間模式</a></div>");}.call(this,"contract" in locals_for_with?locals_for_with.contract:typeof contract!=="undefined"?contract:undefined,"expand" in locals_for_with?locals_for_with.expand:typeof expand!=="undefined"?expand:undefined,"hiddenButton" in locals_for_with?locals_for_with.hiddenButton:typeof hiddenButton!=="undefined"?hiddenButton:undefined,"komicaHelper" in locals_for_with?locals_for_with.komicaHelper:typeof komicaHelper!=="undefined"?komicaHelper:undefined,"newString" in locals_for_with?locals_for_with.newString:typeof newString!=="undefined"?newString:undefined,"night" in locals_for_with?locals_for_with.night:typeof night!=="undefined"?night:undefined,"postform" in locals_for_with?locals_for_with.postform:typeof postform!=="undefined"?postform:undefined,"update" in locals_for_with?locals_for_with.update:typeof update!=="undefined"?update:undefined));;return buf.join("");
 	}
 
 /***/ },
-/* 11 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -826,7 +683,7 @@
 	    throw err;
 	  }
 	  try {
-	    str = str || __webpack_require__(18).readFileSync(filename, 'utf8')
+	    str = str || __webpack_require__(9).readFileSync(filename, 'utf8')
 	  } catch (ex) {
 	    rethrow(err, null, lineno)
 	  }
@@ -858,229 +715,61 @@
 
 
 /***/ },
-/* 12 */
+/* 9 */
+/***/ function(module, exports) {
+
+	/* (ignored) */
+
+/***/ },
+/* 10 */
 /***/ function(module, exports) {
 
 	"use strict";
-	// get the night mode state from local storage
-	var isNight = localStorage && localStorage.getItem('night') === 'true';
-	function bindNightModeButton(doc, darkStyle, nightButton) {
-	    'use strict';
-	    // create the night mode style element
-	    var nightStyle = doc.createElement('style');
-	    nightStyle.innerHTML = darkStyle;
-	    // recover the night mode state
-	    if (isNight) {
-	        doc.body.appendChild(nightStyle);
+	var Ajax = (function () {
+	    function Ajax(method, url, type) {
+	        this.method = method;
+	        this.url = url;
+	        this.xhr = new XMLHttpRequest();
+	        this.type = type;
 	    }
-	    nightButton.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        if (isNight) {
-	            doc.body.removeChild(nightStyle);
-	        }
-	        else {
-	            doc.body.appendChild(nightStyle);
-	        }
-	        // toggle the night mode state
-	        isNight = !isNight;
-	        if (localStorage) {
-	            // update the state to the local storage
-	            localStorage.setItem('night', isNight ? 'true' : 'false');
-	        }
-	    });
-	}
-	exports.bindNightModeButton = bindNightModeButton;
-
-
-/***/ },
-/* 13 */
-/***/ function(module, exports) {
-
-	"use strict";
-	// bind the new post button
-	var isHiding = true;
-	function bindPostButton(hiddenClass, createButton, createNewForm) {
-	    'use strict';
-	    createButton.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        if (isHiding) {
-	            // remove the 'hidden' class, show the post form
-	            var classNames = createNewForm.className.split(' ');
-	            classNames.splice(classNames.length - 1, 1);
-	            createNewForm.className = classNames.join(' ');
-	        }
-	        else {
-	            // add the 'hidden' class to hide the form
-	            createNewForm.className += " " + hiddenClass;
-	        }
-	        // toggle the state
-	        isHiding = !isHiding;
-	    });
-	}
-	exports.bindPostButton = bindPostButton;
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var Ajax_1 = __webpack_require__(1);
-	var config_1 = __webpack_require__(2);
-	var DOMWatcher_1 = __webpack_require__(3);
-	// a function that stick the reply element near the quote
-	function stickReply(quote, reply, floatClass, floatsParent) {
-	    'use strict';
-	    var clone;
-	    if (reply) {
-	        // clone the reply element, prevent duplicate ids and add float class
-	        clone = reply.cloneNode(true);
-	        clone.removeAttribute('id');
-	        // if the reply is the post, add the reply class
-	        if (/threadpost/.test(clone.className)) {
-	            clone.className += ' reply';
-	            // remove the warn text
-	            var toplevel = clone.children[0];
-	            var children = toplevel.children;
-	            var warnSpan = children[children.length - 2];
-	            if (warnSpan.tagName.toLowerCase() === 'span') {
-	                toplevel.removeChild(warnSpan);
-	            }
-	        }
-	        clone.className += " " + floatClass;
-	        // position it near the reply element
-	        var rect = quote.getBoundingClientRect();
-	        clone.setAttribute('style', "left: " + Math.round(rect.left + rect.width) + "px; top: " + Math.round(rect.top) + "px;");
-	        floatsParent.appendChild(clone);
-	    }
-	    // bind the mouseout event that destroy the clone element
-	    // if clone is undefined, still need it to remove "hovering" attribute
-	    function removeElement() {
-	        if (clone) {
-	            floatsParent.removeChild(clone);
-	        }
-	        clone = undefined;
-	        quote.removeAttribute('hovering');
-	        quote.removeEventListener('mouseout', removeElement);
-	    }
-	    quote.addEventListener('mouseout', removeElement);
-	}
-	// the threads cache
-	var cache = {};
-	// the locks of ajax call for thread document
-	var getting = {};
-	function bindReplyToQuote(anchor, doc, floatsParent, floatClass) {
-	    'use strict';
-	    if (floatsParent === void 0) { floatsParent = doc.body; }
-	    // get all the quote element, a quote span may have multiple quote anchor points
-	    var matched = anchor.href.match(/.*#r([0-9]*).*/);
-	    if (!matched || matched.length < 2) {
-	        return;
-	    }
-	    var targetID = matched[1];
-	    anchor.addEventListener('mouseover', function () {
+	    Ajax.prototype.start = function () {
 	        var _this = this;
-	        var target = doc.getElementById("r" + targetID);
-	        if (!target) {
-	            // if the reply is hide inside the thread
-	            // get the thread ID
-	            var threadIDmatch = this.href.match(/.res=([0-9]*).*/);
-	            if (!threadIDmatch || threadIDmatch.length !== 2) {
-	                return;
-	            }
-	            var threadID_1 = threadIDmatch[1];
-	            // check if the thread is cached and the target is in the cache
-	            if (!cache[threadID_1] && !getting[threadID_1]) {
-	                // lock the ajax attempt
-	                getting[threadID_1] = true;
-	                // set the cursor pointing this quote to loading animation
-	                this.setAttribute('style', 'cursor: wait;');
-	                // start ajax loading the thread
-	                var ajax = new Ajax_1.default('get', this.href, 'document');
-	                ajax.start().then(function (newDoc) {
-	                    cache[threadID_1] = newDoc;
-	                    // unlock ajax attempt
-	                    delete getting[threadID_1];
-	                    // remove loading animation
-	                    _this.removeAttribute('style');
-	                    // if this quote is still hovered, stick the reply immediately
-	                    if (_this.getAttribute('hovering')) {
-	                        stickReply(_this, newDoc.getElementById('r' + targetID), floatClass, floatsParent);
-	                    }
-	                });
-	            }
-	            else if (cache[threadID_1]) {
-	                target = cache[threadID_1].getElementById("r" + targetID);
-	            }
+	        var onLoad = new Promise(function (resolve, reject) {
+	            _this.xhr.onload = function () {
+	                if (_this.xhr.status === 200) {
+	                    resolve(_this.xhr.response);
+	                }
+	                else {
+	                    console.log('reject', _this.xhr.status);
+	                    reject();
+	                }
+	            };
+	            _this.xhr.onerror = reject;
+	        });
+	        this.xhr.open(this.method, this.url, true);
+	        if (this.type) {
+	            this.xhr.responseType = this.type;
 	        }
-	        // stick the quoted reply near the quote
-	        stickReply(this, target, floatClass, floatsParent);
-	        // set custom hovering attribute for after ajax loading
-	        this.setAttribute('hovering', 'true');
-	    });
-	}
-	exports.bindReplyToQuote = bindReplyToQuote;
-	function initializeQuotes(config, isThread, floatsParent) {
-	    'use strict';
-	    if (config === void 0) { config = config_1.default(window.location.href); }
-	    if (isThread === void 0) { isThread = config.isThread.test(window.location.href); }
-	    if (floatsParent === void 0) { floatsParent = document.body; }
-	    var style = __webpack_require__(9);
-	    var css = style[0][1];
-	    var locals = style.locals;
-	    // append the style
-	    var styleTag = document.createElement('style');
-	    styleTag.innerHTML = css;
-	    document.body.appendChild(styleTag);
-	    var qlinks = config.getQLinks(document);
-	    if (qlinks) {
-	        for (var i = 0; i < qlinks.length; i++) {
-	            var qlink = qlinks[i];
-	            if (config.quote && config.quote.test(qlink.href)) {
-	                bindReplyToQuote(qlink, document, floatsParent, locals.floatingReply);
-	            }
-	        }
-	    }
-	    // attach a DOM watcher on the main thread or thread list
-	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
-	    var domWatcher = new DOMWatcher_1.default(parent);
-	    domWatcher.onAddNode(function (element) {
-	        var reply = element;
-	        var id = reply.id;
-	        var clear = false;
-	        // if the element is text node, return
-	        if (!reply.setAttribute) {
-	            return;
-	        }
-	        if (!id) {
-	            reply.setAttribute('id', 'komica_helper_temp');
-	            id = reply.id;
-	            clear = true;
-	        }
-	        var newQlinks = document.querySelectorAll("#" + id + " .qlink");
-	        if (newQlinks) {
-	            for (var j = 0; j < newQlinks.length; j++) {
-	                bindReplyToQuote(newQlinks[j], document, floatsParent, locals.floatingReply);
-	            }
-	        }
-	        if (clear) {
-	            reply.removeAttribute('id');
-	        }
-	    });
-	    domWatcher.start();
-	}
+	        this.xhr.send();
+	        return onLoad;
+	    };
+	    return Ajax;
+	}());
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = initializeQuotes;
-	;
+	exports.default = Ajax;
 
 
 /***/ },
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// update function after clicking update button
-	var Ajax_1 = __webpack_require__(1);
+	var Ajax_1 = __webpack_require__(10);
 	function createUpdateCallback(url, doc, floatsParent, config, floatClass) {
 	    'use strict';
 	    if (floatsParent === void 0) { floatsParent = doc.body; }
@@ -1133,7 +822,7 @@
 	        // only invoke update function if it is not updating
 	        if (!(/disabledAnchor/.test(this.className))) {
 	            this.className += " " + locals.disabledAnchor;
-	            this.innerHTML = '更新中..';
+	            this.innerHTML = '更新中..<br>';
 	            // remove any timeout that is started before
 	            if (timeout) {
 	                clearTimeout(timeout);
@@ -1146,7 +835,7 @@
 	                return new Promise(function (resolve) {
 	                    if (diff) {
 	                        // if there are new thread, show the diff and reset after 5 seconds
-	                        _this.innerHTML = "\u66F4\u65B0(+" + diff + ")";
+	                        _this.innerHTML = "\u66F4\u65B0(+" + diff + ")<br>";
 	                        timeout = setTimeout(resolve, 5000);
 	                    }
 	                    else {
@@ -1156,7 +845,7 @@
 	                });
 	            }).then(function () {
 	                // reset the button text
-	                _this.innerHTML = '更新';
+	                _this.innerHTML = '更新<br>';
 	            });
 	        }
 	        else {
@@ -1174,7 +863,7 @@
 
 	"use strict";
 	// update function after clicking update button
-	var Ajax_1 = __webpack_require__(1);
+	var Ajax_1 = __webpack_require__(10);
 	function createUpdateCallback(url, doc, floatsParent, config, floatClass) {
 	    'use strict';
 	    if (floatsParent === void 0) { floatsParent = doc.body; }
@@ -1218,7 +907,7 @@
 	        // only invoke update function if it is not updating
 	        if (!(/disabledAnchor/.test(this.className))) {
 	            this.className += " " + locals.disabledAnchor;
-	            this.innerHTML = '更新中..';
+	            this.innerHTML = '更新中..<br>';
 	            // remove any timeout that is started before
 	            if (timeout) {
 	                clearTimeout(timeout);
@@ -1231,7 +920,7 @@
 	                return new Promise(function (resolve) {
 	                    if (diff) {
 	                        // if there are new thread, show the diff and reset after 5 seconds
-	                        _this.innerHTML = "\u66F4\u65B0(+" + diff + ")";
+	                        _this.innerHTML = "\u66F4\u65B0(+" + diff + ")<br>";
 	                        timeout = setTimeout(resolve, 5000);
 	                    }
 	                    else {
@@ -1241,7 +930,7 @@
 	                });
 	            }).then(function () {
 	                // reset the button text
-	                _this.innerHTML = '更新';
+	                _this.innerHTML = '更新<br>';
 	            });
 	        }
 	        else {
@@ -1254,30 +943,42 @@
 
 
 /***/ },
-/* 17 */
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var def = __webpack_require__(6)[0][1];
-	var homu = __webpack_require__(7)[0][1];
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = {
-	    default: def,
-	    homu: homu,
-	};
-
-
-/***/ },
-/* 18 */
-/***/ function(module, exports) {
-
-	/* (ignored) */
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(5);
+	var replylistupdate_1 = __webpack_require__(15);
+	var threadlistupdate_1 = __webpack_require__(16);
+	var config_1 = __webpack_require__(1);
+	var injectmenu_1 = __webpack_require__(2);
+	function initialize() {
+	    'use strict';
+	    var url = window.location.href;
+	    var config = config_1.default(url);
+	    var isThread = config.isThread.test(url);
+	    // inject the menu buttons
+	    var menuButtons = injectmenu_1.injectMenu(config, isThread);
+	    // enable update button
+	    injectmenu_1.enableButtons({
+	        updateButton: true,
+	    });
+	    // bind the update button base on the page type
+	    if (isThread) {
+	        replylistupdate_1.default(url, document, menuButtons.menu, config, menuButtons.locals, menuButtons.updateButton);
+	    }
+	    else {
+	        threadlistupdate_1.default(url, document, menuButtons.menu, config, menuButtons.locals, menuButtons.updateButton);
+	    }
+	}
+	if (document.readyState !== 'loading') {
+	    initialize();
+	}
+	else {
+	    document.addEventListener('DOMContentLoaded', initialize.bind(undefined));
+	}
 
 
 /***/ }

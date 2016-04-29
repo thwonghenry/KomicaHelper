@@ -40,8 +40,10 @@ function stickReply(quote: HTMLElement, reply: HTMLElement, floatClass: string, 
         clone = undefined;
         quote.removeAttribute('hovering');
         quote.removeEventListener('mouseout', removeElement);
+        document.removeEventListener('scroll', removeElement);
     }
     quote.addEventListener('mouseout', removeElement);
+    document.addEventListener('scroll', removeElement);
 }
 
 // the threads cache
@@ -111,20 +113,23 @@ export function bindReplyToQuote(anchor: HTMLAnchorElement, doc: Document, float
     });
 }
 
-export default function initializeQuotes(config: Config = getConfigByURL(window.location.href),
-    isThread: boolean = config.isThread.test(window.location.href),
+const url: string  = window.location.href;
+export default function initializeQuotes(config: komicaHelper.Config = getConfigByURL(url),
+    isThread: boolean = config.isThread.test(url),
     floatsParent: HTMLElement = document.body): void {
 
     'use strict';
+    // import the css
     const style: any = require('!css!sass!../styles/quote.sass');
     const css: string = style[0][1];
-    const locals: LocalStyle = style.locals;
+    const locals: komicaHelper.LocalStyle = style.locals;
 
     // append the style
     let styleTag: HTMLElement = document.createElement('style');
     styleTag.innerHTML = css;
     document.body.appendChild(styleTag);
 
+    // bind all the quotes to stick reply event
     const qlinks: NodeListOf<Element> = config.getQLinks(document);
     if (qlinks) {
         for (let i: number = 0; i < qlinks.length; i++) {
@@ -134,11 +139,12 @@ export default function initializeQuotes(config: Config = getConfigByURL(window.
             }
         }
     }
+
     // attach a DOM watcher on the main thread or thread list
     const parent: HTMLElement = isThread ? config.getReplies(document) : config.getThreads(document);
-
     const domWatcher: DOMWatcher = new DOMWatcher(parent);
 
+    // attach add node event callback
     domWatcher.onAddNode((element: Node) => {
         let reply: HTMLElement = element as HTMLElement;
         let id: string = reply.id;
@@ -147,17 +153,20 @@ export default function initializeQuotes(config: Config = getConfigByURL(window.
         if (!reply.setAttribute) {
             return;
         }
+        // if no id to query, add a temporary id to the node
         if (!id) {
             reply.setAttribute('id', 'komica_helper_temp');
             id = reply.id;
             clear = true;
         }
-        let newQlinks: NodeListOf<Element> = document.querySelectorAll(`#${id} .qlink`);
+        // query the qoute element
+        let newQlinks: NodeListOf<Element> = document.querySelectorAll(`#${id} .respost .qlink`);
         if (newQlinks) {
             for (let j: number = 0; j < newQlinks.length; j++) {
                 bindReplyToQuote(newQlinks[j] as HTMLAnchorElement, document, floatsParent, locals.floatingReply);
             }
         }
+        // if a temporary id is added, clear it at the end
         if (clear) {
             reply.removeAttribute('id');
         }

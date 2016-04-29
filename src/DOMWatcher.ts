@@ -8,6 +8,7 @@ export default class DOMWatcher {
         this.parent = parent;
     }
 
+    // client attaches the event callback actively
     public onUpdate(onUpdateCallback: () => void): void {
         this.onUpdateCallback = onUpdateCallback;
     }
@@ -20,16 +21,19 @@ export default class DOMWatcher {
         this.onRemoveNodeCallback = onRemoveNodeCallback;
     }
 
+    // install the observer
     public start(): void {
         const mutationObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[], observer: MutationObserver) => {
             if (this.onUpdateCallback) {
                 this.onUpdateCallback();
             }
+            // only continue if both event callback exists
             if (!this.onAddNodeCallback && !this.onRemoveNodeCallback) {
                 return;
             }
+
             mutations.forEach((mutation: MutationRecord) => {
-                // for all added nodes, bind the thumbnail to a button if exists
+                // for each event type, trigger the callback
                 if (this.onAddNodeCallback) {
                     for (let i: number = 0; i < mutation.addedNodes.length; i++) {
                         this.onAddNodeCallback(mutation.addedNodes[i]);

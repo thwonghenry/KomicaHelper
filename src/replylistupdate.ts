@@ -2,7 +2,7 @@
 import Ajax from './Ajax';
 
 function createUpdateCallback(url: string, doc: HTMLDocument, floatsParent: HTMLElement = doc.body,
-    config: Config, floatClass: string): () => Promise<number> {
+    config: komicaHelper.Config, floatClass: string): () => Promise<number> {
 
     'use strict';
     // initialize ajax object
@@ -13,13 +13,12 @@ function createUpdateCallback(url: string, doc: HTMLDocument, floatsParent: HTML
     let newChildren: HTMLCollection;
     let oldChildren: HTMLCollection;
 
-    // get the method of obtaining threads
-    const getElements: (doc: Document) => HTMLElement = config.getThreads;
+    // get the method of obtaining replies
+    const getElements: (doc: Document) => HTMLElement = config.getReplies;
 
     return function(): Promise<number> {
         return ajax.start().then(
             (newDoc: Document) => {
-                // create a new doc to plug in the ajax result
                 newElements = getElements(newDoc);
                 oldElements = getElements(doc);
                 if (!newElements || !oldElements) {
@@ -28,23 +27,32 @@ function createUpdateCallback(url: string, doc: HTMLDocument, floatsParent: HTML
                 }
                 newChildren = newElements.children;
                 oldChildren = oldElements.children;
+                const diff: number = newChildren.length - oldChildren.length;
 
-                // update the whole page
-                oldElements.innerHTML = newElements.innerHTML;
+                // compare the difference on the number of threads reply
+                const lastReply: Element = oldChildren[oldChildren.length - 2];
+
+                // insert the new replys from bottom of the new list to the bottom of the old list
+                for (let i: number = newChildren.length - 2, j: number = 0; i >= 0; i-- , j++) {
+                    if (lastReply.id === newChildren[i].id) {
+                        break;
+                    } else {
+                        oldElements.insertBefore(newChildren[i], oldChildren[oldChildren.length - 1 - j]);
+                    }
+                }
 
                 // return the diff value
                 return new Promise<number>((resolve: (diff: number) => void) => {
-                    resolve(0);
+                    resolve(diff);
                 });
             },
             () => console.log('rejected')
         );
     };
-
 }
 
 export default function bindUpdateButton(url: string, doc: Document, menuButtons: HTMLElement,
-    config: Config, locals: LocalStyle, updateButton: HTMLAnchorElement): void {
+    config: komicaHelper.Config, locals: komicaHelper.LocalStyle, updateButton: HTMLAnchorElement): void {
 
     'use strict';
     // create callback function
@@ -59,7 +67,7 @@ export default function bindUpdateButton(url: string, doc: Document, menuButtons
         // only invoke update function if it is not updating
         if (!(/disabledAnchor/.test(this.className))) {
             this.className += ` ${locals.disabledAnchor}`;
-            this.innerHTML = '更新中..';
+            this.innerHTML = '更新中..<br>';
 
             // remove any timeout that is started before
             if (timeout) {
@@ -75,7 +83,7 @@ export default function bindUpdateButton(url: string, doc: Document, menuButtons
                 return new Promise<void>((resolve: () => void) => {
                     if (diff) {
                         // if there are new thread, show the diff and reset after 5 seconds
-                        this.innerHTML = `更新(+${diff})`;
+                        this.innerHTML = `更新(+${diff})<br>`;
                         timeout = setTimeout(resolve, 5000);
                     } else {
                         // reset immediately
@@ -84,7 +92,7 @@ export default function bindUpdateButton(url: string, doc: Document, menuButtons
                 });
             }).then(() => {
                 // reset the button text
-                this.innerHTML = '更新';
+                this.innerHTML = '更新<br>';
             });
         } else {
             console.log('waiting');

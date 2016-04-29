@@ -1,5 +1,6 @@
 import nightStyles from '../styles/dark/index';
 
+// helper functions that used for binding
 function getElementById(id: string, doc: Document): HTMLElement {
     'use strict';
     return doc.getElementById(id);
@@ -29,7 +30,7 @@ function getElementsByQuery(query: string, doc: Document): NodeListOf<Element> {
     return doc.querySelectorAll(query);
 }
 
-function getThumbnailSizeByStyle(img: HTMLImageElement): ThumbnailSize {
+function getThumbnailSizeByStyle(img: HTMLImageElement): komicaHelper.ThumbnailSize {
     'use strict';
     const style: CSSStyleDeclaration = img.style;
     return {
@@ -43,12 +44,12 @@ function enlargeThumbnailByStyle(img: HTMLImageElement): void {
     img.setAttribute('style', 'max-width: 95%; float: none;');
 }
 
-function setThumbnailSizeByStyle(img: HTMLImageElement, size: ThumbnailSize): void {
+function setThumbnailSizeByStyle(img: HTMLImageElement, size: komicaHelper.ThumbnailSize): void {
     'use strict';
     img.setAttribute('style', `width: ${size.width}px; height: ${size.height}px`);
 }
 
-function getThumbnailSizeByAttribute(img: HTMLImageElement): ThumbnailSize {
+function getThumbnailSizeByAttribute(img: HTMLImageElement): komicaHelper.ThumbnailSize {
     'use strict';
     return {
         height: img.height,
@@ -64,7 +65,7 @@ function enlargeThumbnailByAttribute(img: HTMLImageElement): void {
     img.removeAttribute('align');
 }
 
-function setThumbnailSizeByAttribute(img: HTMLImageElement, size: ThumbnailSize): void {
+function setThumbnailSizeByAttribute(img: HTMLImageElement, size: komicaHelper.ThumbnailSize): void {
     'use strict';
     img.removeAttribute('style');
     img.width = size.width;
@@ -72,7 +73,7 @@ function setThumbnailSizeByAttribute(img: HTMLImageElement, size: ThumbnailSize)
     img.align = 'left';
 }
 
-function extendConfig(oldConfig: Config, newConfig: Config): void {
+function extendConfig(oldConfig: komicaHelper.Config, newConfig: komicaHelper.Config): void {
     'use strict';
     for (const key in newConfig) {
         if (!oldConfig.hasOwnProperty(key)) {
@@ -82,10 +83,11 @@ function extendConfig(oldConfig: Config, newConfig: Config): void {
     }
 }
 
-const defaultConfig: DefaultConfig = {
+// default config that is going to be extended
+const defaultConfig: komicaHelper.DefaultConfig = {
     darkStyle: nightStyles.default,
     enlargeThumbnail: enlargeThumbnailByStyle,
-    getCreateNewElement: getElementById.bind(undefined, 'postform_main'),
+    getPostformElement: getElementById.bind(undefined, 'postform_main'),
     getQLinks: getElementsByClassName.bind(undefined, 'qlink'),
     getReplies: getElementById.bind(undefined, 'threads'),
     getThreads: getElementById.bind(undefined, 'threads'),
@@ -97,14 +99,15 @@ const defaultConfig: DefaultConfig = {
     setThumbnailSize: setThumbnailSizeByStyle,
 };
 
-const configs: Config[] = [
+// config for different boards
+const configs: komicaHelper.Config[] = [
     {
         match: /http:\/\/.*\.mykomica\.org.*/,
         quote: /.*#r[0-9]*/,
     }, {
         darkStyle: nightStyles.homu,
         enlargeThumbnail: enlargeThumbnailByAttribute,
-        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
+        getPostformElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
         getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
         getThreads: getElementByTagNameIndex.bind(undefined, 'form', 1),
         getThumbnailSize: getThumbnailSizeByAttribute,
@@ -115,7 +118,7 @@ const configs: Config[] = [
     }, {
         darkStyle: nightStyles.homu,
         enlargeThumbnail: enlargeThumbnailByAttribute,
-        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
+        getPostformElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
         getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
         getThreads: getElementByTagNameIndex.bind(undefined, 'body', 0),
         getThumbnailSize: getThumbnailSizeByAttribute,
@@ -126,10 +129,11 @@ const configs: Config[] = [
     },
 ];
 
-export default function getConfigByURL(url: string): Config {
+// function that get config base on the url
+export default function getConfigByURL(url: string): komicaHelper.Config {
     'use strict';
     for (let i: number = 0; i < configs.length; i++) {
-        let config: Config = configs[i];
+        let config: komicaHelper.Config = configs[i];
         if (config.match.test(url)) {
             extendConfig(config, defaultConfig);
             return config;

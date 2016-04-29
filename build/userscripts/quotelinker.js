@@ -52,6 +52,7 @@
 // @description A plugin that stick the quoted reply directly
 // @name Komica Quotes Linker
 // @namespace https://github.com/thwonghenry/KomicaHelper
+// @version 0.1
 // ==/UserScript==
 
 /******/ (function(modules) { // webpackBootstrap
@@ -93,7 +94,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 23);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -156,88 +157,9 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(0)();
-	// imports
-
-
-	// module
-	exports.push([module.i, "html {\n  background-color: #111;\n  color: silver; }\n\na:link {\n  color: #6699FF; }\n\na:hover {\n  color: #FF9966; }\n\na:visited {\n  color: #99FF66; }\n\nhr {\n  border-color: #555555; }\n\nh1 {\n  color: #B36666; }\n\n.reply {\n  background-color: #222222; }\n\n.reply_hl {\n  background-color: #333333; }\n\n.Form_bg {\n  color: #800000; }\n\n#postform_main {\n  background-color: #444444; }\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(0)();
-	// imports
-
-
-	// module
-	exports.push([module.i, "body {\n  background-color: #111;\n  color: silver; }\n\na:link {\n  color: #6699FF; }\n\na:hover {\n  color: #FF9966; }\n\na:visited {\n  color: #99FF66; }\n\ntd[bgColor=\"#F0E0D6\"], td[bgColor=\"#FFFFEE\"] {\n  background-color: #222222; }\n\ntd[bgColor=\"#eeaa88\"] {\n  color: #800000; }\n\ntd[bgColor=\"#DDDDEE\"] {\n  background-color: #453877; }\n\ntd[bgColor=\"#EEDDDD\"] {\n  background-color: #333333; }\n\nhr {\n  border-color: #555555; }\n\nfont[size=\"5\"] {\n  color: #B36666; }\n\ncenter form {\n  background-color: #444444; }\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var DOMWatcher = (function () {
-	    function DOMWatcher(parent) {
-	        this.parent = parent;
-	    }
-	    DOMWatcher.prototype.onUpdate = function (onUpdateCallback) {
-	        this.onUpdateCallback = onUpdateCallback;
-	    };
-	    DOMWatcher.prototype.onAddNode = function (onAddNodeCallback) {
-	        this.onAddNodeCallback = onAddNodeCallback;
-	    };
-	    DOMWatcher.prototype.onRemoveNode = function (onRemoveNodeCallback) {
-	        this.onRemoveNodeCallback = onRemoveNodeCallback;
-	    };
-	    DOMWatcher.prototype.start = function () {
-	        var _this = this;
-	        var mutationObserver = new MutationObserver(function (mutations, observer) {
-	            if (_this.onUpdateCallback) {
-	                _this.onUpdateCallback();
-	            }
-	            if (!_this.onAddNodeCallback && !_this.onRemoveNodeCallback) {
-	                return;
-	            }
-	            mutations.forEach(function (mutation) {
-	                // for all added nodes, bind the thumbnail to a button if exists
-	                if (_this.onAddNodeCallback) {
-	                    for (var i = 0; i < mutation.addedNodes.length; i++) {
-	                        _this.onAddNodeCallback(mutation.addedNodes[i]);
-	                    }
-	                }
-	                if (_this.onRemoveNodeCallback) {
-	                    for (var i = 0; i < mutation.removedNodes.length; i++) {
-	                        _this.onRemoveNodeCallback(mutation.removedNodes[i]);
-	                    }
-	                }
-	            });
-	        });
-	        // attach a DOM watcher on the parent element
-	        mutationObserver.observe(this.parent, {
-	            childList: true,
-	        });
-	    };
-	    return DOMWatcher;
-	}());
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = DOMWatcher;
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
 	"use strict";
 	var index_1 = __webpack_require__(5);
+	// helper functions that used for binding
 	function getElementById(id, doc) {
 	    'use strict';
 	    return doc.getElementById(id);
@@ -308,10 +230,11 @@
 	        }
 	    }
 	}
+	// default config that is going to be extended
 	var defaultConfig = {
 	    darkStyle: index_1.default.default,
 	    enlargeThumbnail: enlargeThumbnailByStyle,
-	    getCreateNewElement: getElementById.bind(undefined, 'postform_main'),
+	    getPostformElement: getElementById.bind(undefined, 'postform_main'),
 	    getQLinks: getElementsByClassName.bind(undefined, 'qlink'),
 	    getReplies: getElementById.bind(undefined, 'threads'),
 	    getThreads: getElementById.bind(undefined, 'threads'),
@@ -322,6 +245,7 @@
 	    quote: /^((?!page_num).)*#r[0-9]*/,
 	    setThumbnailSize: setThumbnailSizeByStyle,
 	};
+	// config for different boards
 	var configs = [
 	    {
 	        match: /http:\/\/.*\.mykomica\.org.*/,
@@ -329,7 +253,7 @@
 	    }, {
 	        darkStyle: index_1.default.homu,
 	        enlargeThumbnail: enlargeThumbnailByAttribute,
-	        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
+	        getPostformElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
 	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
 	        getThreads: getElementByTagNameIndex.bind(undefined, 'form', 1),
 	        getThumbnailSize: getThumbnailSizeByAttribute,
@@ -340,7 +264,7 @@
 	    }, {
 	        darkStyle: index_1.default.homu,
 	        enlargeThumbnail: enlargeThumbnailByAttribute,
-	        getCreateNewElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
+	        getPostformElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
 	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
 	        getThreads: getElementByTagNameIndex.bind(undefined, 'body', 0),
 	        getThumbnailSize: getThumbnailSizeByAttribute,
@@ -350,6 +274,7 @@
 	        setThumbnailSize: setThumbnailSizeByAttribute,
 	    },
 	];
+	// function that get config base on the url
 	function getConfigByURL(url) {
 	    'use strict';
 	    for (var i = 0; i < configs.length; i++) {
@@ -367,12 +292,41 @@
 
 
 /***/ },
+/* 2 */,
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(0)();
+	// imports
+
+
+	// module
+	exports.push([module.i, "html {\n  background-color: #111;\n  color: silver; }\n\na:link {\n  color: #6699FF; }\n\na:hover {\n  color: #FF9966; }\n\na:visited {\n  color: #99FF66; }\n\nhr {\n  border-color: #555555; }\n\nh1 {\n  color: #B36666; }\n\n.reply {\n  background-color: #222222; }\n\n.reply_hl {\n  background-color: #333333; }\n\n.Form_bg {\n  color: #800000; }\n\n#postform_main {\n  background-color: #444444; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(0)();
+	// imports
+
+
+	// module
+	exports.push([module.i, "body {\n  background-color: #111;\n  color: silver; }\n\na:link {\n  color: #6699FF; }\n\na:hover {\n  color: #FF9966; }\n\na:visited {\n  color: #99FF66; }\n\ntd[bgColor=\"#F0E0D6\"], td[bgColor=\"#FFFFEE\"] {\n  background-color: #222222; }\n\ntd[bgColor=\"#eeaa88\"] {\n  color: #800000; }\n\ntd[bgColor=\"#DDDDEE\"] {\n  background-color: #453877; }\n\ntd[bgColor=\"#EEDDDD\"] {\n  background-color: #333333; }\n\nhr {\n  border-color: #555555; }\n\nfont[size=\"5\"] {\n  color: #B36666; }\n\ncenter form {\n  background-color: #444444; }\n", ""]);
+
+	// exports
+
+
+/***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var def = __webpack_require__(1)[0][1];
-	var homu = __webpack_require__(2)[0][1];
+	var def = __webpack_require__(3)[0][1];
+	var homu = __webpack_require__(4)[0][1];
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = {
 	    default: def,
@@ -381,13 +335,113 @@
 
 
 /***/ },
-/* 6 */
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Ajax = (function () {
+	    function Ajax(method, url, type) {
+	        this.method = method;
+	        this.url = url;
+	        this.xhr = new XMLHttpRequest();
+	        this.type = type;
+	    }
+	    Ajax.prototype.start = function () {
+	        var _this = this;
+	        var onLoad = new Promise(function (resolve, reject) {
+	            _this.xhr.onload = function () {
+	                if (_this.xhr.status === 200) {
+	                    resolve(_this.xhr.response);
+	                }
+	                else {
+	                    console.log('reject', _this.xhr.status);
+	                    reject();
+	                }
+	            };
+	            _this.xhr.onerror = reject;
+	        });
+	        this.xhr.open(this.method, this.url, true);
+	        if (this.type) {
+	            this.xhr.responseType = this.type;
+	        }
+	        this.xhr.send();
+	        return onLoad;
+	    };
+	    return Ajax;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = Ajax;
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var DOMWatcher = (function () {
+	    function DOMWatcher(parent) {
+	        this.parent = parent;
+	    }
+	    // client attaches the event callback actively
+	    DOMWatcher.prototype.onUpdate = function (onUpdateCallback) {
+	        this.onUpdateCallback = onUpdateCallback;
+	    };
+	    DOMWatcher.prototype.onAddNode = function (onAddNodeCallback) {
+	        this.onAddNodeCallback = onAddNodeCallback;
+	    };
+	    DOMWatcher.prototype.onRemoveNode = function (onRemoveNodeCallback) {
+	        this.onRemoveNodeCallback = onRemoveNodeCallback;
+	    };
+	    // install the observer
+	    DOMWatcher.prototype.start = function () {
+	        var _this = this;
+	        var mutationObserver = new MutationObserver(function (mutations, observer) {
+	            if (_this.onUpdateCallback) {
+	                _this.onUpdateCallback();
+	            }
+	            // only continue if both event callback exists
+	            if (!_this.onAddNodeCallback && !_this.onRemoveNodeCallback) {
+	                return;
+	            }
+	            mutations.forEach(function (mutation) {
+	                // for each event type, trigger the callback
+	                if (_this.onAddNodeCallback) {
+	                    for (var i = 0; i < mutation.addedNodes.length; i++) {
+	                        _this.onAddNodeCallback(mutation.addedNodes[i]);
+	                    }
+	                }
+	                if (_this.onRemoveNodeCallback) {
+	                    for (var i = 0; i < mutation.removedNodes.length; i++) {
+	                        _this.onRemoveNodeCallback(mutation.removedNodes[i]);
+	                    }
+	                }
+	            });
+	        });
+	        // attach a DOM watcher on the parent element
+	        mutationObserver.observe(this.parent, {
+	            childList: true,
+	        });
+	    };
+	    return DOMWatcher;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = DOMWatcher;
+
+
+/***/ },
+/* 12 */,
+/* 13 */,
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Ajax_1 = __webpack_require__(11);
-	var config_1 = __webpack_require__(4);
-	var DOMWatcher_1 = __webpack_require__(3);
+	var Ajax_1 = __webpack_require__(10);
+	var config_1 = __webpack_require__(1);
+	var DOMWatcher_1 = __webpack_require__(11);
 	// a function that stick the reply element near the quote
 	function stickReply(quote, reply, floatClass, floatsParent) {
 	    'use strict';
@@ -422,8 +476,10 @@
 	        clone = undefined;
 	        quote.removeAttribute('hovering');
 	        quote.removeEventListener('mouseout', removeElement);
+	        document.removeEventListener('scroll', removeElement);
 	    }
 	    quote.addEventListener('mouseout', removeElement);
+	    document.addEventListener('scroll', removeElement);
 	}
 	// the threads cache
 	var cache = {};
@@ -480,18 +536,21 @@
 	    });
 	}
 	exports.bindReplyToQuote = bindReplyToQuote;
+	var url = window.location.href;
 	function initializeQuotes(config, isThread, floatsParent) {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(window.location.href); }
-	    if (isThread === void 0) { isThread = config.isThread.test(window.location.href); }
+	    if (config === void 0) { config = config_1.default(url); }
+	    if (isThread === void 0) { isThread = config.isThread.test(url); }
 	    if (floatsParent === void 0) { floatsParent = document.body; }
-	    var style = __webpack_require__(8);
+	    // import the css
+	    var style = __webpack_require__(19);
 	    var css = style[0][1];
 	    var locals = style.locals;
 	    // append the style
 	    var styleTag = document.createElement('style');
 	    styleTag.innerHTML = css;
 	    document.body.appendChild(styleTag);
+	    // bind all the quotes to stick reply event
 	    var qlinks = config.getQLinks(document);
 	    if (qlinks) {
 	        for (var i = 0; i < qlinks.length; i++) {
@@ -504,6 +563,7 @@
 	    // attach a DOM watcher on the main thread or thread list
 	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
 	    var domWatcher = new DOMWatcher_1.default(parent);
+	    // attach add node event callback
 	    domWatcher.onAddNode(function (element) {
 	        var reply = element;
 	        var id = reply.id;
@@ -512,17 +572,20 @@
 	        if (!reply.setAttribute) {
 	            return;
 	        }
+	        // if no id to query, add a temporary id to the node
 	        if (!id) {
 	            reply.setAttribute('id', 'komica_helper_temp');
 	            id = reply.id;
 	            clear = true;
 	        }
-	        var newQlinks = document.querySelectorAll("#" + id + " .qlink");
+	        // query the qoute element
+	        var newQlinks = document.querySelectorAll("#" + id + " .respost .qlink");
 	        if (newQlinks) {
 	            for (var j = 0; j < newQlinks.length; j++) {
 	                bindReplyToQuote(newQlinks[j], document, floatsParent, locals.floatingReply);
 	            }
 	        }
+	        // if a temporary id is added, clear it at the end
 	        if (clear) {
 	            reply.removeAttribute('id');
 	        }
@@ -535,8 +598,11 @@
 
 
 /***/ },
-/* 7 */,
-/* 8 */
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(0)();
@@ -552,57 +618,20 @@
 	};
 
 /***/ },
-/* 9 */
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var quote_1 = __webpack_require__(6);
+	var quote_1 = __webpack_require__(14);
 	if (document.readyState !== 'loading') {
 	    quote_1.default();
 	}
 	else {
 	    document.addEventListener('DOMContentLoaded', quote_1.default.bind(undefined));
 	}
-
-
-/***/ },
-/* 10 */,
-/* 11 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var Ajax = (function () {
-	    function Ajax(method, url, type) {
-	        this.method = method;
-	        this.url = url;
-	        this.xhr = new XMLHttpRequest();
-	        this.type = type;
-	    }
-	    Ajax.prototype.start = function () {
-	        var _this = this;
-	        var onLoad = new Promise(function (resolve, reject) {
-	            _this.xhr.onload = function () {
-	                if (_this.xhr.status === 200) {
-	                    resolve(_this.xhr.response);
-	                }
-	                else {
-	                    console.log('reject', _this.xhr.status);
-	                    reject();
-	                }
-	            };
-	            _this.xhr.onerror = reject;
-	        });
-	        this.xhr.open(this.method, this.url, true);
-	        if (this.type) {
-	            this.xhr.responseType = this.type;
-	        }
-	        this.xhr.send();
-	        return onLoad;
-	    };
-	    return Ajax;
-	}());
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = Ajax;
 
 
 /***/ }

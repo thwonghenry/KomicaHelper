@@ -3,7 +3,7 @@ import DOMWatcher from './DOMWatcher';
 
 let buttons: HTMLButtonElement[] = [];
 
-export function bindThumbnail(img: HTMLImageElement, config: Config, doc: Document): void {
+function bindThumbnail(img: HTMLImageElement, config: komicaHelper.Config, doc: Document): void {
     'use strict';
     // create the button element for image function
     let button: HTMLButtonElement = doc.createElement('button');
@@ -17,7 +17,7 @@ export function bindThumbnail(img: HTMLImageElement, config: Config, doc: Docume
     let br: HTMLBRElement = doc.createElement('br');
 
     // save the size of the thumbnail for restoring later
-    const size: ThumbnailSize = config.getThumbnailSize(img);
+    const size: komicaHelper.ThumbnailSize = config.getThumbnailSize(img);
     if (!size) {
         console.error('Error when getting the size of thumbnail');
         return;
@@ -77,8 +77,9 @@ export function bindThumbnailControlButtons(expandButton: HTMLAnchorElement, con
     });
 }
 
-export default function initializeThumbnails(config: Config = getConfigByURL(window.location.href),
-    isThread: boolean = config.isThread.test(window.location.href)): void {
+const url: string = window.location.href;
+export default function initializeThumbnails(config: komicaHelper.Config = getConfigByURL(url),
+    isThread: boolean = config.isThread.test(url)): void {
 
     'use strict';
     // bind all the thumbnails to a button
@@ -99,15 +100,18 @@ export default function initializeThumbnails(config: Config = getConfigByURL(win
         if (!reply.setAttribute) {
             return;
         }
+        // if no id to query, add a temporary id to the node
         if (!id) {
             reply.setAttribute('id', 'komica_helper_temp');
             id = reply.id;
             clear = true;
         }
+        // query the thumbnail element
         let img: HTMLImageElement = document.querySelector(`#${id} img`) as HTMLImageElement;
         if (img) {
             bindThumbnail(img, config, document);
         }
+        // if a temporary id is added, clear it at the end
         if (clear) {
             reply.removeAttribute('id');
         }
