@@ -160,7 +160,7 @@ export default function initializeQuotes(config: komicaHelper.Config = getConfig
             clear = true;
         }
         // query the qoute element
-        let newQlinks: NodeListOf<Element> = document.querySelectorAll(`#${id} .respost .qlink`);
+        let newQlinks: NodeListOf<Element> = document.querySelectorAll(`#${id} .resquote .qlink`);
         if (newQlinks) {
             for (let j: number = 0; j < newQlinks.length; j++) {
                 bindReplyToQuote(newQlinks[j] as HTMLAnchorElement, document, floatsParent, locals.floatingReply);

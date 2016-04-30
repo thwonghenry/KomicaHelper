@@ -579,7 +579,7 @@
 	            clear = true;
 	        }
 	        // query the qoute element
-	        var newQlinks = document.querySelectorAll("#" + id + " .respost .qlink");
+	        var newQlinks = document.querySelectorAll("#" + id + " .resquote .qlink");
 	        if (newQlinks) {
 	            for (var j = 0; j < newQlinks.length; j++) {
 	                bindReplyToQuote(newQlinks[j], document, floatsParent, locals.floatingReply);
