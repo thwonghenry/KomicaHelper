@@ -145,7 +145,7 @@ export default function initializeQuotes(config: komicaHelper.Config = getConfig
     const domWatcher: DOMWatcher = new DOMWatcher(parent);
 
     // attach add node event callback
-    domWatcher.onAddNode((element: Node) => {
+    domWatcher.on('addnode', (element: Node) => {
         let reply: HTMLElement = element as HTMLElement;
         let id: string = reply.id;
         let clear: boolean = false;

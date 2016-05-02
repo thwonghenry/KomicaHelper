@@ -94,7 +94,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -301,7 +301,7 @@
 
 
 	// module
-	exports.push([module.i, "html {\n  background-color: #111;\n  color: silver; }\n\na:link {\n  color: #6699FF; }\n\na:hover {\n  color: #FF9966; }\n\na:visited {\n  color: #99FF66; }\n\nhr {\n  border-color: #555555; }\n\nh1 {\n  color: #B36666; }\n\n.reply {\n  background-color: #222222; }\n\n.reply_hl {\n  background-color: #333333; }\n\n.Form_bg {\n  color: #800000; }\n\n#postform_main {\n  background-color: #444444; }\n", ""]);
+	exports.push([module.i, "html, body {\n  background-color: #111;\n  color: silver; }\n\na:link {\n  color: #6699FF; }\n\na:hover {\n  color: #FF9966; }\n\na:visited {\n  color: #99FF66; }\n\nhr {\n  border-color: #555555; }\n\nh1 {\n  color: #B36666; }\n\n.reply {\n  background-color: #222222; }\n\n.reply_hl {\n  background-color: #333333; }\n\n.Form_bg {\n  color: #800000; }\n\n#postform_main {\n  background-color: #444444; }\n\n.page_switch .ul div.link a {\n  background-color: #222222; }\n", ""]);
 
 	// exports
 
@@ -385,38 +385,47 @@
 	var DOMWatcher = (function () {
 	    function DOMWatcher(parent) {
 	        this.parent = parent;
+	        this.subscribers = {};
 	    }
 	    // client attaches the event callback actively
-	    DOMWatcher.prototype.onUpdate = function (onUpdateCallback) {
-	        this.onUpdateCallback = onUpdateCallback;
+	    DOMWatcher.prototype.on = function (eventType, callback) {
+	        if (!this.subscribers[eventType]) {
+	            this.subscribers[eventType] = [callback];
+	        }
+	        else {
+	            this.subscribers[eventType].push(callback);
+	        }
 	    };
-	    DOMWatcher.prototype.onAddNode = function (onAddNodeCallback) {
-	        this.onAddNodeCallback = onAddNodeCallback;
-	    };
-	    DOMWatcher.prototype.onRemoveNode = function (onRemoveNodeCallback) {
-	        this.onRemoveNodeCallback = onRemoveNodeCallback;
+	    DOMWatcher.prototype.off = function (eventType, callback) {
+	        if (!this.subscribers[eventType]) {
+	            return;
+	        }
+	        var index = this.subscribers[eventType].indexOf(callback);
+	        if (index > -1) {
+	            this.subscribers[eventType].splice(index, 1);
+	        }
 	    };
 	    // install the observer
 	    DOMWatcher.prototype.start = function () {
 	        var _this = this;
 	        var mutationObserver = new MutationObserver(function (mutations, observer) {
-	            if (_this.onUpdateCallback) {
-	                _this.onUpdateCallback();
+	            if (_this.hasSubscriber('update')) {
+	                _this.dispatch('update');
 	            }
 	            // only continue if both event callback exists
-	            if (!_this.onAddNodeCallback && !_this.onRemoveNodeCallback) {
+	            if (!_this.hasSubscriber('addnode') && !_this.hasSubscriber('removenode')) {
 	                return;
 	            }
 	            mutations.forEach(function (mutation) {
 	                // for each event type, trigger the callback
-	                if (_this.onAddNodeCallback) {
+	                if (_this.hasSubscriber('addnode')) {
 	                    for (var i = 0; i < mutation.addedNodes.length; i++) {
-	                        _this.onAddNodeCallback(mutation.addedNodes[i]);
+	                        _this.dispatch('addnode', mutation.addedNodes[i]);
 	                    }
 	                }
-	                if (_this.onRemoveNodeCallback) {
+	                if (_this.hasSubscriber('removenode')) {
 	                    for (var i = 0; i < mutation.removedNodes.length; i++) {
-	                        _this.onRemoveNodeCallback(mutation.removedNodes[i]);
+	                        _this.dispatch('removenode', mutation.removedNodes[i]);
 	                    }
 	                }
 	            });
@@ -425,6 +434,18 @@
 	        mutationObserver.observe(this.parent, {
 	            childList: true,
 	        });
+	    };
+	    DOMWatcher.prototype.hasSubscriber = function (eventType) {
+	        return this.subscribers[eventType] && this.subscribers[eventType].length > 0;
+	    };
+	    DOMWatcher.prototype.dispatch = function (eventType) {
+	        var args = [];
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            args[_i - 1] = arguments[_i];
+	        }
+	        if (this.hasSubscriber(eventType)) {
+	            this.subscribers[eventType].forEach(function (callback) { return callback.apply(void 0, args); });
+	        }
 	    };
 	    return DOMWatcher;
 	}());
@@ -435,7 +456,8 @@
 /***/ },
 /* 12 */,
 /* 13 */,
-/* 14 */
+/* 14 */,
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -543,7 +565,7 @@
 	    if (isThread === void 0) { isThread = config.isThread.test(url); }
 	    if (floatsParent === void 0) { floatsParent = document.body; }
 	    // import the css
-	    var style = __webpack_require__(19);
+	    var style = __webpack_require__(23);
 	    var css = style[0][1];
 	    var locals = style.locals;
 	    // append the style
@@ -564,7 +586,7 @@
 	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
 	    var domWatcher = new DOMWatcher_1.default(parent);
 	    // attach add node event callback
-	    domWatcher.onAddNode(function (element) {
+	    domWatcher.on('addnode', function (element) {
 	        var reply = element;
 	        var id = reply.id;
 	        var clear = false;
@@ -598,11 +620,14 @@
 
 
 /***/ },
-/* 15 */,
 /* 16 */,
 /* 17 */,
 /* 18 */,
-/* 19 */
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(0)();
@@ -618,14 +643,14 @@
 	};
 
 /***/ },
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var quote_1 = __webpack_require__(14);
+	var quote_1 = __webpack_require__(15);
 	if (document.readyState !== 'loading') {
 	    quote_1.default();
 	}

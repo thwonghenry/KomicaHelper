@@ -73,4 +73,9 @@ declare namespace komicaHelper {
         postformButton?: boolean;
         nightModeButton?: boolean;
     }
+
+    interface Setting {
+        value: string;
+        timestamp: string;
+    }
 }

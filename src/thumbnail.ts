@@ -45,7 +45,6 @@ function bindThumbnail(img: HTMLImageElement, config: komicaHelper.Config, doc: 
 export function resetButtons(): void {
     'use strict';
     // reset the button list by setting empty array
-    console.log('reset');
     buttons = [];
 }
 
@@ -92,7 +91,7 @@ export default function initializeThumbnails(config: komicaHelper.Config = getCo
     const parent: HTMLElement = isThread ? config.getReplies(document) : config.getThreads(document);
 
     const domWatcher: DOMWatcher = new DOMWatcher(parent);
-    domWatcher.onAddNode((element: Node) => {
+    domWatcher.on('addnode', (element: Node) => {
         let reply: HTMLElement = element as HTMLElement;
         let id: string = reply.id;
         let clear: boolean = false;
@@ -117,6 +116,8 @@ export default function initializeThumbnails(config: komicaHelper.Config = getCo
         }
     });
 
-    domWatcher.onUpdate(isThread ? undefined : resetButtons);
+    if (!isThread) {
+        domWatcher.on('update', resetButtons);
+    }
     domWatcher.start();
 }

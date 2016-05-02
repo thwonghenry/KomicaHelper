@@ -34,6 +34,7 @@ function jsonToMetadata(json) {
             metadata += '// @' + key + ' ' + json[key] + '\n';
             break;
         case 'matches':
+        case 'extramatches':
             for (let i = 0; i < json[key].length; i++) {
                 metadata += '// @match ' + json[key][i] + '\n';
             }

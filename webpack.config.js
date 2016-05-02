@@ -11,8 +11,7 @@ const PrependMetadata = require('./webpack_plugins/prependmetadata');
 module.exports = [{
     name: 'chrome-extension',
     entry: {
-        komicahelper: path.resolve(entryPath, 'komicahelper.ts'),
-        komicahelper_menu: path.resolve(entryPath, 'komicahelper_menu.ts')
+        komicahelper: path.resolve(entryPath, 'komicahelper.ts')
     },
     // Currently we need to add '.ts' to the resolve.extensions array.
     resolve: {
@@ -100,7 +99,8 @@ module.exports = [{
             path: path.resolve(userscriptsPath, 'nightmodetoggle.js'),
             replace: {
                 name: 'Komica Night Mode Toggle',
-                description: 'A plugin that add night mode style toggle'
+                description: 'A plugin that add night mode style toggle',
+                extramatches: ['http://web.komica.org/*']
             }
         }, {
             path: path.resolve(userscriptsPath, 'postformtoggle.js'),

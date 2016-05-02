@@ -9,7 +9,7 @@ import initializeNightMode from '../src/nightmode';
 import bindReplyListUpdate from '../src/replylistupdate';
 import bindThreadListUpdate from '../src/threadlistupdate';
 import {injectMenu, enableButtons} from '../src/injectmenu';
-// import {getSetting, setSetting} from '../src/settingsync';
+import {init} from '../src/settingsync';
 
 function initialize(): void {
     'use strict';
@@ -42,20 +42,29 @@ function initialize(): void {
 
     // bind the night mode toggle event
     initializeNightMode(config.darkStyle);
-    bindNightModeButton(document, menuButtons.nightModeButton);
+    bindNightModeButton(menuButtons.nightModeButton);
 
-    // setSetting({ komica_helper: '123' }, () => {
-    //     console.log('set done');
-    // });
 }
 
-// getSetting((setting: Object) => {
-//     console.log('setting');
-//     console.log(setting);
-// });
+function initializeMenu(): void {
+    'use strict';
+    const config: komicaHelper.Config = getConfigByURL(window.location.href);
+
+    initializeNightMode(config.darkStyle, true);
+}
+
+let initFunction: Function;
+
+// if the page is menu page, init for cross storage hub
+if (/web\.komica\.org/.test(window.location.href)) {
+    init();
+    initFunction = initializeMenu;
+} else {
+    initFunction = initialize;
+}
 
 if (document.readyState !== 'loading') {
-    initialize();
+    initFunction();
 } else {
-    document.addEventListener('DOMContentLoaded', initialize);
+    document.addEventListener('DOMContentLoaded', initFunction.bind(undefined));
 }
