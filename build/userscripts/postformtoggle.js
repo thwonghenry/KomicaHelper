@@ -741,10 +741,10 @@
 	    createButton.addEventListener('click', function (event) {
 	        event.preventDefault();
 	        if (isHiding) {
-	            createButton.classList.remove(locals.hidden);
+	            postForm.classList.remove(locals.hidden);
 	        }
 	        else {
-	            createButton.classList.add(locals.hidden);
+	            postForm.classList.add(locals.hidden);
 	        }
 	        // toggle the state
 	        isHiding = !isHiding;

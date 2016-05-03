@@ -10,9 +10,9 @@ export function bindPostButton(createButton: HTMLAnchorElement): void {
     createButton.addEventListener('click', function(event: Event): void {
         event.preventDefault();
         if (isHiding) {
-            createButton.classList.remove(locals.hidden);
+            postForm.classList.remove(locals.hidden);
         } else {
-            createButton.classList.add(locals.hidden);
+            postForm.classList.add(locals.hidden);
         }
         // toggle the state
         isHiding = !isHiding;
