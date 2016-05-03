@@ -47,12 +47,12 @@
 - Videos cannot load after update the page
 - Some element is being replaced by some extensions
 
-## How to build the chrome extension
+## How to build the chrome extension / userscripts
 
-1. Make sure you have installed node.js and Google Chrome
+1. Make sure you have installed node.js
 2. `npm i`
 3. `npm run build`
-4. Load the `build` folder as unpackaged extension in Google Chrome
+4. Done! Find the folder / scripts described in [How to use](#how-to-use)
 
 ## Contribution guideline
 
