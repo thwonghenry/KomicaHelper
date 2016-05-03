@@ -1,36 +1,39 @@
 @import "common"
 
-body
+html:local(.night_mode)
     background-color: $bgcolor
     color: $fontcolor
+    body
+        background-color: $bgcolor
+        color: $fontcolor
 
-a
-    &:link
-        color: $alink
-    &:hover
-        color: $ahover
-    &:visited
-        color: $avisit
+    a
+        &:link
+            color: $alink
+        &:hover
+            color: $ahover
+        &:visited
+            color: $avisit
 
-td
-    &[bgColor="#F0E0D6"], &[bgColor="#FFFFEE"]
-        background-color: get-color-by-level(2)
+    td
+        &[bgColor="#F0E0D6"], &[bgColor="#FFFFEE"]
+            background-color: get-color-by-level(2)
 
-    &[bgColor="#eeaa88"]
-        color: #800000
+        &[bgColor="#eeaa88"]
+            color: #800000
 
-    &[bgColor="#DDDDEE"]
-        background-color: #453877
+        &[bgColor="#DDDDEE"]
+            background-color: #453877
 
-    &[bgColor="#EEDDDD"]
-        background-color: get-color-by-level(3)
+        &[bgColor="#EEDDDD"]
+            background-color: get-color-by-level(3)
 
-hr
-    border-color: get-color-by-level(5)
+    hr
+        border-color: get-color-by-level(5)
 
-font
-    &[size="5"]
-        color: $title
+    font
+        &[size="5"]
+            color: $title
 
-center form
-    background-color: get-color-by-level(4)
+    center form
+        background-color: get-color-by-level(4)

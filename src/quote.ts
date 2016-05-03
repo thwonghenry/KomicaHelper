@@ -13,7 +13,7 @@ function stickReply(quote: HTMLElement, reply: HTMLElement, floatClass: string, 
 
         // if the reply is the post, add the reply class
         if (/threadpost/.test(clone.className)) {
-            clone.className += ' reply';
+            clone.classList.add('reply');
 
             // remove the warn text
             const toplevel: HTMLElement = clone.children[0] as HTMLElement;
@@ -23,7 +23,7 @@ function stickReply(quote: HTMLElement, reply: HTMLElement, floatClass: string, 
                 toplevel.removeChild(warnSpan);
             }
         }
-        clone.className += ` ${floatClass}`;
+        clone.classList.add(floatClass);
 
         // position it near the reply element
         const rect: ClientRect = quote.getBoundingClientRect();

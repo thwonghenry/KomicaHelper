@@ -9,7 +9,7 @@ declare namespace komicaHelper {
         enlargeThumbnail?: (img: HTMLImageElement) => void;
         setThumbnailSize?: (img: HTMLImageElement, size: ThumbnailSize) => void;
         getPostformElement?: (doc: Document) => HTMLElement;
-        darkStyle?: string;
+        darkStyle?: any;
         isThread?: RegExp;
         getQLinks?: (doc: Document) => NodeListOf<Element>;
         [key: string]: any; // indicate the compile that the key is a string for looping
@@ -25,7 +25,7 @@ declare namespace komicaHelper {
         enlargeThumbnail: (img: HTMLImageElement) => void;
         setThumbnailSize: (img: HTMLImageElement, size: ThumbnailSize) => void;
         getPostformElement: (doc: Document) => HTMLElement;
-        darkStyle: string;
+        darkStyle: any;
         isThread: RegExp;
         getQLinks: (doc: Document) => NodeListOf<Element>;
     }

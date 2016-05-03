@@ -100,7 +100,8 @@ module.exports = [{
             replace: {
                 name: 'Komica Night Mode Toggle',
                 description: 'A plugin that add night mode style toggle',
-                extramatches: ['http://web.komica.org/*']
+                extramatches: ['http://web.komica.org/*'],
+                'run-at': 'document-start', 
             }
         }, {
             path: path.resolve(userscriptsPath, 'postformtoggle.js'),

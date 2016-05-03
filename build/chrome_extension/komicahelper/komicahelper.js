@@ -243,15 +243,16 @@
 	var settingsync_1 = __webpack_require__(6);
 	// get the night mode state from local storage
 	var isNight = false;
-	var nightStyle = document.createElement('style');
+	var darkStyleName;
 	// bind the toggle button function
 	function toggleNightMode(noSync) {
 	    'use strict';
+	    var root = document.documentElement;
 	    if (isNight) {
-	        document.body.removeChild(nightStyle);
+	        root.classList.remove(darkStyleName);
 	    }
 	    else {
-	        document.body.appendChild(nightStyle);
+	        root.classList.add(darkStyleName);
 	    }
 	    // toggle the night mode state
 	    isNight = !isNight;
@@ -273,12 +274,26 @@
 	}
 	exports.bindNightModeButton = bindNightModeButton;
 	var url = window.location.href;
-	// initialize this module by providing the dark style of this board
-	function initializeNightMode(darkStyleString, isMenu) {
+	function startSynchronize() {
 	    'use strict';
-	    if (darkStyleString === void 0) { darkStyleString = config_1.default(url).darkStyle; }
-	    nightStyle.innerHTML = darkStyleString;
+	    settingsync_1.synchronizeSetting('nightmode').then(function () {
+	        var localNightMode = JSON.parse(localStorage.getItem('komica_helper_nightmode'));
+	        if (localNightMode && (localNightMode.value === 'true') !== isNight) {
+	            toggleNightMode(true);
+	        }
+	    });
+	}
+	exports.startSynchronize = startSynchronize;
+	// initialize this module by providing the dark style of this board
+	function initializeNightMode(config, isMenu) {
+	    'use strict';
+	    if (config === void 0) { config = config_1.default(url); }
+	    // append the night mode style
+	    var nightStyle = document.createElement('style');
+	    nightStyle.innerHTML = config.darkStyle[0][1];
 	    var localNightMode;
+	    document.documentElement.appendChild(nightStyle);
+	    darkStyleName = config.darkStyle.locals.night_mode;
 	    if (isMenu) {
 	        var localSetting = localStorage.getItem('komica_helper_nightmode');
 	        if (localSetting) {
@@ -299,13 +314,6 @@
 	        if (localSetting) {
 	            localNightMode = JSON.parse(localSetting);
 	        }
-	        // if the page is a board, synchronize the setting with the menu page
-	        settingsync_1.synchronizeSetting('nightmode').then(function () {
-	            localNightMode = JSON.parse(localStorage.getItem('komica_helper_nightmode'));
-	            if (localNightMode && (localNightMode.value === 'true') !== isNight) {
-	                toggleNightMode(true);
-	            }
-	        });
 	    }
 	    if (localNightMode && localNightMode.value === 'true') {
 	        toggleNightMode(true);
@@ -330,14 +338,10 @@
 	    createButton.addEventListener('click', function (event) {
 	        event.preventDefault();
 	        if (isHiding) {
-	            // remove the 'hidden' class, show the post form
-	            var classNames = postForm.className.split(' ');
-	            classNames.splice(classNames.length - 1, 1);
-	            postForm.className = classNames.join(' ');
+	            createButton.classList.remove(locals.hidden);
 	        }
 	        else {
-	            // add the 'hidden' class to hide the form
-	            postForm.className += " " + locals.hidden;
+	            createButton.classList.add(locals.hidden);
 	        }
 	        // toggle the state
 	        isHiding = !isHiding;
@@ -357,7 +361,7 @@
 	    document.body.appendChild(styleTag);
 	    postForm = config.getPostformElement(document);
 	    if (postForm) {
-	        postForm.className += locals.createNew + " " + locals.hidden;
+	        postForm.classList.add(locals.createNew, locals.hidden);
 	    }
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -375,8 +379,9 @@
 	function bindThumbnail(img, config, doc) {
 	    'use strict';
 	    // create the button element for image function
-	    var button = doc.createElement('button');
+	    var button = doc.createElement('a');
 	    button.innerHTML = '放大';
+	    button.href = '#';
 	    // insert the button alongside with the image
 	    var anchor = img.parentNode;
 	    anchor.parentNode.insertBefore(button, anchor.nextSibling);
@@ -573,12 +578,15 @@
 	    for (var _i = 0; _i < arguments.length; _i++) {
 	        keys[_i - 0] = arguments[_i];
 	    }
+	    // add the prefix
 	    keys = keys.map(function (key) { return ("komica_helper_" + key); });
 	    var storage = new crossStorage.CrossStorageClient('http://web.komica.org', {});
 	    return storage.onConnect().then(function () {
+	        // get all the keys
 	        return storage.get.apply(storage, keys);
 	    }).then(function (settings) {
-	        settings = [].concat(settings); // ensure it is array
+	        settings = [].concat(settings); // deal with single parameter
+	        // promises that used to set cross storage's value
 	        var promises = [];
 	        if (settings) {
 	            for (var i = 0; i < keys.length; i++) {
@@ -586,13 +594,14 @@
 	                var localSetting = JSON.parse(localStorage.getItem(keys[i]));
 	                var crossTimestamp = 0;
 	                var localTimestamp = 0;
+	                // retrieve the timestamp of both local and cross storage
 	                if (crossSetting && crossSetting.timestamp) {
 	                    crossTimestamp = parseInt(crossSetting.timestamp, 10) || 0;
 	                }
 	                if (localSetting && localSetting.timestamp) {
 	                    localTimestamp = parseInt(localSetting.timestamp, 10) || 0;
 	                }
-	                // need to apply cross setting to local setting
+	                // determine which setting is most recent and update the older one
 	                if (crossTimestamp > localTimestamp) {
 	                    localStorage.setItem(keys[i], JSON.stringify(crossSetting));
 	                }
@@ -601,9 +610,11 @@
 	                }
 	            }
 	        }
+	        // wait for all updates finished
 	        return Promise.all(promises);
 	    }).then(function () {
 	        storage.close();
+	        // return new promise for the caller
 	        return new Promise(function (resolve) {
 	            resolve();
 	        });
@@ -746,9 +757,7 @@
 	function enableButton(button) {
 	    'use strict';
 	    // remove the hiddenButton class
-	    var classNames = button.className.split(' ');
-	    var filtered = classNames.filter(function (className) { return className !== locals.hiddenButton; });
-	    button.className = filtered.join(' ');
+	    button.classList.remove(locals.hiddenButton);
 	}
 	// enable the selected menu buttons
 	function enableButtons(enables) {
@@ -797,7 +806,7 @@
 	        clone.removeAttribute('id');
 	        // if the reply is the post, add the reply class
 	        if (/threadpost/.test(clone.className)) {
-	            clone.className += ' reply';
+	            clone.classList.add('reply');
 	            // remove the warn text
 	            var toplevel = clone.children[0];
 	            var children = toplevel.children;
@@ -806,7 +815,7 @@
 	                toplevel.removeChild(warnSpan);
 	            }
 	        }
-	        clone.className += " " + floatClass;
+	        clone.classList.add(floatClass);
 	        // position it near the reply element
 	        var rect = quote.getBoundingClientRect();
 	        clone.setAttribute('style', "left: " + Math.round(rect.left + rect.width) + "px; top: " + Math.round(rect.top) + "px;");
@@ -1000,7 +1009,7 @@
 	        event.preventDefault();
 	        // only invoke update function if it is not updating
 	        if (!(/disabledAnchor/.test(this.className))) {
-	            this.className += " " + locals.disabledAnchor;
+	            this.classList.add(locals.disabledAnchor);
 	            this.innerHTML = '更新中..<br>';
 	            // remove any timeout that is started before
 	            if (timeout) {
@@ -1008,9 +1017,7 @@
 	            }
 	            clickCallback().then(function (diff) {
 	                // remove the "disabledAnchor" class
-	                var classes = _this.className.split(' ');
-	                classes.splice(classes.length - 1, 1);
-	                _this.className = classes.join(' ');
+	                _this.classList.remove(locals.disabledAnchor);
 	                return new Promise(function (resolve) {
 	                    if (diff) {
 	                        // if there are new thread, show the diff and reset after 5 seconds
@@ -1085,7 +1092,7 @@
 	        event.preventDefault();
 	        // only invoke update function if it is not updating
 	        if (!(/disabledAnchor/.test(this.className))) {
-	            this.className += " " + locals.disabledAnchor;
+	            this.classList.add(locals.disabledAnchor);
 	            this.innerHTML = '更新中..<br>';
 	            // remove any timeout that is started before
 	            if (timeout) {
@@ -1093,9 +1100,7 @@
 	            }
 	            clickCallback().then(function (diff) {
 	                // remove the "disabledAnchor" class
-	                var classes = _this.className.split(' ');
-	                classes.splice(classes.length - 1, 1);
-	                _this.className = classes.join(' ');
+	                _this.classList.remove(locals.disabledAnchor);
 	                return new Promise(function (resolve) {
 	                    if (diff) {
 	                        // if there are new thread, show the diff and reset after 5 seconds
@@ -1885,10 +1890,12 @@
 
 
 	// module
-	exports.push([module.i, "html, body {\n  background-color: #111;\n  color: silver; }\n\na:link {\n  color: #6699FF; }\n\na:hover {\n  color: #FF9966; }\n\na:visited {\n  color: #99FF66; }\n\nhr {\n  border-color: #555555; }\n\nh1 {\n  color: #B36666; }\n\n.reply {\n  background-color: #222222; }\n\n.reply_hl {\n  background-color: #333333; }\n\n.Form_bg {\n  color: #800000; }\n\n#postform_main {\n  background-color: #444444; }\n\n.page_switch .ul div.link a {\n  background-color: #222222; }\n", ""]);
+	exports.push([module.i, "html._1CH0lDxiMIShbCcxHUrmod {\n  background-color: #111;\n  color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod body {\n    background-color: #111;\n    color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod a:link {\n    color: #6699FF; }\n  html._1CH0lDxiMIShbCcxHUrmod a:hover {\n    color: #FF9966; }\n  html._1CH0lDxiMIShbCcxHUrmod a:visited {\n    color: #99FF66; }\n  html._1CH0lDxiMIShbCcxHUrmod hr {\n    border-color: #555555; }\n  html._1CH0lDxiMIShbCcxHUrmod h1 {\n    color: #B36666; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply_hl {\n    background-color: #333333; }\n  html._1CH0lDxiMIShbCcxHUrmod .Form_bg {\n    color: #800000; }\n  html._1CH0lDxiMIShbCcxHUrmod #postform_main {\n    background-color: #444444; }\n  html._1CH0lDxiMIShbCcxHUrmod .page_switch .ul div.link a {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .pushpost {\n    background-color: #333333; }\n", ""]);
 
 	// exports
-
+	exports.locals = {
+		"night_mode": "_1CH0lDxiMIShbCcxHUrmod"
+	};
 
 /***/ },
 /* 16 */
@@ -1899,10 +1906,12 @@
 
 
 	// module
-	exports.push([module.i, "body {\n  background-color: #111;\n  color: silver; }\n\na:link {\n  color: #6699FF; }\n\na:hover {\n  color: #FF9966; }\n\na:visited {\n  color: #99FF66; }\n\ntd[bgColor=\"#F0E0D6\"], td[bgColor=\"#FFFFEE\"] {\n  background-color: #222222; }\n\ntd[bgColor=\"#eeaa88\"] {\n  color: #800000; }\n\ntd[bgColor=\"#DDDDEE\"] {\n  background-color: #453877; }\n\ntd[bgColor=\"#EEDDDD\"] {\n  background-color: #333333; }\n\nhr {\n  border-color: #555555; }\n\nfont[size=\"5\"] {\n  color: #B36666; }\n\ncenter form {\n  background-color: #444444; }\n", ""]);
+	exports.push([module.i, "html._3PcSwAIK8c5KIZxv3BleHH {\n  background-color: #111;\n  color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH body {\n    background-color: #111;\n    color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:link {\n    color: #6699FF; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:hover {\n    color: #FF9966; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:visited {\n    color: #99FF66; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#F0E0D6\"], html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#FFFFEE\"] {\n    background-color: #222222; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#eeaa88\"] {\n    color: #800000; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#DDDDEE\"] {\n    background-color: #453877; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#EEDDDD\"] {\n    background-color: #333333; }\n  html._3PcSwAIK8c5KIZxv3BleHH hr {\n    border-color: #555555; }\n  html._3PcSwAIK8c5KIZxv3BleHH font[size=\"5\"] {\n    color: #B36666; }\n  html._3PcSwAIK8c5KIZxv3BleHH center form {\n    background-color: #444444; }\n", ""]);
 
 	// exports
-
+	exports.locals = {
+		"night_mode": "_3PcSwAIK8c5KIZxv3BleHH"
+	};
 
 /***/ },
 /* 17 */
@@ -2244,11 +2253,12 @@
 	var threadlistupdate_1 = __webpack_require__(11);
 	var injectmenu_1 = __webpack_require__(8);
 	var settingsync_1 = __webpack_require__(6);
+	var url = window.location.href;
+	var config = config_1.default(url);
+	var isThread = config.isThread.test(url);
+	var isMenu = /web\.komica\.org/.test(url);
 	function initialize() {
 	    'use strict';
-	    var url = window.location.href;
-	    var config = config_1.default(url);
-	    var isThread = config.isThread.test(url);
 	    // inject menu buttons
 	    var menuButtons = injectmenu_1.injectMenu(config, isThread);
 	    // enable all menu buttons
@@ -2269,28 +2279,23 @@
 	    postform_2.default(config);
 	    postform_1.bindPostButton(menuButtons.postformButton);
 	    // bind the night mode toggle event
-	    nightmode_2.default(config.darkStyle);
 	    nightmode_1.bindNightModeButton(menuButtons.nightModeButton);
+	    // synchronize the night mode state
+	    nightmode_1.startSynchronize();
 	}
-	function initializeMenu() {
-	    'use strict';
-	    var config = config_1.default(window.location.href);
-	    nightmode_2.default(config.darkStyle, true);
-	}
-	var initFunction;
 	// if the page is menu page, init for cross storage hub
-	if (/web\.komica\.org/.test(window.location.href)) {
+	if (isMenu) {
 	    settingsync_1.init();
-	    initFunction = initializeMenu;
+	    nightmode_2.default(config, true);
 	}
 	else {
-	    initFunction = initialize;
-	}
-	if (document.readyState !== 'loading') {
-	    initFunction();
-	}
-	else {
-	    document.addEventListener('DOMContentLoaded', initFunction.bind(undefined));
+	    nightmode_2.default(config);
+	    if (document.readyState !== 'loading') {
+	        initialize();
+	    }
+	    else {
+	        document.addEventListener('DOMContentLoaded', initialize.bind(undefined));
+	    }
 	}
 
 
@@ -2299,8 +2304,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var def = __webpack_require__(15)[0][1];
-	var homu = __webpack_require__(16)[0][1];
+	var def = __webpack_require__(15);
+	var homu = __webpack_require__(16);
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = {
 	    default: def,

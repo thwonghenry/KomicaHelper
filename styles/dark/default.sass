@@ -1,34 +1,40 @@
 @import "common"
 
-html, body
+html:local(.night_mode)
     background-color: $bgcolor
     color: $fontcolor
+    body
+        background-color: $bgcolor
+        color: $fontcolor
 
-a
-    &:link
-        color: $alink
-    &:hover
-        color: $ahover
-    &:visited
-        color: $avisit
+    a
+        &:link
+            color: $alink
+        &:hover
+            color: $ahover
+        &:visited
+            color: $avisit
 
-hr
-    border-color: get-color-by-level(5)
+    hr
+        border-color: get-color-by-level(5)
 
-h1
-    color: $title
+    h1
+        color: $title
 
-.reply
-    background-color: get-color-by-level(2)
+    .reply
+        background-color: get-color-by-level(2)
 
-.reply_hl
-    background-color: get-color-by-level(3)
+    .reply_hl
+        background-color: get-color-by-level(3)
 
-.Form_bg
-    color: #800000
+    .Form_bg
+        color: #800000
 
-#postform_main
-    background-color: get-color-by-level(4)
+    #postform_main
+        background-color: get-color-by-level(4)
 
-.page_switch .ul div.link a
-    background-color: get-color-by-level(2)
+    .page_switch .ul div.link a
+        background-color: get-color-by-level(2)
+
+    .pushpost
+        background-color: get-color-by-level(3)

@@ -58,9 +58,7 @@ export function injectMenu(config: komicaHelper.Config = getConfigByURL(url),
 function enableButton(button: HTMLAnchorElement): void {
     'use strict';
     // remove the hiddenButton class
-    const classNames: string[] = button.className.split(' ');
-    const filtered: string[] = classNames.filter((className: string) => className !== locals.hiddenButton);
-    button.className = filtered.join(' ');
+    button.classList.remove(locals.hiddenButton);
 }
 
 // enable the selected menu buttons

@@ -1,7 +1,8 @@
-import initializeNightMode, {bindNightModeButton} from '../src/nightmode';
+import initializeNightMode, {bindNightModeButton, startSynchronize} from '../src/nightmode';
 import {injectMenu, enableButtons} from '../src/injectmenu';
 import {init} from '../src/settingsync';
 
+const isMenu: boolean = /web\.komica\.org/.test(window.location.href);
 function initialize(): void {
     'use strict';
     // inject the menu buttons
@@ -13,29 +14,23 @@ function initialize(): void {
     });
 
     // initialize night mode toggle
-    initializeNightMode();
     bindNightModeButton(nightModeButton);
 
+    // synchronize the night mode state
+    startSynchronize();
 }
 
-function initializeMenu(): void {
-    'use strict';
-
-    initializeNightMode(undefined, true);
-}
-
-let initFunction: Function;
 
 // if the page is menu page, init for cross storage hub
-if (/web\.komica\.org/.test(window.location.href)) {
+if (isMenu) {
     init();
-    initFunction = initializeMenu;
+    initializeNightMode(undefined, true);
 } else {
-    initFunction = initialize;
-}
+    initializeNightMode();
+    if (document.readyState !== 'loading') {
+        initialize();
+    } else {
+        document.addEventListener('DOMContentLoaded', initialize.bind(undefined));
+    }
 
-if (document.readyState !== 'loading') {
-    initFunction();
-} else {
-    document.addEventListener('DOMContentLoaded', initFunction.bind(undefined));
 }

@@ -31,6 +31,7 @@ function jsonToMetadata(json) {
         case 'name':
         case 'namespace':
         case 'version':
+        case 'run-at':
             metadata += '// @' + key + ' ' + json[key] + '\n';
             break;
         case 'matches':

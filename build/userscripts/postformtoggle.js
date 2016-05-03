@@ -349,9 +349,7 @@
 	function enableButton(button) {
 	    'use strict';
 	    // remove the hiddenButton class
-	    var classNames = button.className.split(' ');
-	    var filtered = classNames.filter(function (className) { return className !== locals.hiddenButton; });
-	    button.className = filtered.join(' ');
+	    button.classList.remove(locals.hiddenButton);
 	}
 	// enable the selected menu buttons
 	function enableButtons(enables) {
@@ -391,10 +389,12 @@
 
 
 	// module
-	exports.push([module.i, "html, body {\n  background-color: #111;\n  color: silver; }\n\na:link {\n  color: #6699FF; }\n\na:hover {\n  color: #FF9966; }\n\na:visited {\n  color: #99FF66; }\n\nhr {\n  border-color: #555555; }\n\nh1 {\n  color: #B36666; }\n\n.reply {\n  background-color: #222222; }\n\n.reply_hl {\n  background-color: #333333; }\n\n.Form_bg {\n  color: #800000; }\n\n#postform_main {\n  background-color: #444444; }\n\n.page_switch .ul div.link a {\n  background-color: #222222; }\n", ""]);
+	exports.push([module.i, "html._1CH0lDxiMIShbCcxHUrmod {\n  background-color: #111;\n  color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod body {\n    background-color: #111;\n    color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod a:link {\n    color: #6699FF; }\n  html._1CH0lDxiMIShbCcxHUrmod a:hover {\n    color: #FF9966; }\n  html._1CH0lDxiMIShbCcxHUrmod a:visited {\n    color: #99FF66; }\n  html._1CH0lDxiMIShbCcxHUrmod hr {\n    border-color: #555555; }\n  html._1CH0lDxiMIShbCcxHUrmod h1 {\n    color: #B36666; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply_hl {\n    background-color: #333333; }\n  html._1CH0lDxiMIShbCcxHUrmod .Form_bg {\n    color: #800000; }\n  html._1CH0lDxiMIShbCcxHUrmod #postform_main {\n    background-color: #444444; }\n  html._1CH0lDxiMIShbCcxHUrmod .page_switch .ul div.link a {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .pushpost {\n    background-color: #333333; }\n", ""]);
 
 	// exports
-
+	exports.locals = {
+		"night_mode": "_1CH0lDxiMIShbCcxHUrmod"
+	};
 
 /***/ },
 /* 4 */
@@ -405,18 +405,20 @@
 
 
 	// module
-	exports.push([module.i, "body {\n  background-color: #111;\n  color: silver; }\n\na:link {\n  color: #6699FF; }\n\na:hover {\n  color: #FF9966; }\n\na:visited {\n  color: #99FF66; }\n\ntd[bgColor=\"#F0E0D6\"], td[bgColor=\"#FFFFEE\"] {\n  background-color: #222222; }\n\ntd[bgColor=\"#eeaa88\"] {\n  color: #800000; }\n\ntd[bgColor=\"#DDDDEE\"] {\n  background-color: #453877; }\n\ntd[bgColor=\"#EEDDDD\"] {\n  background-color: #333333; }\n\nhr {\n  border-color: #555555; }\n\nfont[size=\"5\"] {\n  color: #B36666; }\n\ncenter form {\n  background-color: #444444; }\n", ""]);
+	exports.push([module.i, "html._3PcSwAIK8c5KIZxv3BleHH {\n  background-color: #111;\n  color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH body {\n    background-color: #111;\n    color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:link {\n    color: #6699FF; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:hover {\n    color: #FF9966; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:visited {\n    color: #99FF66; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#F0E0D6\"], html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#FFFFEE\"] {\n    background-color: #222222; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#eeaa88\"] {\n    color: #800000; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#DDDDEE\"] {\n    background-color: #453877; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#EEDDDD\"] {\n    background-color: #333333; }\n  html._3PcSwAIK8c5KIZxv3BleHH hr {\n    border-color: #555555; }\n  html._3PcSwAIK8c5KIZxv3BleHH font[size=\"5\"] {\n    color: #B36666; }\n  html._3PcSwAIK8c5KIZxv3BleHH center form {\n    background-color: #444444; }\n", ""]);
 
 	// exports
-
+	exports.locals = {
+		"night_mode": "_3PcSwAIK8c5KIZxv3BleHH"
+	};
 
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var def = __webpack_require__(3)[0][1];
-	var homu = __webpack_require__(4)[0][1];
+	var def = __webpack_require__(3);
+	var homu = __webpack_require__(4);
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = {
 	    default: def,
@@ -739,14 +741,10 @@
 	    createButton.addEventListener('click', function (event) {
 	        event.preventDefault();
 	        if (isHiding) {
-	            // remove the 'hidden' class, show the post form
-	            var classNames = postForm.className.split(' ');
-	            classNames.splice(classNames.length - 1, 1);
-	            postForm.className = classNames.join(' ');
+	            createButton.classList.remove(locals.hidden);
 	        }
 	        else {
-	            // add the 'hidden' class to hide the form
-	            postForm.className += " " + locals.hidden;
+	            createButton.classList.add(locals.hidden);
 	        }
 	        // toggle the state
 	        isHiding = !isHiding;
@@ -766,7 +764,7 @@
 	    document.body.appendChild(styleTag);
 	    postForm = config.getPostformElement(document);
 	    if (postForm) {
-	        postForm.className += locals.createNew + " " + locals.hidden;
+	        postForm.classList.add(locals.createNew, locals.hidden);
 	    }
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });

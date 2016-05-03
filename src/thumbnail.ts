@@ -1,13 +1,15 @@
 import getConfigByURL from './config';
 import DOMWatcher from './DOMWatcher';
 
-let buttons: HTMLButtonElement[] = [];
+
+let buttons: HTMLAnchorElement[] = [];
 
 function bindThumbnail(img: HTMLImageElement, config: komicaHelper.Config, doc: Document): void {
     'use strict';
     // create the button element for image function
-    let button: HTMLButtonElement = doc.createElement('button');
+    let button: HTMLAnchorElement = doc.createElement('a');
     button.innerHTML = '放大';
+    button.href = '#';
 
     // insert the button alongside with the image
     let anchor: HTMLAnchorElement = img.parentNode as HTMLAnchorElement;
@@ -56,7 +58,7 @@ export function bindThumbnailControlButtons(expandButton: HTMLAnchorElement, con
         event.preventDefault();
         // click all the enlarge button
         for (let i: number = 0; i < buttons.length; i++) {
-            const button: HTMLButtonElement = buttons[i];
+            const button: HTMLAnchorElement = buttons[i];
             if (button.innerHTML === '放大') {
                 button.click();
             }
@@ -68,7 +70,7 @@ export function bindThumbnailControlButtons(expandButton: HTMLAnchorElement, con
         event.preventDefault();
         // click all the contract button
         for (let i: number = 0; i < buttons.length; i++) {
-            const button: HTMLButtonElement = buttons[i];
+            const button: HTMLAnchorElement = buttons[i];
             if (button.innerHTML === '縮小') {
                 button.click();
             }

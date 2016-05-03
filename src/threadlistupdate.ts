@@ -58,7 +58,7 @@ export default function bindUpdateButton(url: string, doc: Document, menuButtons
 
         // only invoke update function if it is not updating
         if (!(/disabledAnchor/.test(this.className))) {
-            this.className += ` ${locals.disabledAnchor}`;
+            this.classList.add(locals.disabledAnchor);
             this.innerHTML = '更新中..<br>';
 
             // remove any timeout that is started before
@@ -68,9 +68,7 @@ export default function bindUpdateButton(url: string, doc: Document, menuButtons
             clickCallback().then((diff: number) => {
 
                 // remove the "disabledAnchor" class
-                let classes: string[] = this.className.split(' ');
-                classes.splice(classes.length - 1, 1);
-                this.className = classes.join(' ');
+                this.classList.remove(locals.disabledAnchor);
 
                 return new Promise<void>((resolve: () => void) => {
                     if (diff) {

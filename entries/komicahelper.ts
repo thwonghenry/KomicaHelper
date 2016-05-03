@@ -1,7 +1,7 @@
 import getConfigByURL from '../src/config';
 import {bindThumbnailControlButtons} from '../src/thumbnail';
 import {bindPostButton} from '../src/postform';
-import {bindNightModeButton} from '../src/nightmode';
+import {bindNightModeButton, startSynchronize} from '../src/nightmode';
 import initializeThumbnails from '../src/thumbnail';
 import initializeQuotes from '../src/quote';
 import initializePostform from '../src/postform';
@@ -10,13 +10,15 @@ import bindReplyListUpdate from '../src/replylistupdate';
 import bindThreadListUpdate from '../src/threadlistupdate';
 import {injectMenu, enableButtons} from '../src/injectmenu';
 import {init} from '../src/settingsync';
+const url: string = window.location.href;
+
+const config: komicaHelper.Config = getConfigByURL(url);
+const isThread: boolean = config.isThread.test(url);
+const isMenu: boolean = /web\.komica\.org/.test(url);
 
 function initialize(): void {
     'use strict';
-    const url: string = window.location.href;
 
-    const config: komicaHelper.Config = getConfigByURL(url);
-    const isThread: boolean = config.isThread.test(url);
     // inject menu buttons
     const menuButtons: komicaHelper.MenuButtons = injectMenu(config, isThread);
     // enable all menu buttons
@@ -41,30 +43,24 @@ function initialize(): void {
     bindPostButton(menuButtons.postformButton);
 
     // bind the night mode toggle event
-    initializeNightMode(config.darkStyle);
     bindNightModeButton(menuButtons.nightModeButton);
 
+    // synchronize the night mode state
+    startSynchronize();
+
 }
 
-function initializeMenu(): void {
-    'use strict';
-    const config: komicaHelper.Config = getConfigByURL(window.location.href);
-
-    initializeNightMode(config.darkStyle, true);
-}
-
-let initFunction: Function;
 
 // if the page is menu page, init for cross storage hub
-if (/web\.komica\.org/.test(window.location.href)) {
+if (isMenu) {
     init();
-    initFunction = initializeMenu;
+    initializeNightMode(config, true);
 } else {
-    initFunction = initialize;
-}
+    initializeNightMode(config);
+    if (document.readyState !== 'loading') {
+        initialize();
+    } else {
+        document.addEventListener('DOMContentLoaded', initialize.bind(undefined));
+    }
 
-if (document.readyState !== 'loading') {
-    initFunction();
-} else {
-    document.addEventListener('DOMContentLoaded', initFunction.bind(undefined));
 }

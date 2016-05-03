@@ -42,12 +42,15 @@ export function setSetting(key: string, setting: komicaHelper.Setting, callback?
 export function synchronizeSetting(...keys: string[]): Promise<any> {
     'use strict';
 
+    // add the prefix
     keys = keys.map((key: string) => `komica_helper_${key}`);
     const storage: crossStorage.CrossStorageClient = new crossStorage.CrossStorageClient('http://web.komica.org', {});
     return storage.onConnect().then(() => {
+        // get all the keys
         return storage.get(...keys);
     }).then((settings: komicaHelper.Setting[]) => {
-        settings = [].concat(settings); // ensure it is array
+        settings = [].concat(settings); // deal with single parameter
+        // promises that used to set cross storage's value
         let promises: Promise<any>[] = [];
         if (settings) {
             for (let i: number = 0; i < keys.length; i++) {
@@ -55,13 +58,14 @@ export function synchronizeSetting(...keys: string[]): Promise<any> {
                 let localSetting: komicaHelper.Setting = JSON.parse(localStorage.getItem(keys[i]));
                 let crossTimestamp: number = 0;
                 let localTimestamp: number = 0;
+                // retrieve the timestamp of both local and cross storage
                 if (crossSetting && crossSetting.timestamp) {
                     crossTimestamp = parseInt(crossSetting.timestamp, 10) || 0;
                 }
                 if (localSetting && localSetting.timestamp) {
                     localTimestamp = parseInt(localSetting.timestamp, 10) || 0;
                 }
-                // need to apply cross setting to local setting
+                // determine which setting is most recent and update the older one
                 if (crossTimestamp > localTimestamp) {
                     localStorage.setItem(keys[i], JSON.stringify(crossSetting));
                 } else if (crossTimestamp < localTimestamp) {
@@ -69,9 +73,11 @@ export function synchronizeSetting(...keys: string[]): Promise<any> {
                 }
             }
         }
+        // wait for all updates finished
         return Promise.all(promises);
     }).then(() => {
         storage.close();
+        // return new promise for the caller
         return new Promise((resolve: Function) => {
             resolve();
         });

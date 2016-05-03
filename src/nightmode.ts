@@ -3,15 +3,15 @@ import {synchronizeSetting, setSetting} from './settingsync';
 
 // get the night mode state from local storage
 let isNight: boolean = false;
-let nightStyle: HTMLStyleElement = document.createElement('style');
-
+let darkStyleName: string;
 // bind the toggle button function
 function toggleNightMode(noSync?: boolean): void {
     'use strict';
+    const root: HTMLElement = document.documentElement;
     if (isNight) {
-        document.body.removeChild(nightStyle);
+        root.classList.remove(darkStyleName);
     } else {
-        document.body.appendChild(nightStyle);
+        root.classList.add(darkStyleName);
     }
     // toggle the night mode state
     isNight = !isNight;
@@ -35,11 +35,26 @@ export function bindNightModeButton(nightButton: HTMLAnchorElement): void {
 }
 
 const url: string = window.location.href;
-// initialize this module by providing the dark style of this board
-export default function initializeNightMode(darkStyleString: string = getConfigByURL(url).darkStyle, isMenu?: boolean): void {
+
+export function startSynchronize(): void {
     'use strict';
-    nightStyle.innerHTML = darkStyleString;
+    synchronizeSetting('nightmode').then(() => {
+        let localNightMode: komicaHelper.Setting = JSON.parse(localStorage.getItem('komica_helper_nightmode'));
+        if (localNightMode && (localNightMode.value === 'true') !== isNight) {
+            toggleNightMode(true);
+        }
+    });
+}
+
+// initialize this module by providing the dark style of this board
+export default function initializeNightMode(config: komicaHelper.Config = getConfigByURL(url), isMenu?: boolean): void {
+    'use strict';
+    // append the night mode style
+    let nightStyle: HTMLStyleElement = document.createElement('style');
+    nightStyle.innerHTML = config.darkStyle[0][1];
     let localNightMode: komicaHelper.Setting;
+    document.documentElement.appendChild(nightStyle);
+    darkStyleName = config.darkStyle.locals.night_mode;
 
     if (isMenu) {
         let localSetting: string = localStorage.getItem('komica_helper_nightmode');
@@ -61,14 +76,6 @@ export default function initializeNightMode(darkStyleString: string = getConfigB
         if (localSetting) {
             localNightMode = JSON.parse(localSetting);
         }
-
-        // if the page is a board, synchronize the setting with the menu page
-        synchronizeSetting('nightmode').then(() => {
-            localNightMode = JSON.parse(localStorage.getItem('komica_helper_nightmode'));
-            if (localNightMode && (localNightMode.value === 'true') !== isNight) {
-                toggleNightMode(true);
-            }
-        });
     }
     if (localNightMode && localNightMode.value === 'true') {
         toggleNightMode(true);

@@ -10,13 +10,9 @@ export function bindPostButton(createButton: HTMLAnchorElement): void {
     createButton.addEventListener('click', function(event: Event): void {
         event.preventDefault();
         if (isHiding) {
-            // remove the 'hidden' class, show the post form
-            let classNames: string[] = postForm.className.split(' ');
-            classNames.splice(classNames.length - 1, 1);
-            postForm.className = classNames.join(' ');
+            createButton.classList.remove(locals.hidden);
         } else {
-            // add the 'hidden' class to hide the form
-            postForm.className += ` ${locals.hidden}`;
+            createButton.classList.add(locals.hidden);
         }
         // toggle the state
         isHiding = !isHiding;
@@ -37,6 +33,6 @@ export default function initializePostform(config: komicaHelper.Config = getConf
 
     postForm = config.getPostformElement(document);
     if (postForm) {
-        postForm.className += `${locals.createNew} ${locals.hidden}`;
+        postForm.classList.add(locals.createNew, locals.hidden);
     }
 }
