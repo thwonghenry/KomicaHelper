@@ -27,7 +27,7 @@
   - Load it from your userscripts loader in your browser
   - Done!
 
-## TODO features:
+## TODO features
 
 - Support more boards
 - Support update topic list
@@ -39,7 +39,7 @@
 - Setting page
 - Support Firefox, Microsoft Edge and User Script
 
-## TODO bugfix / performance improvement:
+## TODO bugfix / performance improvement
 
 - Improve performance when updating threads in home page
 - Threads with page switch are not updated properly
@@ -54,7 +54,7 @@
 3. `npm run build`
 4. Load the `build` folder as unpackaged extension in Google Chrome
 
-## Contribution guideline:
+## Contribution guideline
 
 - Only TypeScript, SASS and jade
 - The code must pass tslint with the config in this project without warnings (also no compile errors, of course)
