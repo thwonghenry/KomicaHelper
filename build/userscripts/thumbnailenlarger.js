@@ -94,7 +94,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 28);
+/******/ 	return __webpack_require__(__webpack_require__.s = 29);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -184,43 +184,6 @@
 	    'use strict';
 	    return doc.querySelectorAll(query);
 	}
-	function getThumbnailSizeByStyle(img) {
-	    'use strict';
-	    var style = img.style;
-	    return {
-	        height: parseInt(style.height, 10),
-	        width: parseInt(style.width, 10),
-	    };
-	}
-	function enlargeThumbnailByStyle(img) {
-	    'use strict';
-	    img.setAttribute('style', 'max-width: 95%; float: none;');
-	}
-	function setThumbnailSizeByStyle(img, size) {
-	    'use strict';
-	    img.setAttribute('style', "width: " + size.width + "px; height: " + size.height + "px");
-	}
-	function getThumbnailSizeByAttribute(img) {
-	    'use strict';
-	    return {
-	        height: img.height,
-	        width: img.width,
-	    };
-	}
-	function enlargeThumbnailByAttribute(img) {
-	    'use strict';
-	    img.setAttribute('style', 'max-width: 95%;');
-	    img.removeAttribute('height');
-	    img.removeAttribute('width');
-	    img.removeAttribute('align');
-	}
-	function setThumbnailSizeByAttribute(img, size) {
-	    'use strict';
-	    img.removeAttribute('style');
-	    img.width = size.width;
-	    img.height = size.height;
-	    img.align = 'left';
-	}
 	function extendConfig(oldConfig, newConfig) {
 	    'use strict';
 	    for (var key in newConfig) {
@@ -233,17 +196,14 @@
 	// default config that is going to be extended
 	var defaultConfig = {
 	    darkStyle: index_1.default.default,
-	    enlargeThumbnail: enlargeThumbnailByStyle,
 	    getPostformElement: getElementById.bind(undefined, 'postform_main'),
 	    getQLinks: getElementsByClassName.bind(undefined, 'qlink'),
 	    getReplies: getElementById.bind(undefined, 'threads'),
 	    getThreads: getElementById.bind(undefined, 'threads'),
-	    getThumbnailSize: getThumbnailSizeByStyle,
 	    getThumbnails: getElementsByQuery.bind(undefined, '#threads img'),
 	    isThread: /\?res=/,
 	    match: /.*/,
 	    quote: /^((?!page_num).)*#r[0-9]*/,
-	    setThumbnailSize: setThumbnailSizeByStyle,
 	};
 	// config for different boards
 	var configs = [
@@ -252,26 +212,20 @@
 	        quote: /.*#r[0-9]*/,
 	    }, {
 	        darkStyle: index_1.default.homu,
-	        enlargeThumbnail: enlargeThumbnailByAttribute,
 	        getPostformElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
 	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
 	        getThreads: getElementByTagNameIndex.bind(undefined, 'form', 1),
-	        getThumbnailSize: getThumbnailSizeByAttribute,
 	        getThumbnails: getElementsByTagName.bind(undefined, 'img'),
 	        match: /http:\/\/homu\.komica\.org.*/,
 	        quote: /.*#r[0-9]*/,
-	        setThumbnailSize: setThumbnailSizeByAttribute,
 	    }, {
 	        darkStyle: index_1.default.homu,
-	        enlargeThumbnail: enlargeThumbnailByAttribute,
 	        getPostformElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
 	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
 	        getThreads: getElementByTagNameIndex.bind(undefined, 'body', 0),
-	        getThumbnailSize: getThumbnailSizeByAttribute,
 	        getThumbnails: getElementsByTagName.bind(undefined, 'img'),
 	        match: /http:\/\/pink\.komica\.org.*/,
 	        quote: /.*#r[0-9]*/,
-	        setThumbnailSize: setThumbnailSizeByAttribute,
 	    },
 	];
 	// function that get config base on the url
@@ -812,6 +766,9 @@
 	"use strict";
 	var config_1 = __webpack_require__(1);
 	var DOMWatcher_1 = __webpack_require__(11);
+	var style = __webpack_require__(24);
+	var css = style[0][1];
+	var locals = style.locals;
 	var buttons = [];
 	function bindThumbnail(img, config, doc) {
 	    'use strict';
@@ -824,24 +781,29 @@
 	    anchor.parentNode.insertBefore(button, anchor.nextSibling);
 	    // use for breaking line between the enlarged image and the reply
 	    var br = doc.createElement('br');
-	    // save the size of the thumbnail for restoring later
-	    var size = config.getThumbnailSize(img);
-	    if (!size) {
-	        console.error('Error when getting the size of thumbnail');
-	        return;
-	    }
+	    // save the src of the thumbnail for restoring later
+	    var src = img.src;
+	    // remove all the dimension related attributes
+	    img.removeAttribute('style');
+	    img.removeAttribute('width');
+	    img.removeAttribute('height');
+	    // add custom thumbnail class
+	    img.classList.add(locals.contracted);
 	    button.addEventListener('click', function (event) {
 	        event.preventDefault();
 	        // enlarge the image
-	        if (button.innerHTML === '放大') {
+	        if (img.classList.contains(locals.contracted)) {
 	            img.src = anchor.href;
-	            config.enlargeThumbnail(img);
+	            img.classList.remove(locals.contracted);
+	            img.classList.add(locals.expanded);
 	            anchor.parentNode.insertBefore(br, button);
 	            button.innerHTML = '縮小';
 	        }
-	        else if (button.innerHTML === '縮小') {
+	        else if (img.classList.contains(locals.expanded)) {
 	            // restore the image and button
-	            config.setThumbnailSize(img, size);
+	            img.src = src;
+	            img.classList.remove(locals.expanded);
+	            img.classList.add(locals.contracted);
 	            anchor.parentNode.removeChild(br);
 	            button.innerHTML = '放大';
 	        }
@@ -885,6 +847,10 @@
 	    'use strict';
 	    if (config === void 0) { config = config_1.default(url); }
 	    if (isThread === void 0) { isThread = config.isThread.test(url); }
+	    // append the style
+	    var styleTag = document.createElement('style');
+	    styleTag.innerHTML = css;
+	    document.body.appendChild(styleTag);
 	    // bind all the thumbnails to a button
 	    var imgs = config.getThumbnails(document);
 	    for (var i = 0; i < imgs.length; i++) {
@@ -932,11 +898,28 @@
 /* 21 */,
 /* 22 */,
 /* 23 */,
-/* 24 */,
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(0)();
+	// imports
+
+
+	// module
+	exports.push([module.i, "._9HAoyOb7oMTzd7oUnrh5U {\n  max-width: 95% !important;\n  float: none !important; }\n\n._3_c8JMxFnbPB8x56-DfLAG {\n  max-width: none; }\n", ""]);
+
+	// exports
+	exports.locals = {
+		"expanded": "_9HAoyOb7oMTzd7oUnrh5U",
+		"contracted": "_3_c8JMxFnbPB8x56-DfLAG"
+	};
+
+/***/ },
 /* 25 */,
 /* 26 */,
 /* 27 */,
-/* 28 */
+/* 28 */,
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

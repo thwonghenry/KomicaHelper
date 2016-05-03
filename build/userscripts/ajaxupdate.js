@@ -94,7 +94,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 25);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -184,43 +184,6 @@
 	    'use strict';
 	    return doc.querySelectorAll(query);
 	}
-	function getThumbnailSizeByStyle(img) {
-	    'use strict';
-	    var style = img.style;
-	    return {
-	        height: parseInt(style.height, 10),
-	        width: parseInt(style.width, 10),
-	    };
-	}
-	function enlargeThumbnailByStyle(img) {
-	    'use strict';
-	    img.setAttribute('style', 'max-width: 95%; float: none;');
-	}
-	function setThumbnailSizeByStyle(img, size) {
-	    'use strict';
-	    img.setAttribute('style', "width: " + size.width + "px; height: " + size.height + "px");
-	}
-	function getThumbnailSizeByAttribute(img) {
-	    'use strict';
-	    return {
-	        height: img.height,
-	        width: img.width,
-	    };
-	}
-	function enlargeThumbnailByAttribute(img) {
-	    'use strict';
-	    img.setAttribute('style', 'max-width: 95%;');
-	    img.removeAttribute('height');
-	    img.removeAttribute('width');
-	    img.removeAttribute('align');
-	}
-	function setThumbnailSizeByAttribute(img, size) {
-	    'use strict';
-	    img.removeAttribute('style');
-	    img.width = size.width;
-	    img.height = size.height;
-	    img.align = 'left';
-	}
 	function extendConfig(oldConfig, newConfig) {
 	    'use strict';
 	    for (var key in newConfig) {
@@ -233,17 +196,14 @@
 	// default config that is going to be extended
 	var defaultConfig = {
 	    darkStyle: index_1.default.default,
-	    enlargeThumbnail: enlargeThumbnailByStyle,
 	    getPostformElement: getElementById.bind(undefined, 'postform_main'),
 	    getQLinks: getElementsByClassName.bind(undefined, 'qlink'),
 	    getReplies: getElementById.bind(undefined, 'threads'),
 	    getThreads: getElementById.bind(undefined, 'threads'),
-	    getThumbnailSize: getThumbnailSizeByStyle,
 	    getThumbnails: getElementsByQuery.bind(undefined, '#threads img'),
 	    isThread: /\?res=/,
 	    match: /.*/,
 	    quote: /^((?!page_num).)*#r[0-9]*/,
-	    setThumbnailSize: setThumbnailSizeByStyle,
 	};
 	// config for different boards
 	var configs = [
@@ -252,26 +212,20 @@
 	        quote: /.*#r[0-9]*/,
 	    }, {
 	        darkStyle: index_1.default.homu,
-	        enlargeThumbnail: enlargeThumbnailByAttribute,
 	        getPostformElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
 	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
 	        getThreads: getElementByTagNameIndex.bind(undefined, 'form', 1),
-	        getThumbnailSize: getThumbnailSizeByAttribute,
 	        getThumbnails: getElementsByTagName.bind(undefined, 'img'),
 	        match: /http:\/\/homu\.komica\.org.*/,
 	        quote: /.*#r[0-9]*/,
-	        setThumbnailSize: setThumbnailSizeByAttribute,
 	    }, {
 	        darkStyle: index_1.default.homu,
-	        enlargeThumbnail: enlargeThumbnailByAttribute,
 	        getPostformElement: getElementByTagNameIndex.bind(undefined, 'form', 0),
 	        getReplies: getElementByTagNameIndex.bind(undefined, 'form', 1),
 	        getThreads: getElementByTagNameIndex.bind(undefined, 'body', 0),
-	        getThumbnailSize: getThumbnailSizeByAttribute,
 	        getThumbnails: getElementsByTagName.bind(undefined, 'img'),
 	        match: /http:\/\/pink\.komica\.org.*/,
 	        quote: /.*#r[0-9]*/,
-	        setThumbnailSize: setThumbnailSizeByAttribute,
 	    },
 	];
 	// function that get config base on the url
@@ -948,7 +902,8 @@
 /* 21 */,
 /* 22 */,
 /* 23 */,
-/* 24 */
+/* 24 */,
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

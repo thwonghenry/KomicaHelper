@@ -1,6 +1,9 @@
 import getConfigByURL from './config';
 import DOMWatcher from './DOMWatcher';
 
+const style: any = require('!css!sass!../styles/thumbnail.sass');
+const css: string = style[0][1];
+const locals: komicaHelper.LocalStyle = style.locals;
 
 let buttons: HTMLAnchorElement[] = [];
 
@@ -18,25 +21,32 @@ function bindThumbnail(img: HTMLImageElement, config: komicaHelper.Config, doc: 
     // use for breaking line between the enlarged image and the reply
     let br: HTMLBRElement = doc.createElement('br');
 
-    // save the size of the thumbnail for restoring later
-    const size: komicaHelper.ThumbnailSize = config.getThumbnailSize(img);
-    if (!size) {
-        console.error('Error when getting the size of thumbnail');
-        return;
-    }
+    // save the src of the thumbnail for restoring later
+    const src: string = img.src;
+
+    // remove all the dimension related attributes
+    img.removeAttribute('style');
+    img.removeAttribute('width');
+    img.removeAttribute('height');
+
+    // add custom thumbnail class
+    img.classList.add(locals.contracted);
 
     button.addEventListener('click', function(event: Event): void {
         event.preventDefault();
 
         // enlarge the image
-        if (button.innerHTML === '放大') {
+        if (img.classList.contains(locals.contracted)) {
             img.src = anchor.href;
-            config.enlargeThumbnail(img);
+            img.classList.remove(locals.contracted);
+            img.classList.add(locals.expanded);
             anchor.parentNode.insertBefore(br, button);
             button.innerHTML = '縮小';
-        } else if (button.innerHTML === '縮小') {
+        } else if (img.classList.contains(locals.expanded)) {
             // restore the image and button
-            config.setThumbnailSize(img, size);
+            img.src = src;
+            img.classList.remove(locals.expanded);
+            img.classList.add(locals.contracted);
             anchor.parentNode.removeChild(br);
             button.innerHTML = '放大';
         }
@@ -83,6 +93,11 @@ export default function initializeThumbnails(config: komicaHelper.Config = getCo
     isThread: boolean = config.isThread.test(url)): void {
 
     'use strict';
+    // append the style
+    let styleTag: HTMLElement = document.createElement('style');
+    styleTag.innerHTML = css;
+    document.body.appendChild(styleTag);
+
     // bind all the thumbnails to a button
     const imgs: NodeListOf<Element> = config.getThumbnails(document);
     for (let i: number = 0; i < imgs.length; i++) {

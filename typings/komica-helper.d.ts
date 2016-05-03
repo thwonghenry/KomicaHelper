@@ -5,9 +5,6 @@ declare namespace komicaHelper {
         getThreads?: (doc: Document) => HTMLElement;
         getReplies?: (doc: Document) => HTMLElement;
         getThumbnails?: (doc: Document) => NodeListOf<Element>;
-        getThumbnailSize?: (img: HTMLImageElement) => ThumbnailSize;
-        enlargeThumbnail?: (img: HTMLImageElement) => void;
-        setThumbnailSize?: (img: HTMLImageElement, size: ThumbnailSize) => void;
         getPostformElement?: (doc: Document) => HTMLElement;
         darkStyle?: any;
         isThread?: RegExp;
@@ -21,9 +18,6 @@ declare namespace komicaHelper {
         getThreads: (doc: Document) => HTMLElement;
         getReplies: (doc: Document) => HTMLElement;
         getThumbnails: (doc: Document) => NodeListOf<Element>;
-        getThumbnailSize: (img: HTMLImageElement) => ThumbnailSize;
-        enlargeThumbnail: (img: HTMLImageElement) => void;
-        setThumbnailSize: (img: HTMLImageElement, size: ThumbnailSize) => void;
         getPostformElement: (doc: Document) => HTMLElement;
         darkStyle: any;
         isThread: RegExp;
@@ -46,6 +40,8 @@ declare namespace komicaHelper {
         createNew: string;
         hidden: string;
         hiddenButton: string;
+        expanded: string;
+        contracted: string;
 
         // value
         newString: string;
