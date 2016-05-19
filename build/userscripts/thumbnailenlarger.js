@@ -94,7 +94,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 29);
+/******/ 	return __webpack_require__(__webpack_require__.s = 30);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -259,6 +259,8 @@
 	    element.appendChild(node);
 	}
 	var url = window.location.href;
+	var config = config_1.default(url);
+	var isThread = config.isThread.test(url);
 	// menu buttons
 	var menu;
 	var updateButton;
@@ -268,10 +270,8 @@
 	var nightModeButton;
 	var locals;
 	// inject menu buttons
-	function injectMenu(config, isThread) {
+	function injectMenu() {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(url); }
-	    if (isThread === void 0) { isThread = config.isThread.test(url); }
 	    // import assests
 	    var style = __webpack_require__(6);
 	    var css = style[0][1];
@@ -679,38 +679,27 @@
 /***/ },
 /* 10 */,
 /* 11 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var DOMWatcher = (function () {
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var EventEmitter_1 = __webpack_require__(12);
+	var DOMWatcher = (function (_super) {
+	    __extends(DOMWatcher, _super);
 	    function DOMWatcher(parent) {
+	        _super.call(this);
 	        this.parent = parent;
-	        this.subscribers = {};
 	    }
-	    // client attaches the event callback actively
-	    DOMWatcher.prototype.on = function (eventType, callback) {
-	        if (!this.subscribers[eventType]) {
-	            this.subscribers[eventType] = [callback];
-	        }
-	        else {
-	            this.subscribers[eventType].push(callback);
-	        }
-	    };
-	    DOMWatcher.prototype.off = function (eventType, callback) {
-	        if (!this.subscribers[eventType]) {
-	            return;
-	        }
-	        var index = this.subscribers[eventType].indexOf(callback);
-	        if (index > -1) {
-	            this.subscribers[eventType].splice(index, 1);
-	        }
-	    };
 	    // install the observer
 	    DOMWatcher.prototype.start = function () {
 	        var _this = this;
 	        var mutationObserver = new MutationObserver(function (mutations, observer) {
 	            if (_this.hasSubscriber('update')) {
-	                _this.dispatch('update');
+	                _this.emit('update');
 	            }
 	            // only continue if both event callback exists
 	            if (!_this.hasSubscriber('addnode') && !_this.hasSubscriber('removenode')) {
@@ -720,12 +709,12 @@
 	                // for each event type, trigger the callback
 	                if (_this.hasSubscriber('addnode')) {
 	                    for (var i = 0; i < mutation.addedNodes.length; i++) {
-	                        _this.dispatch('addnode', mutation.addedNodes[i]);
+	                        _this.emit('addnode', mutation.addedNodes[i]);
 	                    }
 	                }
 	                if (_this.hasSubscriber('removenode')) {
 	                    for (var i = 0; i < mutation.removedNodes.length; i++) {
-	                        _this.dispatch('removenode', mutation.removedNodes[i]);
+	                        _this.emit('removenode', mutation.removedNodes[i]);
 	                    }
 	                }
 	            });
@@ -735,52 +724,86 @@
 	            childList: true,
 	        });
 	    };
-	    DOMWatcher.prototype.hasSubscriber = function (eventType) {
-	        return this.subscribers[eventType] && this.subscribers[eventType].length > 0;
-	    };
-	    DOMWatcher.prototype.dispatch = function (eventType) {
-	        var args = [];
-	        for (var _i = 1; _i < arguments.length; _i++) {
-	            args[_i - 1] = arguments[_i];
-	        }
-	        if (this.hasSubscriber(eventType)) {
-	            this.subscribers[eventType].forEach(function (callback) { return callback.apply(void 0, args); });
-	        }
-	    };
 	    return DOMWatcher;
-	}());
+	}(EventEmitter_1.default));
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = DOMWatcher;
 
 
 /***/ },
-/* 12 */,
+/* 12 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var EventEmitter = (function () {
+	    function EventEmitter() {
+	        this.subscribers = {};
+	    }
+	    EventEmitter.prototype.on = function (topic, callback) {
+	        if (!(topic in this.subscribers)) {
+	            this.subscribers[topic] = [callback];
+	        }
+	        else {
+	            this.subscribers[topic].push(callback);
+	        }
+	    };
+	    EventEmitter.prototype.off = function (topic, callback) {
+	        if (topic in this.subscribers) {
+	            var index = this.subscribers[topic].indexOf(callback);
+	            if (index > -1) {
+	                this.subscribers[topic].splice(index, 1);
+	            }
+	        }
+	    };
+	    EventEmitter.prototype.emit = function (topic) {
+	        var args = [];
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            args[_i - 1] = arguments[_i];
+	        }
+	        if (topic in this.subscribers) {
+	            this.subscribers[topic].forEach(function (callback) { return callback.apply(void 0, args); });
+	        }
+	    };
+	    EventEmitter.prototype.hasSubscriber = function (eventType) {
+	        return this.subscribers[eventType] && this.subscribers[eventType].length > 0;
+	    };
+	    return EventEmitter;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = EventEmitter;
+
+
+/***/ },
 /* 13 */,
 /* 14 */,
 /* 15 */,
 /* 16 */,
 /* 17 */,
-/* 18 */
+/* 18 */,
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var config_1 = __webpack_require__(1);
 	var DOMWatcher_1 = __webpack_require__(11);
-	var style = __webpack_require__(24);
+	var url = window.location.href;
+	var config = config_1.default(url);
+	var isThread = config.isThread.test(url);
+	var style = __webpack_require__(25);
 	var css = style[0][1];
 	var locals = style.locals;
 	var buttons = [];
-	function bindThumbnail(img, config, doc) {
+	function bindThumbnail(img) {
 	    'use strict';
 	    // create the button element for image function
-	    var button = doc.createElement('a');
+	    var button = document.createElement('a');
 	    button.innerHTML = '放大';
 	    button.href = '#';
 	    // insert the button alongside with the image
 	    var anchor = img.parentNode;
 	    anchor.parentNode.insertBefore(button, anchor.nextSibling);
 	    // use for breaking line between the enlarged image and the reply
-	    var br = doc.createElement('br');
+	    var br = document.createElement('br');
 	    // save the src of the thumbnail for restoring later
 	    var src = img.src;
 	    // remove all the dimension related attributes
@@ -842,11 +865,8 @@
 	    });
 	}
 	exports.bindThumbnailControlButtons = bindThumbnailControlButtons;
-	var url = window.location.href;
-	function initializeThumbnails(config, isThread) {
+	function initializeThumbnails() {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(url); }
-	    if (isThread === void 0) { isThread = config.isThread.test(url); }
 	    // append the style
 	    var styleTag = document.createElement('style');
 	    styleTag.innerHTML = css;
@@ -854,7 +874,7 @@
 	    // bind all the thumbnails to a button
 	    var imgs = config.getThumbnails(document);
 	    for (var i = 0; i < imgs.length; i++) {
-	        bindThumbnail(imgs[i], config, document);
+	        bindThumbnail(imgs[i]);
 	    }
 	    // attach a DOM watcher on the main thread or thread list
 	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
@@ -876,7 +896,7 @@
 	        // query the thumbnail element
 	        var img = document.querySelector("#" + id + " img");
 	        if (img) {
-	            bindThumbnail(img, config, document);
+	            bindThumbnail(img);
 	        }
 	        // if a temporary id is added, clear it at the end
 	        if (clear) {
@@ -893,12 +913,12 @@
 
 
 /***/ },
-/* 19 */,
 /* 20 */,
 /* 21 */,
 /* 22 */,
 /* 23 */,
-/* 24 */
+/* 24 */,
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(0)();
@@ -915,15 +935,15 @@
 	};
 
 /***/ },
-/* 25 */,
 /* 26 */,
 /* 27 */,
 /* 28 */,
-/* 29 */
+/* 29 */,
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var thumbnail_1 = __webpack_require__(18);
+	var thumbnail_1 = __webpack_require__(19);
 	var injectmenu_1 = __webpack_require__(2);
 	function initialize() {
 	    'use strict';

@@ -22,11 +22,10 @@ function initialize(): void {
 
 
 // if the page is menu page, init for cross storage hub
+initializeNightMode();
 if (isMenu) {
     init();
-    initializeNightMode(undefined, true);
 } else {
-    initializeNightMode();
     if (document.readyState !== 'loading') {
         initialize();
     } else {

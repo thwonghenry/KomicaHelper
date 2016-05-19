@@ -94,7 +94,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 27);
+/******/ 	return __webpack_require__(__webpack_require__.s = 28);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -259,6 +259,8 @@
 	    element.appendChild(node);
 	}
 	var url = window.location.href;
+	var config = config_1.default(url);
+	var isThread = config.isThread.test(url);
 	// menu buttons
 	var menu;
 	var updateButton;
@@ -268,10 +270,8 @@
 	var nightModeButton;
 	var locals;
 	// inject menu buttons
-	function injectMenu(config, isThread) {
+	function injectMenu() {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(url); }
-	    if (isThread === void 0) { isThread = config.isThread.test(url); }
 	    // import assests
 	    var style = __webpack_require__(6);
 	    var css = style[0][1];
@@ -681,7 +681,8 @@
 /* 11 */,
 /* 12 */,
 /* 13 */,
-/* 14 */
+/* 14 */,
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -689,6 +690,8 @@
 	var isHiding = true;
 	var locals;
 	var postForm;
+	var url = window.location.href;
+	var config = config_1.default(url);
 	// bind the post button function
 	function bindPostButton(createButton) {
 	    'use strict';
@@ -705,11 +708,10 @@
 	    });
 	}
 	exports.bindPostButton = bindPostButton;
-	function initializePostform(config) {
+	function initializePostform() {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(window.location.href); }
 	    // import the css
-	    var style = __webpack_require__(22);
+	    var style = __webpack_require__(23);
 	    var css = style[0][1];
 	    locals = style.locals;
 	    // append the style
@@ -726,14 +728,14 @@
 
 
 /***/ },
-/* 15 */,
 /* 16 */,
 /* 17 */,
 /* 18 */,
 /* 19 */,
 /* 20 */,
 /* 21 */,
-/* 22 */
+/* 22 */,
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(0)();
@@ -750,15 +752,15 @@
 	};
 
 /***/ },
-/* 23 */,
 /* 24 */,
 /* 25 */,
 /* 26 */,
-/* 27 */
+/* 27 */,
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var postform_1 = __webpack_require__(14);
+	var postform_1 = __webpack_require__(15);
 	var injectmenu_1 = __webpack_require__(2);
 	function initialize() {
 	    'use strict';

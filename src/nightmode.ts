@@ -4,6 +4,10 @@ import {synchronizeSetting, setSetting} from './settingsync';
 // get the night mode state from local storage
 let isNight: boolean = false;
 let darkStyleName: string;
+const url: string = window.location.href;
+const config: komicaHelper.Config = getConfigByURL(url);
+const isMenu: boolean = /web\.komica\.org/.test(url);
+
 // bind the toggle button function
 function toggleNightMode(noSync?: boolean): void {
     'use strict';
@@ -34,8 +38,6 @@ export function bindNightModeButton(nightButton: HTMLAnchorElement): void {
     });
 }
 
-const url: string = window.location.href;
-
 export function startSynchronize(): void {
     'use strict';
     synchronizeSetting('nightmode').then(() => {
@@ -47,7 +49,7 @@ export function startSynchronize(): void {
 }
 
 // initialize this module by providing the dark style of this board
-export default function initializeNightMode(config: komicaHelper.Config = getConfigByURL(url), isMenu?: boolean): void {
+export default function initializeNightMode(): void {
     'use strict';
     // append the night mode style
     let nightStyle: HTMLStyleElement = document.createElement('style');

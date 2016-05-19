@@ -94,7 +94,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 25);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -259,6 +259,8 @@
 	    element.appendChild(node);
 	}
 	var url = window.location.href;
+	var config = config_1.default(url);
+	var isThread = config.isThread.test(url);
 	// menu buttons
 	var menu;
 	var updateButton;
@@ -268,10 +270,8 @@
 	var nightModeButton;
 	var locals;
 	// inject menu buttons
-	function injectMenu(config, isThread) {
+	function injectMenu() {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(url); }
-	    if (isThread === void 0) { isThread = config.isThread.test(url); }
 	    // import assests
 	    var style = __webpack_require__(6);
 	    var css = style[0][1];
@@ -721,15 +721,19 @@
 /* 13 */,
 /* 14 */,
 /* 15 */,
-/* 16 */
+/* 16 */,
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// update function after clicking update button
 	var Ajax_1 = __webpack_require__(10);
-	function createUpdateCallback(url, doc, floatsParent, config, floatClass) {
+	var config_1 = __webpack_require__(1);
+	var url = window.location.href;
+	var config = config_1.default(url);
+	function createUpdateCallback(floatsParent, floatClass) {
 	    'use strict';
-	    if (floatsParent === void 0) { floatsParent = doc.body; }
+	    if (floatsParent === void 0) { floatsParent = document.body; }
 	    // initialize ajax object
 	    var ajax = new Ajax_1.default('get', url, 'document');
 	    var newElements;
@@ -741,7 +745,7 @@
 	    return function () {
 	        return ajax.start().then(function (newDoc) {
 	            newElements = getElements(newDoc);
-	            oldElements = getElements(doc);
+	            oldElements = getElements(document);
 	            if (!newElements || !oldElements) {
 	                console.error('Error when getting the document of ajax result');
 	                return;
@@ -767,10 +771,10 @@
 	        }, function () { return console.log('rejected'); });
 	    };
 	}
-	function bindUpdateButton(url, doc, menuButtons, config, locals, updateButton) {
+	function bindUpdateButton(menuButtons, locals, updateButton) {
 	    'use strict';
 	    // create callback function
-	    var clickCallback = createUpdateCallback(url, doc, menuButtons, config, locals.floatingReply);
+	    var clickCallback = createUpdateCallback(menuButtons, locals.floatingReply);
 	    // store the id of setTimeout in the click event below for later clearTimeout
 	    var timeout = 0;
 	    updateButton.addEventListener('click', function (event) {
@@ -813,15 +817,18 @@
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// update function after clicking update button
 	var Ajax_1 = __webpack_require__(10);
-	function createUpdateCallback(url, doc, floatsParent, config, floatClass) {
+	var config_1 = __webpack_require__(1);
+	var url = window.location.href;
+	var config = config_1.default(url);
+	function createUpdateCallback(floatsParent, floatClass) {
 	    'use strict';
-	    if (floatsParent === void 0) { floatsParent = doc.body; }
+	    if (floatsParent === void 0) { floatsParent = document.body; }
 	    // initialize ajax object
 	    var ajax = new Ajax_1.default('get', url, 'document');
 	    var newElements;
@@ -834,7 +841,7 @@
 	        return ajax.start().then(function (newDoc) {
 	            // create a new doc to plug in the ajax result
 	            newElements = getElements(newDoc);
-	            oldElements = getElements(doc);
+	            oldElements = getElements(document);
 	            if (!newElements || !oldElements) {
 	                console.error('Error when getting the document of ajax result');
 	                return;
@@ -850,10 +857,10 @@
 	        }, function () { return console.log('rejected'); });
 	    };
 	}
-	function bindUpdateButton(url, doc, menuButtons, config, locals, updateButton) {
+	function bindUpdateButton(menuButtons, locals, updateButton) {
 	    'use strict';
 	    // create callback function
-	    var clickCallback = createUpdateCallback(url, doc, menuButtons, config, locals.floatingReply);
+	    var clickCallback = createUpdateCallback(menuButtons, locals.floatingReply);
 	    // store the id of setTimeout in the click event below for later clearTimeout
 	    var timeout = 0;
 	    updateButton.addEventListener('click', function (event) {
@@ -896,19 +903,19 @@
 
 
 /***/ },
-/* 18 */,
 /* 19 */,
 /* 20 */,
 /* 21 */,
 /* 22 */,
 /* 23 */,
 /* 24 */,
-/* 25 */
+/* 25 */,
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var replylistupdate_1 = __webpack_require__(16);
-	var threadlistupdate_1 = __webpack_require__(17);
+	var replylistupdate_1 = __webpack_require__(17);
+	var threadlistupdate_1 = __webpack_require__(18);
 	var config_1 = __webpack_require__(1);
 	var injectmenu_1 = __webpack_require__(2);
 	function initialize() {
@@ -917,17 +924,17 @@
 	    var config = config_1.default(url);
 	    var isThread = config.isThread.test(url);
 	    // inject the menu buttons
-	    var menuButtons = injectmenu_1.injectMenu(config, isThread);
+	    var menuButtons = injectmenu_1.injectMenu();
 	    // enable update button
 	    injectmenu_1.enableButtons({
 	        updateButton: true,
 	    });
 	    // bind the update button base on the page type
 	    if (isThread) {
-	        replylistupdate_1.default(url, document, menuButtons.menu, config, menuButtons.locals, menuButtons.updateButton);
+	        replylistupdate_1.default(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
 	    }
 	    else {
-	        threadlistupdate_1.default(url, document, menuButtons.menu, config, menuButtons.locals, menuButtons.updateButton);
+	        threadlistupdate_1.default(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
 	    }
 	}
 	if (document.readyState !== 'loading') {

@@ -96,7 +96,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 26);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -261,6 +261,8 @@
 	    element.appendChild(node);
 	}
 	var url = window.location.href;
+	var config = config_1.default(url);
+	var isThread = config.isThread.test(url);
 	// menu buttons
 	var menu;
 	var updateButton;
@@ -270,10 +272,8 @@
 	var nightModeButton;
 	var locals;
 	// inject menu buttons
-	function injectMenu(config, isThread) {
+	function injectMenu() {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(url); }
-	    if (isThread === void 0) { isThread = config.isThread.test(url); }
 	    // import assests
 	    var style = __webpack_require__(6);
 	    var css = style[0][1];
@@ -681,11 +681,12 @@
 /***/ },
 /* 10 */,
 /* 11 */,
-/* 12 */
+/* 12 */,
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var crossStorage = __webpack_require__(21);
+	var crossStorage = __webpack_require__(22);
 	// used for cross storage hub
 	function init() {
 	    'use strict';
@@ -776,15 +777,18 @@
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var config_1 = __webpack_require__(1);
-	var settingsync_1 = __webpack_require__(12);
+	var settingsync_1 = __webpack_require__(13);
 	// get the night mode state from local storage
 	var isNight = false;
 	var darkStyleName;
+	var url = window.location.href;
+	var config = config_1.default(url);
+	var isMenu = /web\.komica\.org/.test(url);
 	// bind the toggle button function
 	function toggleNightMode(noSync) {
 	    'use strict';
@@ -814,7 +818,6 @@
 	    });
 	}
 	exports.bindNightModeButton = bindNightModeButton;
-	var url = window.location.href;
 	function startSynchronize() {
 	    'use strict';
 	    settingsync_1.synchronizeSetting('nightmode').then(function () {
@@ -826,9 +829,8 @@
 	}
 	exports.startSynchronize = startSynchronize;
 	// initialize this module by providing the dark style of this board
-	function initializeNightMode(config, isMenu) {
+	function initializeNightMode() {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(url); }
 	    // append the night mode style
 	    var nightStyle = document.createElement('style');
 	    nightStyle.innerHTML = config.darkStyle[0][1];
@@ -865,12 +867,12 @@
 
 
 /***/ },
-/* 14 */,
 /* 15 */,
 /* 16 */,
 /* 17 */,
 /* 18 */,
-/* 19 */
+/* 19 */,
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	;(function(root) {
@@ -1333,7 +1335,7 @@
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	;(function(root) {
@@ -1615,27 +1617,27 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	  CrossStorageClient: __webpack_require__(19),
-	  CrossStorageHub:    __webpack_require__(20)
+	  CrossStorageClient: __webpack_require__(20),
+	  CrossStorageHub:    __webpack_require__(21)
 	};
 
 
 /***/ },
-/* 22 */,
 /* 23 */,
 /* 24 */,
 /* 25 */,
-/* 26 */
+/* 26 */,
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var nightmode_1 = __webpack_require__(13);
+	var nightmode_1 = __webpack_require__(14);
 	var injectmenu_1 = __webpack_require__(2);
-	var settingsync_1 = __webpack_require__(12);
+	var settingsync_1 = __webpack_require__(13);
 	var isMenu = /web\.komica\.org/.test(window.location.href);
 	function initialize() {
 	    'use strict';
@@ -1652,12 +1654,11 @@
 	    nightmode_1.startSynchronize();
 	}
 	// if the page is menu page, init for cross storage hub
+	nightmode_1.default();
 	if (isMenu) {
 	    settingsync_1.init();
-	    nightmode_1.default(undefined, true);
 	}
 	else {
-	    nightmode_1.default();
 	    if (document.readyState !== 'loading') {
 	        initialize();
 	    }

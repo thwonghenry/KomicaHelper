@@ -11,7 +11,7 @@ function initialize(): void {
     const isThread: boolean = config.isThread.test(url);
 
     // inject the menu buttons
-    const menuButtons: komicaHelper.MenuButtons = injectMenu(config, isThread);
+    const menuButtons: komicaHelper.MenuButtons = injectMenu();
     // enable update button
     enableButtons({
         updateButton: true,
@@ -19,9 +19,9 @@ function initialize(): void {
 
     // bind the update button base on the page type
     if (isThread) {
-        bindUpdateRepliesButton(url, document, menuButtons.menu, config, menuButtons.locals, menuButtons.updateButton);
+        bindUpdateRepliesButton(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
     } else {
-        bindUpdateThreadsButton(url, document, menuButtons.menu, config, menuButtons.locals, menuButtons.updateButton);
+        bindUpdateThreadsButton(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
     }
 }
 

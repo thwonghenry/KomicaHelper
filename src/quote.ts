@@ -2,6 +2,10 @@ import Ajax from './Ajax';
 import getConfigByURL from './config';
 import DOMWatcher from './DOMWatcher';
 
+const url: string  = window.location.href;
+const config: komicaHelper.Config = getConfigByURL(url);
+const isThread: boolean = config.isThread.test(url);
+
 // a function that stick the reply element near the quote
 function stickReply(quote: HTMLElement, reply: HTMLElement, floatClass: string, floatsParent: HTMLElement): void {
     'use strict';
@@ -52,7 +56,7 @@ let cache: { [threadID: string]: HTMLDocument; } = {};
 // the locks of ajax call for thread document
 let getting: { [threadID: string]: boolean } = {};
 
-export function bindReplyToQuote(anchor: HTMLAnchorElement, doc: Document, floatsParent: HTMLElement = doc.body, floatClass: string): void {
+export function bindReplyToQuote(anchor: HTMLAnchorElement, floatsParent: HTMLElement = document.body, floatClass: string): void {
     'use strict';
     // get all the quote element, a quote span may have multiple quote anchor points
 
@@ -64,7 +68,7 @@ export function bindReplyToQuote(anchor: HTMLAnchorElement, doc: Document, float
 
     anchor.addEventListener('mouseover', function(): void {
 
-        let target: HTMLElement = doc.getElementById(`r${targetID}`);
+        let target: HTMLElement = document.getElementById(`r${targetID}`);
         if (!target) {
             // if the reply is hide inside the thread
             // get the thread ID
@@ -113,10 +117,7 @@ export function bindReplyToQuote(anchor: HTMLAnchorElement, doc: Document, float
     });
 }
 
-const url: string  = window.location.href;
-export default function initializeQuotes(config: komicaHelper.Config = getConfigByURL(url),
-    isThread: boolean = config.isThread.test(url),
-    floatsParent: HTMLElement = document.body): void {
+export default function initializeQuotes(floatsParent: HTMLElement = document.body): void {
 
     'use strict';
     // import the css
@@ -135,7 +136,7 @@ export default function initializeQuotes(config: komicaHelper.Config = getConfig
         for (let i: number = 0; i < qlinks.length; i++) {
             const qlink: HTMLAnchorElement = qlinks[i] as HTMLAnchorElement;
             if (config.quote && config.quote.test(qlink.href)) {
-                bindReplyToQuote(qlink, document, floatsParent, locals.floatingReply);
+                bindReplyToQuote(qlink, floatsParent, locals.floatingReply);
             }
         }
     }
@@ -163,7 +164,7 @@ export default function initializeQuotes(config: komicaHelper.Config = getConfig
         let newQlinks: NodeListOf<Element> = document.querySelectorAll(`#${id} .resquote .qlink`);
         if (newQlinks) {
             for (let j: number = 0; j < newQlinks.length; j++) {
-                bindReplyToQuote(newQlinks[j] as HTMLAnchorElement, document, floatsParent, locals.floatingReply);
+                bindReplyToQuote(newQlinks[j] as HTMLAnchorElement, floatsParent, locals.floatingReply);
             }
         }
         // if a temporary id is added, clear it at the end

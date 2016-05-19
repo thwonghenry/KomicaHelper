@@ -1,8 +1,12 @@
 // update function after clicking update button
 import Ajax from './Ajax';
+import getConfigByURL from './config';
 
-function createUpdateCallback(url: string, doc: HTMLDocument, floatsParent: HTMLElement = doc.body,
-    config: komicaHelper.Config, floatClass: string): () => Promise<number> {
+const url: string = window.location.href;
+const config: komicaHelper.Config = getConfigByURL(url);
+
+function createUpdateCallback(floatsParent: HTMLElement = document.body,
+    floatClass: string): () => Promise<number> {
 
     'use strict';
     // initialize ajax object
@@ -20,7 +24,7 @@ function createUpdateCallback(url: string, doc: HTMLDocument, floatsParent: HTML
         return ajax.start().then(
             (newDoc: Document) => {
                 newElements = getElements(newDoc);
-                oldElements = getElements(doc);
+                oldElements = getElements(document);
                 if (!newElements || !oldElements) {
                     console.error('Error when getting the document of ajax result');
                     return;
@@ -51,12 +55,12 @@ function createUpdateCallback(url: string, doc: HTMLDocument, floatsParent: HTML
     };
 }
 
-export default function bindUpdateButton(url: string, doc: Document, menuButtons: HTMLElement,
-    config: komicaHelper.Config, locals: komicaHelper.LocalStyle, updateButton: HTMLAnchorElement): void {
+export default function bindUpdateButton(menuButtons: HTMLElement,
+    locals: komicaHelper.LocalStyle, updateButton: HTMLAnchorElement): void {
 
     'use strict';
     // create callback function
-    const clickCallback: () => Promise<number> = createUpdateCallback(url, doc, menuButtons, config, locals.floatingReply);
+    const clickCallback: () => Promise<number> = createUpdateCallback(menuButtons, locals.floatingReply);
 
     // store the id of setTimeout in the click event below for later clearTimeout
     let timeout: number = 0;

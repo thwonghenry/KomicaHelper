@@ -20,26 +20,26 @@ function initialize(): void {
     'use strict';
 
     // inject menu buttons
-    const menuButtons: komicaHelper.MenuButtons = injectMenu(config, isThread);
+    const menuButtons: komicaHelper.MenuButtons = injectMenu();
     // enable all menu buttons
     enableButtons();
 
     // bind the update button base on the page type
     if (isThread) {
-        bindReplyListUpdate(url, document, menuButtons.menu, config, menuButtons.locals, menuButtons.updateButton);
+        bindReplyListUpdate(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
     } else {
-        bindThreadListUpdate(url, document, menuButtons.menu, config, menuButtons.locals, menuButtons.updateButton);
+        bindThreadListUpdate(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
     }
 
     // intialize thumbnails related function
-    initializeThumbnails(config, isThread);
+    initializeThumbnails();
     bindThumbnailControlButtons(menuButtons.expandAllButton, menuButtons.contractAllButton);
 
     // initialize reply sticker events
-    initializeQuotes(config, isThread, menuButtons.menu);
+    initializeQuotes(menuButtons.menu);
 
     // bind the post button event
-    initializePostform(config);
+    initializePostform();
     bindPostButton(menuButtons.postformButton);
 
     // bind the night mode toggle event
@@ -52,11 +52,10 @@ function initialize(): void {
 
 
 // if the page is menu page, init for cross storage hub
+initializeNightMode();
 if (isMenu) {
     init();
-    initializeNightMode(config, true);
 } else {
-    initializeNightMode(config);
     if (document.readyState !== 'loading') {
         initialize();
     } else {

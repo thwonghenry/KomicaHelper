@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var index_1 = __webpack_require__(24);
+	var index_1 = __webpack_require__(25);
 	// helper functions that used for binding
 	function getElementById(id, doc) {
 	    'use strict';
@@ -198,6 +198,9 @@
 	// get the night mode state from local storage
 	var isNight = false;
 	var darkStyleName;
+	var url = window.location.href;
+	var config = config_1.default(url);
+	var isMenu = /web\.komica\.org/.test(url);
 	// bind the toggle button function
 	function toggleNightMode(noSync) {
 	    'use strict';
@@ -227,7 +230,6 @@
 	    });
 	}
 	exports.bindNightModeButton = bindNightModeButton;
-	var url = window.location.href;
 	function startSynchronize() {
 	    'use strict';
 	    settingsync_1.synchronizeSetting('nightmode').then(function () {
@@ -239,9 +241,8 @@
 	}
 	exports.startSynchronize = startSynchronize;
 	// initialize this module by providing the dark style of this board
-	function initializeNightMode(config, isMenu) {
+	function initializeNightMode() {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(url); }
 	    // append the night mode style
 	    var nightStyle = document.createElement('style');
 	    nightStyle.innerHTML = config.darkStyle[0][1];
@@ -286,6 +287,8 @@
 	var isHiding = true;
 	var locals;
 	var postForm;
+	var url = window.location.href;
+	var config = config_1.default(url);
 	// bind the post button function
 	function bindPostButton(createButton) {
 	    'use strict';
@@ -302,9 +305,8 @@
 	    });
 	}
 	exports.bindPostButton = bindPostButton;
-	function initializePostform(config) {
+	function initializePostform() {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(window.location.href); }
 	    // import the css
 	    var style = __webpack_require__(18);
 	    var css = style[0][1];
@@ -329,21 +331,24 @@
 	"use strict";
 	var config_1 = __webpack_require__(0);
 	var DOMWatcher_1 = __webpack_require__(7);
+	var url = window.location.href;
+	var config = config_1.default(url);
+	var isThread = config.isThread.test(url);
 	var style = __webpack_require__(20);
 	var css = style[0][1];
 	var locals = style.locals;
 	var buttons = [];
-	function bindThumbnail(img, config, doc) {
+	function bindThumbnail(img) {
 	    'use strict';
 	    // create the button element for image function
-	    var button = doc.createElement('a');
+	    var button = document.createElement('a');
 	    button.innerHTML = '放大';
 	    button.href = '#';
 	    // insert the button alongside with the image
 	    var anchor = img.parentNode;
 	    anchor.parentNode.insertBefore(button, anchor.nextSibling);
 	    // use for breaking line between the enlarged image and the reply
-	    var br = doc.createElement('br');
+	    var br = document.createElement('br');
 	    // save the src of the thumbnail for restoring later
 	    var src = img.src;
 	    // remove all the dimension related attributes
@@ -405,11 +410,8 @@
 	    });
 	}
 	exports.bindThumbnailControlButtons = bindThumbnailControlButtons;
-	var url = window.location.href;
-	function initializeThumbnails(config, isThread) {
+	function initializeThumbnails() {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(url); }
-	    if (isThread === void 0) { isThread = config.isThread.test(url); }
 	    // append the style
 	    var styleTag = document.createElement('style');
 	    styleTag.innerHTML = css;
@@ -417,7 +419,7 @@
 	    // bind all the thumbnails to a button
 	    var imgs = config.getThumbnails(document);
 	    for (var i = 0; i < imgs.length; i++) {
-	        bindThumbnail(imgs[i], config, document);
+	        bindThumbnail(imgs[i]);
 	    }
 	    // attach a DOM watcher on the main thread or thread list
 	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
@@ -439,7 +441,7 @@
 	        // query the thumbnail element
 	        var img = document.querySelector("#" + id + " img");
 	        if (img) {
-	            bindThumbnail(img, config, document);
+	            bindThumbnail(img);
 	        }
 	        // if a temporary id is added, clear it at the end
 	        if (clear) {
@@ -591,38 +593,27 @@
 
 /***/ },
 /* 7 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var DOMWatcher = (function () {
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var EventEmitter_1 = __webpack_require__(24);
+	var DOMWatcher = (function (_super) {
+	    __extends(DOMWatcher, _super);
 	    function DOMWatcher(parent) {
+	        _super.call(this);
 	        this.parent = parent;
-	        this.subscribers = {};
 	    }
-	    // client attaches the event callback actively
-	    DOMWatcher.prototype.on = function (eventType, callback) {
-	        if (!this.subscribers[eventType]) {
-	            this.subscribers[eventType] = [callback];
-	        }
-	        else {
-	            this.subscribers[eventType].push(callback);
-	        }
-	    };
-	    DOMWatcher.prototype.off = function (eventType, callback) {
-	        if (!this.subscribers[eventType]) {
-	            return;
-	        }
-	        var index = this.subscribers[eventType].indexOf(callback);
-	        if (index > -1) {
-	            this.subscribers[eventType].splice(index, 1);
-	        }
-	    };
 	    // install the observer
 	    DOMWatcher.prototype.start = function () {
 	        var _this = this;
 	        var mutationObserver = new MutationObserver(function (mutations, observer) {
 	            if (_this.hasSubscriber('update')) {
-	                _this.dispatch('update');
+	                _this.emit('update');
 	            }
 	            // only continue if both event callback exists
 	            if (!_this.hasSubscriber('addnode') && !_this.hasSubscriber('removenode')) {
@@ -632,12 +623,12 @@
 	                // for each event type, trigger the callback
 	                if (_this.hasSubscriber('addnode')) {
 	                    for (var i = 0; i < mutation.addedNodes.length; i++) {
-	                        _this.dispatch('addnode', mutation.addedNodes[i]);
+	                        _this.emit('addnode', mutation.addedNodes[i]);
 	                    }
 	                }
 	                if (_this.hasSubscriber('removenode')) {
 	                    for (var i = 0; i < mutation.removedNodes.length; i++) {
-	                        _this.dispatch('removenode', mutation.removedNodes[i]);
+	                        _this.emit('removenode', mutation.removedNodes[i]);
 	                    }
 	                }
 	            });
@@ -647,20 +638,8 @@
 	            childList: true,
 	        });
 	    };
-	    DOMWatcher.prototype.hasSubscriber = function (eventType) {
-	        return this.subscribers[eventType] && this.subscribers[eventType].length > 0;
-	    };
-	    DOMWatcher.prototype.dispatch = function (eventType) {
-	        var args = [];
-	        for (var _i = 1; _i < arguments.length; _i++) {
-	            args[_i - 1] = arguments[_i];
-	        }
-	        if (this.hasSubscriber(eventType)) {
-	            this.subscribers[eventType].forEach(function (callback) { return callback.apply(void 0, args); });
-	        }
-	    };
 	    return DOMWatcher;
-	}());
+	}(EventEmitter_1.default));
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = DOMWatcher;
 
@@ -679,6 +658,8 @@
 	    element.appendChild(node);
 	}
 	var url = window.location.href;
+	var config = config_1.default(url);
+	var isThread = config.isThread.test(url);
 	// menu buttons
 	var menu;
 	var updateButton;
@@ -688,10 +669,8 @@
 	var nightModeButton;
 	var locals;
 	// inject menu buttons
-	function injectMenu(config, isThread) {
+	function injectMenu() {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(url); }
-	    if (isThread === void 0) { isThread = config.isThread.test(url); }
 	    // import assests
 	    var style = __webpack_require__(17);
 	    var css = style[0][1];
@@ -762,6 +741,9 @@
 	var Ajax_1 = __webpack_require__(5);
 	var config_1 = __webpack_require__(0);
 	var DOMWatcher_1 = __webpack_require__(7);
+	var url = window.location.href;
+	var config = config_1.default(url);
+	var isThread = config.isThread.test(url);
 	// a function that stick the reply element near the quote
 	function stickReply(quote, reply, floatClass, floatsParent) {
 	    'use strict';
@@ -805,9 +787,9 @@
 	var cache = {};
 	// the locks of ajax call for thread document
 	var getting = {};
-	function bindReplyToQuote(anchor, doc, floatsParent, floatClass) {
+	function bindReplyToQuote(anchor, floatsParent, floatClass) {
 	    'use strict';
-	    if (floatsParent === void 0) { floatsParent = doc.body; }
+	    if (floatsParent === void 0) { floatsParent = document.body; }
 	    // get all the quote element, a quote span may have multiple quote anchor points
 	    var matched = anchor.href.match(/.*#r([0-9]*).*/);
 	    if (!matched || matched.length < 2) {
@@ -816,7 +798,7 @@
 	    var targetID = matched[1];
 	    anchor.addEventListener('mouseover', function () {
 	        var _this = this;
-	        var target = doc.getElementById("r" + targetID);
+	        var target = document.getElementById("r" + targetID);
 	        if (!target) {
 	            // if the reply is hide inside the thread
 	            // get the thread ID
@@ -856,11 +838,8 @@
 	    });
 	}
 	exports.bindReplyToQuote = bindReplyToQuote;
-	var url = window.location.href;
-	function initializeQuotes(config, isThread, floatsParent) {
+	function initializeQuotes(floatsParent) {
 	    'use strict';
-	    if (config === void 0) { config = config_1.default(url); }
-	    if (isThread === void 0) { isThread = config.isThread.test(url); }
 	    if (floatsParent === void 0) { floatsParent = document.body; }
 	    // import the css
 	    var style = __webpack_require__(19);
@@ -876,7 +855,7 @@
 	        for (var i = 0; i < qlinks.length; i++) {
 	            var qlink = qlinks[i];
 	            if (config.quote && config.quote.test(qlink.href)) {
-	                bindReplyToQuote(qlink, document, floatsParent, locals.floatingReply);
+	                bindReplyToQuote(qlink, floatsParent, locals.floatingReply);
 	            }
 	        }
 	    }
@@ -902,7 +881,7 @@
 	        var newQlinks = document.querySelectorAll("#" + id + " .resquote .qlink");
 	        if (newQlinks) {
 	            for (var j = 0; j < newQlinks.length; j++) {
-	                bindReplyToQuote(newQlinks[j], document, floatsParent, locals.floatingReply);
+	                bindReplyToQuote(newQlinks[j], floatsParent, locals.floatingReply);
 	            }
 	        }
 	        // if a temporary id is added, clear it at the end
@@ -924,9 +903,12 @@
 	"use strict";
 	// update function after clicking update button
 	var Ajax_1 = __webpack_require__(5);
-	function createUpdateCallback(url, doc, floatsParent, config, floatClass) {
+	var config_1 = __webpack_require__(0);
+	var url = window.location.href;
+	var config = config_1.default(url);
+	function createUpdateCallback(floatsParent, floatClass) {
 	    'use strict';
-	    if (floatsParent === void 0) { floatsParent = doc.body; }
+	    if (floatsParent === void 0) { floatsParent = document.body; }
 	    // initialize ajax object
 	    var ajax = new Ajax_1.default('get', url, 'document');
 	    var newElements;
@@ -938,7 +920,7 @@
 	    return function () {
 	        return ajax.start().then(function (newDoc) {
 	            newElements = getElements(newDoc);
-	            oldElements = getElements(doc);
+	            oldElements = getElements(document);
 	            if (!newElements || !oldElements) {
 	                console.error('Error when getting the document of ajax result');
 	                return;
@@ -964,10 +946,10 @@
 	        }, function () { return console.log('rejected'); });
 	    };
 	}
-	function bindUpdateButton(url, doc, menuButtons, config, locals, updateButton) {
+	function bindUpdateButton(menuButtons, locals, updateButton) {
 	    'use strict';
 	    // create callback function
-	    var clickCallback = createUpdateCallback(url, doc, menuButtons, config, locals.floatingReply);
+	    var clickCallback = createUpdateCallback(menuButtons, locals.floatingReply);
 	    // store the id of setTimeout in the click event below for later clearTimeout
 	    var timeout = 0;
 	    updateButton.addEventListener('click', function (event) {
@@ -1016,9 +998,12 @@
 	"use strict";
 	// update function after clicking update button
 	var Ajax_1 = __webpack_require__(5);
-	function createUpdateCallback(url, doc, floatsParent, config, floatClass) {
+	var config_1 = __webpack_require__(0);
+	var url = window.location.href;
+	var config = config_1.default(url);
+	function createUpdateCallback(floatsParent, floatClass) {
 	    'use strict';
-	    if (floatsParent === void 0) { floatsParent = doc.body; }
+	    if (floatsParent === void 0) { floatsParent = document.body; }
 	    // initialize ajax object
 	    var ajax = new Ajax_1.default('get', url, 'document');
 	    var newElements;
@@ -1031,7 +1016,7 @@
 	        return ajax.start().then(function (newDoc) {
 	            // create a new doc to plug in the ajax result
 	            newElements = getElements(newDoc);
-	            oldElements = getElements(doc);
+	            oldElements = getElements(document);
 	            if (!newElements || !oldElements) {
 	                console.error('Error when getting the document of ajax result');
 	                return;
@@ -1047,10 +1032,10 @@
 	        }, function () { return console.log('rejected'); });
 	    };
 	}
-	function bindUpdateButton(url, doc, menuButtons, config, locals, updateButton) {
+	function bindUpdateButton(menuButtons, locals, updateButton) {
 	    'use strict';
 	    // create callback function
-	    var clickCallback = createUpdateCallback(url, doc, menuButtons, config, locals.floatingReply);
+	    var clickCallback = createUpdateCallback(menuButtons, locals.floatingReply);
 	    // store the id of setTimeout in the click event below for later clearTimeout
 	    var timeout = 0;
 	    updateButton.addEventListener('click', function (event) {
@@ -2188,7 +2173,7 @@
 	    throw err;
 	  }
 	  try {
-	    str = str || __webpack_require__(25).readFileSync(filename, 'utf8')
+	    str = str || __webpack_require__(26).readFileSync(filename, 'utf8')
 	  } catch (ex) {
 	    rethrow(err, null, lineno)
 	  }
@@ -2243,23 +2228,23 @@
 	function initialize() {
 	    'use strict';
 	    // inject menu buttons
-	    var menuButtons = injectmenu_1.injectMenu(config, isThread);
+	    var menuButtons = injectmenu_1.injectMenu();
 	    // enable all menu buttons
 	    injectmenu_1.enableButtons();
 	    // bind the update button base on the page type
 	    if (isThread) {
-	        replylistupdate_1.default(url, document, menuButtons.menu, config, menuButtons.locals, menuButtons.updateButton);
+	        replylistupdate_1.default(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
 	    }
 	    else {
-	        threadlistupdate_1.default(url, document, menuButtons.menu, config, menuButtons.locals, menuButtons.updateButton);
+	        threadlistupdate_1.default(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
 	    }
 	    // intialize thumbnails related function
-	    thumbnail_2.default(config, isThread);
+	    thumbnail_2.default();
 	    thumbnail_1.bindThumbnailControlButtons(menuButtons.expandAllButton, menuButtons.contractAllButton);
 	    // initialize reply sticker events
-	    quote_1.default(config, isThread, menuButtons.menu);
+	    quote_1.default(menuButtons.menu);
 	    // bind the post button event
-	    postform_2.default(config);
+	    postform_2.default();
 	    postform_1.bindPostButton(menuButtons.postformButton);
 	    // bind the night mode toggle event
 	    nightmode_1.bindNightModeButton(menuButtons.nightModeButton);
@@ -2267,12 +2252,11 @@
 	    nightmode_1.startSynchronize();
 	}
 	// if the page is menu page, init for cross storage hub
+	nightmode_2.default();
 	if (isMenu) {
 	    settingsync_1.init();
-	    nightmode_2.default(config, true);
 	}
 	else {
-	    nightmode_2.default(config);
 	    if (document.readyState !== 'loading') {
 	        initialize();
 	    }
@@ -2284,6 +2268,49 @@
 
 /***/ },
 /* 24 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var EventEmitter = (function () {
+	    function EventEmitter() {
+	        this.subscribers = {};
+	    }
+	    EventEmitter.prototype.on = function (topic, callback) {
+	        if (!(topic in this.subscribers)) {
+	            this.subscribers[topic] = [callback];
+	        }
+	        else {
+	            this.subscribers[topic].push(callback);
+	        }
+	    };
+	    EventEmitter.prototype.off = function (topic, callback) {
+	        if (topic in this.subscribers) {
+	            var index = this.subscribers[topic].indexOf(callback);
+	            if (index > -1) {
+	                this.subscribers[topic].splice(index, 1);
+	            }
+	        }
+	    };
+	    EventEmitter.prototype.emit = function (topic) {
+	        var args = [];
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            args[_i - 1] = arguments[_i];
+	        }
+	        if (topic in this.subscribers) {
+	            this.subscribers[topic].forEach(function (callback) { return callback.apply(void 0, args); });
+	        }
+	    };
+	    EventEmitter.prototype.hasSubscriber = function (eventType) {
+	        return this.subscribers[eventType] && this.subscribers[eventType].length > 0;
+	    };
+	    return EventEmitter;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = EventEmitter;
+
+
+/***/ },
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2297,7 +2324,7 @@
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports) {
 
 	/* (ignored) */

@@ -9,6 +9,8 @@ function addHTMLToElement(tag: string, html: string, element: HTMLElement): void
 }
 
 const url: string = window.location.href;
+const config: komicaHelper.Config = getConfigByURL(url);
+const isThread: boolean = config.isThread.test(url);
 
 // menu buttons
 let menu: HTMLElement;
@@ -20,8 +22,7 @@ let nightModeButton: HTMLAnchorElement;
 let locals: komicaHelper.LocalStyle;
 
 // inject menu buttons
-export function injectMenu(config: komicaHelper.Config = getConfigByURL(url),
-    isThread: boolean = config.isThread.test(url)): komicaHelper.MenuButtons {
+export function injectMenu(): komicaHelper.MenuButtons {
     'use strict';
     // import assests
     const style: any = require('!css!sass!../styles/main.sass');

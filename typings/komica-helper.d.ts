@@ -71,7 +71,7 @@ declare namespace komicaHelper {
     }
 
     interface Setting {
-        value: string;
+        value: any;
         timestamp: string;
     }
 }

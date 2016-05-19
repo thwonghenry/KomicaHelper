@@ -1,16 +1,21 @@
 import getConfigByURL from './config';
 import DOMWatcher from './DOMWatcher';
 
+const url: string = window.location.href;
+const config: komicaHelper.Config = getConfigByURL(url);
+const isThread: boolean = config.isThread.test(url);
+
 const style: any = require('!css!sass!../styles/thumbnail.sass');
 const css: string = style[0][1];
 const locals: komicaHelper.LocalStyle = style.locals;
 
+
 let buttons: HTMLAnchorElement[] = [];
 
-function bindThumbnail(img: HTMLImageElement, config: komicaHelper.Config, doc: Document): void {
+function bindThumbnail(img: HTMLImageElement): void {
     'use strict';
     // create the button element for image function
-    let button: HTMLAnchorElement = doc.createElement('a');
+    let button: HTMLAnchorElement = document.createElement('a');
     button.innerHTML = '放大';
     button.href = '#';
 
@@ -19,7 +24,7 @@ function bindThumbnail(img: HTMLImageElement, config: komicaHelper.Config, doc: 
     anchor.parentNode.insertBefore(button, anchor.nextSibling);
 
     // use for breaking line between the enlarged image and the reply
-    let br: HTMLBRElement = doc.createElement('br');
+    let br: HTMLBRElement = document.createElement('br');
 
     // save the src of the thumbnail for restoring later
     const src: string = img.src;
@@ -88,9 +93,7 @@ export function bindThumbnailControlButtons(expandButton: HTMLAnchorElement, con
     });
 }
 
-const url: string = window.location.href;
-export default function initializeThumbnails(config: komicaHelper.Config = getConfigByURL(url),
-    isThread: boolean = config.isThread.test(url)): void {
+export default function initializeThumbnails(): void {
 
     'use strict';
     // append the style
@@ -101,7 +104,7 @@ export default function initializeThumbnails(config: komicaHelper.Config = getCo
     // bind all the thumbnails to a button
     const imgs: NodeListOf<Element> = config.getThumbnails(document);
     for (let i: number = 0; i < imgs.length; i++) {
-        bindThumbnail(imgs[i] as HTMLImageElement, config, document);
+        bindThumbnail(imgs[i] as HTMLImageElement);
     }
 
     // attach a DOM watcher on the main thread or thread list
@@ -125,7 +128,7 @@ export default function initializeThumbnails(config: komicaHelper.Config = getCo
         // query the thumbnail element
         let img: HTMLImageElement = document.querySelector(`#${id} img`) as HTMLImageElement;
         if (img) {
-            bindThumbnail(img, config, document);
+            bindThumbnail(img);
         }
         // if a temporary id is added, clear it at the end
         if (clear) {

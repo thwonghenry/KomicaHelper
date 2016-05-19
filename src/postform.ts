@@ -3,6 +3,8 @@ import getConfigByURL from './config';
 let isHiding: boolean = true;
 let locals: komicaHelper.LocalStyle;
 let postForm: HTMLElement;
+const url: string = window.location.href;
+const config: komicaHelper.Config = getConfigByURL(url);
 
 // bind the post button function
 export function bindPostButton(createButton: HTMLAnchorElement): void {
@@ -19,7 +21,7 @@ export function bindPostButton(createButton: HTMLAnchorElement): void {
     });
 }
 
-export default function initializePostform(config: komicaHelper.Config = getConfigByURL(window.location.href)): void {
+export default function initializePostform(): void {
     'use strict';
     // import the css
     const style: any = require('!css!sass!../styles/postform.sass');
