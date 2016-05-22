@@ -17,12 +17,12 @@
 - Chrome:
 
   - Clone this repository
-  - Load <build/chrome_extension/komicahelper> as unpackaged extension from Google Chrome
+  - Load [build/chrome_extension/komicaHelper](build/chrome_extension/komicaHelper) as unpackaged extension from Google Chrome
   - Done!
 
 - Userscript:
 
-  - Choose the function you want to use from <build/userscripts>
+  - Choose the function you want to use from [build/userscripts](build/userscripts)
   - Load it from your userscripts loader in your browser
   - Done!
 
