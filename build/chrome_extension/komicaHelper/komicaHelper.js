@@ -37,7 +37,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 21);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var index_1 = __webpack_require__(25);
+	var index_1 = __webpack_require__(23);
 	// helper functions that used for binding
 	function getElementById(id, doc) {
 	    'use strict';
@@ -75,7 +75,6 @@
 	    'use strict';
 	    for (var key in newConfig) {
 	        if (!oldConfig.hasOwnProperty(key)) {
-	            console.log('extending', key);
 	            oldConfig[key] = newConfig[key];
 	        }
 	    }
@@ -125,7 +124,6 @@
 	            return config;
 	        }
 	    }
-	    console.log('using default config');
 	    return defaultConfig;
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -190,275 +188,6 @@
 
 /***/ },
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var config_1 = __webpack_require__(0);
-	var settingsync_1 = __webpack_require__(6);
-	// get the night mode state from local storage
-	var isNight = false;
-	var darkStyleName;
-	var url = window.location.href;
-	var config = config_1.default(url);
-	var isMenu = /web\.komica\.org/.test(url);
-	// bind the toggle button function
-	function toggleNightMode(noSync) {
-	    'use strict';
-	    var root = document.documentElement;
-	    if (isNight) {
-	        root.classList.remove(darkStyleName);
-	    }
-	    else {
-	        root.classList.add(darkStyleName);
-	    }
-	    // toggle the night mode state
-	    isNight = !isNight;
-	    if (!noSync) {
-	        var setting = {
-	            timestamp: "" + Math.floor(Date.now()),
-	            value: isNight ? 'true' : 'false',
-	        };
-	        localStorage.setItem('komica_helper_nightmode', JSON.stringify(setting));
-	        settingsync_1.setSetting('nightmode', setting);
-	    }
-	}
-	function bindNightModeButton(nightButton) {
-	    'use strict';
-	    nightButton.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        toggleNightMode();
-	    });
-	}
-	exports.bindNightModeButton = bindNightModeButton;
-	function startSynchronize() {
-	    'use strict';
-	    settingsync_1.synchronizeSetting('nightmode').then(function () {
-	        var localNightMode = JSON.parse(localStorage.getItem('komica_helper_nightmode'));
-	        if (localNightMode && (localNightMode.value === 'true') !== isNight) {
-	            toggleNightMode(true);
-	        }
-	    });
-	}
-	exports.startSynchronize = startSynchronize;
-	// initialize this module by providing the dark style of this board
-	function initializeNightMode() {
-	    'use strict';
-	    // append the night mode style
-	    var nightStyle = document.createElement('style');
-	    nightStyle.innerHTML = config.darkStyle[0][1];
-	    var localNightMode;
-	    document.documentElement.appendChild(nightStyle);
-	    darkStyleName = config.darkStyle.locals.night_mode;
-	    if (isMenu) {
-	        var localSetting = localStorage.getItem('komica_helper_nightmode');
-	        if (localSetting) {
-	            localNightMode = JSON.parse(localSetting).value;
-	        }
-	        // if the page is a menu, attach storage change event
-	        window.addEventListener('storage', function (event) {
-	            if (event.key === 'komica_helper_nightmode') {
-	                var newSetting = JSON.parse(event.newValue).value;
-	                if ((newSetting.value === 'true') !== isNight) {
-	                    toggleNightMode(true);
-	                }
-	            }
-	        });
-	    }
-	    else {
-	        var localSetting = localStorage.getItem('komica_helper_nightmode');
-	        if (localSetting) {
-	            localNightMode = JSON.parse(localSetting);
-	        }
-	    }
-	    if (localNightMode && localNightMode.value === 'true') {
-	        toggleNightMode(true);
-	    }
-	}
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = initializeNightMode;
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var config_1 = __webpack_require__(0);
-	var isHiding = true;
-	var locals;
-	var postForm;
-	var url = window.location.href;
-	var config = config_1.default(url);
-	// bind the post button function
-	function bindPostButton(createButton) {
-	    'use strict';
-	    createButton.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        if (isHiding) {
-	            postForm.classList.remove(locals.hidden);
-	        }
-	        else {
-	            postForm.classList.add(locals.hidden);
-	        }
-	        // toggle the state
-	        isHiding = !isHiding;
-	    });
-	}
-	exports.bindPostButton = bindPostButton;
-	function initializePostform() {
-	    'use strict';
-	    // import the css
-	    var style = __webpack_require__(18);
-	    var css = style[0][1];
-	    locals = style.locals;
-	    // append the style
-	    var styleTag = document.createElement('style');
-	    styleTag.innerHTML = css;
-	    document.body.appendChild(styleTag);
-	    postForm = config.getPostformElement(document);
-	    if (postForm) {
-	        postForm.classList.add(locals.createNew, locals.hidden);
-	    }
-	}
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = initializePostform;
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var config_1 = __webpack_require__(0);
-	var DOMWatcher_1 = __webpack_require__(7);
-	var url = window.location.href;
-	var config = config_1.default(url);
-	var isThread = config.isThread.test(url);
-	var style = __webpack_require__(20);
-	var css = style[0][1];
-	var locals = style.locals;
-	var buttons = [];
-	function bindThumbnail(img) {
-	    'use strict';
-	    // create the button element for image function
-	    var button = document.createElement('a');
-	    button.innerHTML = '放大';
-	    button.href = '#';
-	    // insert the button alongside with the image
-	    var anchor = img.parentNode;
-	    anchor.parentNode.insertBefore(button, anchor.nextSibling);
-	    // use for breaking line between the enlarged image and the reply
-	    var br = document.createElement('br');
-	    // save the src of the thumbnail for restoring later
-	    var src = img.src;
-	    // remove all the dimension related attributes
-	    img.removeAttribute('style');
-	    img.removeAttribute('width');
-	    img.removeAttribute('height');
-	    // add custom thumbnail class
-	    img.classList.add(locals.contracted);
-	    button.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        // enlarge the image
-	        if (img.classList.contains(locals.contracted)) {
-	            img.src = anchor.href;
-	            img.classList.remove(locals.contracted);
-	            img.classList.add(locals.expanded);
-	            anchor.parentNode.insertBefore(br, button);
-	            button.innerHTML = '縮小';
-	        }
-	        else if (img.classList.contains(locals.expanded)) {
-	            // restore the image and button
-	            img.src = src;
-	            img.classList.remove(locals.expanded);
-	            img.classList.add(locals.contracted);
-	            anchor.parentNode.removeChild(br);
-	            button.innerHTML = '放大';
-	        }
-	    });
-	    buttons.push(button);
-	}
-	function resetButtons() {
-	    'use strict';
-	    // reset the button list by setting empty array
-	    buttons = [];
-	}
-	exports.resetButtons = resetButtons;
-	function bindThumbnailControlButtons(expandButton, contractButton) {
-	    'use strict';
-	    // bind the button that expand all unexpanded thumbnails
-	    expandButton.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        // click all the enlarge button
-	        for (var i = 0; i < buttons.length; i++) {
-	            var button = buttons[i];
-	            if (button.innerHTML === '放大') {
-	                button.click();
-	            }
-	        }
-	    });
-	    // bind the button that expand all expanded thumbnails
-	    contractButton.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        // click all the contract button
-	        for (var i = 0; i < buttons.length; i++) {
-	            var button = buttons[i];
-	            if (button.innerHTML === '縮小') {
-	                button.click();
-	            }
-	        }
-	    });
-	}
-	exports.bindThumbnailControlButtons = bindThumbnailControlButtons;
-	function initializeThumbnails() {
-	    'use strict';
-	    // append the style
-	    var styleTag = document.createElement('style');
-	    styleTag.innerHTML = css;
-	    document.body.appendChild(styleTag);
-	    // bind all the thumbnails to a button
-	    var imgs = config.getThumbnails(document);
-	    for (var i = 0; i < imgs.length; i++) {
-	        bindThumbnail(imgs[i]);
-	    }
-	    // attach a DOM watcher on the main thread or thread list
-	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
-	    var domWatcher = new DOMWatcher_1.default(parent);
-	    domWatcher.on('addnode', function (element) {
-	        var reply = element;
-	        var id = reply.id;
-	        var clear = false;
-	        // if the element is text node, continue;
-	        if (!reply.setAttribute) {
-	            return;
-	        }
-	        // if no id to query, add a temporary id to the node
-	        if (!id) {
-	            reply.setAttribute('id', 'komica_helper_temp');
-	            id = reply.id;
-	            clear = true;
-	        }
-	        // query the thumbnail element
-	        var img = document.querySelector("#" + id + " img");
-	        if (img) {
-	            bindThumbnail(img);
-	        }
-	        // if a temporary id is added, clear it at the end
-	        if (clear) {
-	            reply.removeAttribute('id');
-	        }
-	    });
-	    if (!isThread) {
-	        domWatcher.on('update', resetButtons);
-	    }
-	    domWatcher.start();
-	}
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = initializeThumbnails;
-
-
-/***/ },
-/* 5 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -497,11 +226,11 @@
 
 
 /***/ },
-/* 6 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var crossStorage = __webpack_require__(14);
+	var crossStorage = __webpack_require__(13);
 	// used for cross storage hub
 	function init() {
 	    'use strict';
@@ -592,7 +321,7 @@
 
 
 /***/ },
-/* 7 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -601,7 +330,7 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var EventEmitter_1 = __webpack_require__(24);
+	var EventEmitter_1 = __webpack_require__(22);
 	var DOMWatcher = (function (_super) {
 	    __extends(DOMWatcher, _super);
 	    function DOMWatcher(parent) {
@@ -611,7 +340,7 @@
 	    // install the observer
 	    DOMWatcher.prototype.start = function () {
 	        var _this = this;
-	        var mutationObserver = new MutationObserver(function (mutations, observer) {
+	        this.observer = new MutationObserver(function (mutations, observer) {
 	            if (_this.hasSubscriber('update')) {
 	                _this.emit('update');
 	            }
@@ -634,9 +363,15 @@
 	            });
 	        });
 	        // attach a DOM watcher on the parent element
-	        mutationObserver.observe(this.parent, {
+	        this.observer.observe(this.parent, {
 	            childList: true,
 	        });
+	    };
+	    DOMWatcher.prototype.stop = function () {
+	        if (this.observer) {
+	            this.observer.disconnect();
+	        }
+	        delete this.observer;
 	    };
 	    return DOMWatcher;
 	}(EventEmitter_1.default));
@@ -645,7 +380,7 @@
 
 
 /***/ },
-/* 8 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -665,14 +400,13 @@
 	var updateButton;
 	var expandAllButton;
 	var contractAllButton;
-	var postformButton;
 	var nightModeButton;
 	var locals;
 	// inject menu buttons
 	function injectMenu() {
 	    'use strict';
 	    // import assests
-	    var style = __webpack_require__(17);
+	    var style = __webpack_require__(16);
 	    var css = style[0][1];
 	    locals = style.locals;
 	    menu = document.getElementById(locals.komicaHelper);
@@ -681,7 +415,7 @@
 	        // render the menu buttons with local scoped id
 	        var body = document.body;
 	        locals.newString = isThread ? '新回覆' : '新主題';
-	        var html = __webpack_require__(21)(locals);
+	        var html = __webpack_require__(19)(locals);
 	        // add the menu buttons
 	        addHTMLToElement('div', html, body);
 	        // add the buttons style from main.sass
@@ -692,10 +426,9 @@
 	    updateButton = document.getElementById(locals.update);
 	    expandAllButton = document.getElementById(locals.expand);
 	    contractAllButton = document.getElementById(locals.contract);
-	    postformButton = document.getElementById(locals.postform);
 	    nightModeButton = document.getElementById(locals.night);
 	    return {
-	        menu: menu, updateButton: updateButton, expandAllButton: expandAllButton, contractAllButton: contractAllButton, postformButton: postformButton, nightModeButton: nightModeButton, locals: locals,
+	        menu: menu, updateButton: updateButton, expandAllButton: expandAllButton, contractAllButton: contractAllButton, nightModeButton: nightModeButton, locals: locals,
 	    };
 	}
 	exports.injectMenu = injectMenu;
@@ -711,7 +444,6 @@
 	        contractAllButton: true,
 	        expandAllButton: true,
 	        nightModeButton: true,
-	        postformButton: true,
 	        updateButton: true,
 	    }; }
 	    if (enables.updateButton) {
@@ -723,9 +455,6 @@
 	    if (enables.contractAllButton) {
 	        enableButton(contractAllButton);
 	    }
-	    if (enables.postformButton) {
-	        enableButton(postformButton);
-	    }
 	    if (enables.nightModeButton) {
 	        enableButton(nightModeButton);
 	    }
@@ -734,13 +463,103 @@
 
 
 /***/ },
-/* 9 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Ajax_1 = __webpack_require__(5);
 	var config_1 = __webpack_require__(0);
-	var DOMWatcher_1 = __webpack_require__(7);
+	var settingSync_1 = __webpack_require__(3);
+	// get the night mode state from local storage
+	var isNight = false;
+	var darkStyleName;
+	var url = window.location.href;
+	var config = config_1.default(url);
+	var isMenu = /web\.komica\.org/.test(url);
+	// bind the toggle button function
+	function toggleNightMode(noSync) {
+	    'use strict';
+	    var root = document.documentElement;
+	    if (isNight) {
+	        root.classList.remove(darkStyleName);
+	    }
+	    else {
+	        root.classList.add(darkStyleName);
+	    }
+	    // toggle the night mode state
+	    isNight = !isNight;
+	    if (!noSync) {
+	        var setting = {
+	            timestamp: "" + Math.floor(Date.now()),
+	            value: isNight ? 'true' : 'false',
+	        };
+	        localStorage.setItem('komica_helper_nightmode', JSON.stringify(setting));
+	        settingSync_1.setSetting('nightmode', setting);
+	    }
+	}
+	function bindNightModeButton(nightButton) {
+	    'use strict';
+	    nightButton.addEventListener('click', function (event) {
+	        event.preventDefault();
+	        toggleNightMode();
+	    });
+	}
+	exports.bindNightModeButton = bindNightModeButton;
+	function startSynchronize() {
+	    'use strict';
+	    settingSync_1.synchronizeSetting('nightmode').then(function () {
+	        var localNightMode = JSON.parse(localStorage.getItem('komica_helper_nightmode'));
+	        if (localNightMode && (localNightMode.value === 'true') !== isNight) {
+	            toggleNightMode(true);
+	        }
+	    });
+	}
+	exports.startSynchronize = startSynchronize;
+	// initialize this module by providing the dark style of this board
+	function initializeNightMode() {
+	    'use strict';
+	    // append the night mode style
+	    var nightStyle = document.createElement('style');
+	    nightStyle.innerHTML = config.darkStyle[0][1];
+	    var localNightMode;
+	    document.documentElement.appendChild(nightStyle);
+	    darkStyleName = config.darkStyle.locals.night_mode;
+	    if (isMenu) {
+	        var localSetting = localStorage.getItem('komica_helper_nightmode');
+	        if (localSetting) {
+	            localNightMode = JSON.parse(localSetting).value;
+	        }
+	        // if the page is a menu, attach storage change event
+	        window.addEventListener('storage', function (event) {
+	            if (event.key === 'komica_helper_nightmode') {
+	                var newSetting = JSON.parse(event.newValue).value;
+	                if ((newSetting.value === 'true') !== isNight) {
+	                    toggleNightMode(true);
+	                }
+	            }
+	        });
+	    }
+	    else {
+	        var localSetting = localStorage.getItem('komica_helper_nightmode');
+	        if (localSetting) {
+	            localNightMode = JSON.parse(localSetting);
+	        }
+	    }
+	    if (localNightMode && localNightMode.value === 'true') {
+	        toggleNightMode(true);
+	    }
+	}
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = initializeNightMode;
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var Ajax_1 = __webpack_require__(2);
+	var config_1 = __webpack_require__(0);
+	var DOMWatcher_1 = __webpack_require__(4);
 	var url = window.location.href;
 	var config = config_1.default(url);
 	var isThread = config.isThread.test(url);
@@ -842,7 +661,7 @@
 	    'use strict';
 	    if (floatsParent === void 0) { floatsParent = document.body; }
 	    // import the css
-	    var style = __webpack_require__(19);
+	    var style = __webpack_require__(17);
 	    var css = style[0][1];
 	    var locals = style.locals;
 	    // append the style
@@ -897,12 +716,12 @@
 
 
 /***/ },
-/* 10 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// update function after clicking update button
-	var Ajax_1 = __webpack_require__(5);
+	var Ajax_1 = __webpack_require__(2);
 	var config_1 = __webpack_require__(0);
 	var url = window.location.href;
 	var config = config_1.default(url);
@@ -992,12 +811,12 @@
 
 
 /***/ },
-/* 11 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	// update function after clicking update button
-	var Ajax_1 = __webpack_require__(5);
+	var Ajax_1 = __webpack_require__(2);
 	var config_1 = __webpack_require__(0);
 	var url = window.location.href;
 	var config = config_1.default(url);
@@ -1078,7 +897,131 @@
 
 
 /***/ },
-/* 12 */
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var config_1 = __webpack_require__(0);
+	var DOMWatcher_1 = __webpack_require__(4);
+	var url = window.location.href;
+	var config = config_1.default(url);
+	var isThread = config.isThread.test(url);
+	var style = __webpack_require__(18);
+	var css = style[0][1];
+	var locals = style.locals;
+	var buttons = {};
+	function bindThumbnail(img) {
+	    'use strict';
+	    // create the button element for image function
+	    var button = document.createElement('a');
+	    button.innerHTML = '放大';
+	    button.href = '#';
+	    // insert the button alongside with the image
+	    var anchor = img.parentNode;
+	    anchor.parentNode.insertBefore(button, anchor.nextSibling);
+	    // use for breaking line between the enlarged image and the reply
+	    var br = document.createElement('br');
+	    // save the src of the thumbnail for restoring later
+	    var src = img.src;
+	    // remove all the dimension related attributes
+	    img.removeAttribute('style');
+	    img.removeAttribute('width');
+	    img.removeAttribute('height');
+	    // add custom thumbnail class
+	    img.classList.add(locals.contracted);
+	    button.addEventListener('click', function (event) {
+	        event.preventDefault();
+	        // enlarge the image
+	        if (img.classList.contains(locals.contracted)) {
+	            img.src = anchor.href;
+	            img.classList.remove(locals.contracted);
+	            img.classList.add(locals.expanded);
+	            anchor.parentNode.insertBefore(br, button);
+	            button.innerHTML = '縮小';
+	        }
+	        else if (img.classList.contains(locals.expanded)) {
+	            // restore the image and button
+	            img.src = src;
+	            img.classList.remove(locals.expanded);
+	            img.classList.add(locals.contracted);
+	            anchor.parentNode.removeChild(br);
+	            button.innerHTML = '放大';
+	        }
+	    });
+	    buttons[src] = button;
+	}
+	function bindThumbnailControlButtons(expandButton, contractButton) {
+	    'use strict';
+	    // bind the button that expand all unexpanded thumbnails
+	    expandButton.addEventListener('click', function (event) {
+	        event.preventDefault();
+	        // click all the enlarge button
+	        Object.keys(buttons).forEach(function (key) {
+	            var button = buttons[key];
+	            if (button.innerHTML === '放大') {
+	                button.click();
+	            }
+	        });
+	    });
+	    // bind the button that expand all expanded thumbnails
+	    contractButton.addEventListener('click', function (event) {
+	        event.preventDefault();
+	        // click all the contract button
+	        Object.keys(buttons).forEach(function (key) {
+	            var button = buttons[key];
+	            if (button.innerHTML === '縮小') {
+	                button.click();
+	            }
+	        });
+	    });
+	}
+	exports.bindThumbnailControlButtons = bindThumbnailControlButtons;
+	function initializeThumbnails() {
+	    'use strict';
+	    // append the style
+	    var styleTag = document.createElement('style');
+	    styleTag.innerHTML = css;
+	    document.body.appendChild(styleTag);
+	    // bind all the thumbnails to a button
+	    var imgs = config.getThumbnails(document);
+	    for (var i = 0; i < imgs.length; i++) {
+	        bindThumbnail(imgs[i]);
+	    }
+	    // attach a DOM watcher on the main thread or thread list
+	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
+	    var domWatcher = new DOMWatcher_1.default(parent);
+	    domWatcher.on('addnode', function (element) {
+	        var reply = element;
+	        var id = reply.id;
+	        var clear = false;
+	        // if the element is text node, continue;
+	        if (!reply.setAttribute) {
+	            return;
+	        }
+	        // if no id to query, add a temporary id to the node
+	        if (!id) {
+	            reply.setAttribute('id', 'komica_helper_temp');
+	            id = reply.id;
+	            clear = true;
+	        }
+	        // query the thumbnail element
+	        var img = document.querySelector("#" + id + " img");
+	        if (img) {
+	            bindThumbnail(img);
+	        }
+	        // if a temporary id is added, clear it at the end
+	        if (clear) {
+	            reply.removeAttribute('id');
+	        }
+	    });
+	    domWatcher.start();
+	}
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = initializeThumbnails;
+
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	;(function(root) {
@@ -1541,7 +1484,7 @@
 
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	;(function(root) {
@@ -1823,14 +1766,30 @@
 
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	  CrossStorageClient: __webpack_require__(12),
-	  CrossStorageHub:    __webpack_require__(13)
+	  CrossStorageClient: __webpack_require__(11),
+	  CrossStorageHub:    __webpack_require__(12)
 	};
 
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(1)();
+	// imports
+
+
+	// module
+	exports.push([module.i, "html._1CH0lDxiMIShbCcxHUrmod {\n  background-color: #111;\n  color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod body {\n    background-color: #111;\n    color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod a:link {\n    color: #6699FF; }\n  html._1CH0lDxiMIShbCcxHUrmod a:hover {\n    color: #FF9966; }\n  html._1CH0lDxiMIShbCcxHUrmod a:visited {\n    color: #99FF66; }\n  html._1CH0lDxiMIShbCcxHUrmod hr {\n    border-color: #555555; }\n  html._1CH0lDxiMIShbCcxHUrmod h1 {\n    color: #B36666; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply_hl {\n    background-color: #333333; }\n  html._1CH0lDxiMIShbCcxHUrmod .Form_bg {\n    color: #800000; }\n  html._1CH0lDxiMIShbCcxHUrmod .page_switch .ul div.link a {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .pushpost {\n    background-color: #333333; }\n", ""]);
+
+	// exports
+	exports.locals = {
+		"night_mode": "_1CH0lDxiMIShbCcxHUrmod"
+	};
 
 /***/ },
 /* 15 */
@@ -1841,11 +1800,11 @@
 
 
 	// module
-	exports.push([module.i, "html._1CH0lDxiMIShbCcxHUrmod {\n  background-color: #111;\n  color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod body {\n    background-color: #111;\n    color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod a:link {\n    color: #6699FF; }\n  html._1CH0lDxiMIShbCcxHUrmod a:hover {\n    color: #FF9966; }\n  html._1CH0lDxiMIShbCcxHUrmod a:visited {\n    color: #99FF66; }\n  html._1CH0lDxiMIShbCcxHUrmod hr {\n    border-color: #555555; }\n  html._1CH0lDxiMIShbCcxHUrmod h1 {\n    color: #B36666; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply_hl {\n    background-color: #333333; }\n  html._1CH0lDxiMIShbCcxHUrmod .Form_bg {\n    color: #800000; }\n  html._1CH0lDxiMIShbCcxHUrmod #postform_main {\n    background-color: #444444; }\n  html._1CH0lDxiMIShbCcxHUrmod .page_switch .ul div.link a {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .pushpost {\n    background-color: #333333; }\n", ""]);
+	exports.push([module.i, "html._3PcSwAIK8c5KIZxv3BleHH {\n  background-color: #111;\n  color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH body {\n    background-color: #111;\n    color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:link {\n    color: #6699FF; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:hover {\n    color: #FF9966; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:visited {\n    color: #99FF66; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#F0E0D6\"], html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#FFFFEE\"] {\n    background-color: #222222; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#eeaa88\"] {\n    color: #800000; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#DDDDEE\"] {\n    background-color: #453877; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#EEDDDD\"] {\n    background-color: #333333; }\n  html._3PcSwAIK8c5KIZxv3BleHH hr {\n    border-color: #555555; }\n  html._3PcSwAIK8c5KIZxv3BleHH font[size=\"5\"] {\n    color: #B36666; }\n", ""]);
 
 	// exports
 	exports.locals = {
-		"night_mode": "_1CH0lDxiMIShbCcxHUrmod"
+		"night_mode": "_3PcSwAIK8c5KIZxv3BleHH"
 	};
 
 /***/ },
@@ -1857,23 +1816,7 @@
 
 
 	// module
-	exports.push([module.i, "html._3PcSwAIK8c5KIZxv3BleHH {\n  background-color: #111;\n  color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH body {\n    background-color: #111;\n    color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:link {\n    color: #6699FF; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:hover {\n    color: #FF9966; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:visited {\n    color: #99FF66; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#F0E0D6\"], html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#FFFFEE\"] {\n    background-color: #222222; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#eeaa88\"] {\n    color: #800000; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#DDDDEE\"] {\n    background-color: #453877; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#EEDDDD\"] {\n    background-color: #333333; }\n  html._3PcSwAIK8c5KIZxv3BleHH hr {\n    border-color: #555555; }\n  html._3PcSwAIK8c5KIZxv3BleHH font[size=\"5\"] {\n    color: #B36666; }\n  html._3PcSwAIK8c5KIZxv3BleHH center form {\n    background-color: #444444; }\n", ""]);
-
-	// exports
-	exports.locals = {
-		"night_mode": "_3PcSwAIK8c5KIZxv3BleHH"
-	};
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(1)();
-	// imports
-
-
-	// module
-	exports.push([module.i, "#_2RKIDvBZ-c75YVkbPE3upo {\n  position: fixed;\n  top: 40%;\n  right: 0px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._239Ry-eeiEXoNyd-zFwfxk {\n    pointer-events: none;\n    cursor: default;\n    color: gray; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2HQO3DDkC7XaudXT9Urjzk {\n    color: BBB;\n    text-decoration: none;\n    border-bottom: 2px solid silver;\n    margin-bottom: 6px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2bliZs_JXLzcFFvsue8m7Z {\n    display: none; }\n\n#pHE21zpZzvEWryqHMcJf1, #_2jg1ulKVXlhO3Zu-TeZl0r, #Gll4U5FrCKtIYknK7gnl, #_3sNxjFDihcy5wsRxcqmdTm, #_1abk3Qff5m62ALvruCfPMy {\n  text-decoration: none; }\n", ""]);
+	exports.push([module.i, "#_2RKIDvBZ-c75YVkbPE3upo {\n  position: fixed;\n  top: 40%;\n  right: 0px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._239Ry-eeiEXoNyd-zFwfxk {\n    pointer-events: none;\n    cursor: default;\n    color: gray; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2HQO3DDkC7XaudXT9Urjzk {\n    color: BBB;\n    text-decoration: none;\n    border-bottom: 2px solid silver;\n    margin-bottom: 6px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2bliZs_JXLzcFFvsue8m7Z {\n    display: none; }\n\n#pHE21zpZzvEWryqHMcJf1, #_2jg1ulKVXlhO3Zu-TeZl0r, #Gll4U5FrCKtIYknK7gnl, #_1abk3Qff5m62ALvruCfPMy {\n  text-decoration: none; }\n", ""]);
 
 	// exports
 	exports.locals = {
@@ -1884,29 +1827,11 @@
 		"update": "pHE21zpZzvEWryqHMcJf1",
 		"expand": "_2jg1ulKVXlhO3Zu-TeZl0r",
 		"contract": "Gll4U5FrCKtIYknK7gnl",
-		"postform": "_3sNxjFDihcy5wsRxcqmdTm",
 		"night": "_1abk3Qff5m62ALvruCfPMy"
 	};
 
 /***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(1)();
-	// imports
-
-
-	// module
-	exports.push([module.i, "._2tXlWf9rQklM_2v7bnrcDy {\n  padding-top: 30px;\n  position: fixed;\n  width: 100%;\n  height: 33%;\n  overflow-y: scroll;\n  bottom: 0px;\n  background-color: #FFFFCC; }\n\n._3Lgni0e7amfvqB2yrsBMK4 {\n  display: none; }\n", ""]);
-
-	// exports
-	exports.locals = {
-		"createNew": "_2tXlWf9rQklM_2v7bnrcDy",
-		"hidden": "_3Lgni0e7amfvqB2yrsBMK4"
-	};
-
-/***/ },
-/* 19 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(1)();
@@ -1922,7 +1847,7 @@
 	};
 
 /***/ },
-/* 20 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(1)();
@@ -1939,21 +1864,21 @@
 	};
 
 /***/ },
-/* 21 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(22);
+	var jade = __webpack_require__(20);
 
 	module.exports = function template(locals) {
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (contract, expand, hiddenButton, komicaHelper, newString, night, postform, update) {
-	buf.push("<div" + (jade.attr("id", komicaHelper, true, true)) + "><a href=\"#\"" + (jade.attr("id", update, true, true)) + (jade.cls([hiddenButton], [true])) + ">更新<br></a><a href=\"#\"" + (jade.attr("id", expand, true, true)) + (jade.cls([hiddenButton], [true])) + ">放大所有圖片<br></a><a href=\"#\"" + (jade.attr("id", contract, true, true)) + (jade.cls([hiddenButton], [true])) + ">縮小所有圖片<br></a><a href=\"#\"" + (jade.attr("id", postform, true, true)) + (jade.cls([hiddenButton], [true])) + ">" + (jade.escape((jade_interp = newString) == null ? '' : jade_interp)) + "<br></a><a href=\"#\"" + (jade.attr("id", night, true, true)) + (jade.cls([hiddenButton], [true])) + ">夜間模式</a></div>");}.call(this,"contract" in locals_for_with?locals_for_with.contract:typeof contract!=="undefined"?contract:undefined,"expand" in locals_for_with?locals_for_with.expand:typeof expand!=="undefined"?expand:undefined,"hiddenButton" in locals_for_with?locals_for_with.hiddenButton:typeof hiddenButton!=="undefined"?hiddenButton:undefined,"komicaHelper" in locals_for_with?locals_for_with.komicaHelper:typeof komicaHelper!=="undefined"?komicaHelper:undefined,"newString" in locals_for_with?locals_for_with.newString:typeof newString!=="undefined"?newString:undefined,"night" in locals_for_with?locals_for_with.night:typeof night!=="undefined"?night:undefined,"postform" in locals_for_with?locals_for_with.postform:typeof postform!=="undefined"?postform:undefined,"update" in locals_for_with?locals_for_with.update:typeof update!=="undefined"?update:undefined));;return buf.join("");
+	;var locals_for_with = (locals || {});(function (contract, expand, hiddenButton, komicaHelper, night, update) {
+	buf.push("<div" + (jade.attr("id", komicaHelper, true, true)) + "><a href=\"#\"" + (jade.attr("id", update, true, true)) + (jade.cls([hiddenButton], [true])) + ">更新<br></a><a href=\"#\"" + (jade.attr("id", expand, true, true)) + (jade.cls([hiddenButton], [true])) + ">放大所有圖片<br></a><a href=\"#\"" + (jade.attr("id", contract, true, true)) + (jade.cls([hiddenButton], [true])) + ">縮小所有圖片<br></a><a href=\"#\"" + (jade.attr("id", night, true, true)) + (jade.cls([hiddenButton], [true])) + ">夜間模式</a></div>");}.call(this,"contract" in locals_for_with?locals_for_with.contract:typeof contract!=="undefined"?contract:undefined,"expand" in locals_for_with?locals_for_with.expand:typeof expand!=="undefined"?expand:undefined,"hiddenButton" in locals_for_with?locals_for_with.hiddenButton:typeof hiddenButton!=="undefined"?hiddenButton:undefined,"komicaHelper" in locals_for_with?locals_for_with.komicaHelper:typeof komicaHelper!=="undefined"?komicaHelper:undefined,"night" in locals_for_with?locals_for_with.night:typeof night!=="undefined"?night:undefined,"update" in locals_for_with?locals_for_with.update:typeof update!=="undefined"?update:undefined));;return buf.join("");
 	}
 
 /***/ },
-/* 22 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2173,7 +2098,7 @@
 	    throw err;
 	  }
 	  try {
-	    str = str || __webpack_require__(26).readFileSync(filename, 'utf8')
+	    str = str || __webpack_require__(24).readFileSync(filename, 'utf8')
 	  } catch (ex) {
 	    rethrow(err, null, lineno)
 	  }
@@ -2205,22 +2130,18 @@
 
 
 /***/ },
-/* 23 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var config_1 = __webpack_require__(0);
-	var thumbnail_1 = __webpack_require__(4);
-	var postform_1 = __webpack_require__(3);
-	var nightmode_1 = __webpack_require__(2);
-	var thumbnail_2 = __webpack_require__(4);
-	var quote_1 = __webpack_require__(9);
-	var postform_2 = __webpack_require__(3);
-	var nightmode_2 = __webpack_require__(2);
-	var replylistupdate_1 = __webpack_require__(10);
-	var threadlistupdate_1 = __webpack_require__(11);
-	var injectmenu_1 = __webpack_require__(8);
-	var settingsync_1 = __webpack_require__(6);
+	var thumbnail_1 = __webpack_require__(10);
+	var nightMode_1 = __webpack_require__(6);
+	var quote_1 = __webpack_require__(7);
+	var replyListUpdate_1 = __webpack_require__(8);
+	var threadListUpdate_1 = __webpack_require__(9);
+	var injectMenu_1 = __webpack_require__(5);
+	var settingSync_1 = __webpack_require__(3);
 	var url = window.location.href;
 	var config = config_1.default(url);
 	var isThread = config.isThread.test(url);
@@ -2228,33 +2149,30 @@
 	function initialize() {
 	    'use strict';
 	    // inject menu buttons
-	    var menuButtons = injectmenu_1.injectMenu();
+	    var menuButtons = injectMenu_1.injectMenu();
 	    // enable all menu buttons
-	    injectmenu_1.enableButtons();
+	    injectMenu_1.enableButtons();
 	    // bind the update button base on the page type
 	    if (isThread) {
-	        replylistupdate_1.default(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
+	        replyListUpdate_1.default(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
 	    }
 	    else {
-	        threadlistupdate_1.default(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
+	        threadListUpdate_1.default(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
 	    }
 	    // intialize thumbnails related function
-	    thumbnail_2.default();
+	    thumbnail_1.default();
 	    thumbnail_1.bindThumbnailControlButtons(menuButtons.expandAllButton, menuButtons.contractAllButton);
 	    // initialize reply sticker events
 	    quote_1.default(menuButtons.menu);
-	    // bind the post button event
-	    postform_2.default();
-	    postform_1.bindPostButton(menuButtons.postformButton);
 	    // bind the night mode toggle event
-	    nightmode_1.bindNightModeButton(menuButtons.nightModeButton);
+	    nightMode_1.bindNightModeButton(menuButtons.nightModeButton);
 	    // synchronize the night mode state
-	    nightmode_1.startSynchronize();
+	    nightMode_1.startSynchronize();
 	}
 	// if the page is menu page, init for cross storage hub
-	nightmode_2.default();
+	nightMode_1.default();
 	if (isMenu) {
-	    settingsync_1.init();
+	    settingSync_1.init();
 	}
 	else {
 	    if (document.readyState !== 'loading') {
@@ -2267,7 +2185,7 @@
 
 
 /***/ },
-/* 24 */
+/* 22 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2310,12 +2228,12 @@
 
 
 /***/ },
-/* 25 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var def = __webpack_require__(15);
-	var homu = __webpack_require__(16);
+	var def = __webpack_require__(14);
+	var homu = __webpack_require__(15);
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = {
 	    default: def,
@@ -2324,7 +2242,7 @@
 
 
 /***/ },
-/* 26 */
+/* 24 */
 /***/ function(module, exports) {
 
 	/* (ignored) */

@@ -5,7 +5,6 @@
 - Update the threads and replies without refreshing
 - Display the quoted reply near the quote ID when hovered
 - Enlarge the thumbnail by clicking the button nearby
-- Show the form of creating new thread / reply with toggle button
 - Night mode toggle
 - More to come..
 
@@ -16,14 +15,14 @@
 ## How to use
 
 - Chrome:
-  
+
   - Clone this repository
-  - Load [build/chrome_extension/komicahelper](build/chrome_extension/komicahelper) as unpackaged extension from Google Chrome
+  - Load <build/chrome_extension/komicahelper> as unpackaged extension from Google Chrome
   - Done!
 
 - Userscript:
 
-  - Choose the function you want to use from [build/userscripts](build/userscripts)
+  - Choose the function you want to use from <build/userscripts>
   - Load it from your userscripts loader in your browser
   - Done!
 
@@ -50,9 +49,11 @@
 ## How to build the chrome extension / userscripts
 
 1. Make sure you have installed node.js
-2. `npm i`
-3. `npm run build`
-4. Done! Find the folder / scripts described in [How to use](#how-to-use)
+2. `npm i -g webpack`
+3. `cd ${this project folder}`
+4. `npm i`
+5. `webpack`
+6. Done! Find the folder / scripts described in [How to use](#how-to-use)
 
 ## Contribution guideline
 

@@ -2,6 +2,7 @@ import EventEmitter from './EventEmitter';
 
 export default class DOMWatcher extends EventEmitter {
     private parent: HTMLElement;
+    private observer: MutationObserver;
 
     constructor(parent: HTMLElement) {
         super();
@@ -10,7 +11,7 @@ export default class DOMWatcher extends EventEmitter {
 
     // install the observer
     public start(): void {
-        const mutationObserver: MutationObserver = new MutationObserver((mutations: MutationRecord[], observer: MutationObserver) => {
+        this.observer = new MutationObserver((mutations: MutationRecord[], observer: MutationObserver) => {
             if (this.hasSubscriber('update')) {
                 this.emit('update');
             }
@@ -35,8 +36,15 @@ export default class DOMWatcher extends EventEmitter {
         });
 
         // attach a DOM watcher on the parent element
-        mutationObserver.observe(this.parent, {
+        this.observer.observe(this.parent, {
             childList: true,
         });
+    }
+
+    public stop(): void {
+        if (this.observer) {
+            this.observer.disconnect();
+        }
+        delete this.observer;
     }
 }

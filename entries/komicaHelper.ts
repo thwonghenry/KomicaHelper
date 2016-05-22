@@ -1,15 +1,11 @@
 import getConfigByURL from '../src/config';
-import {bindThumbnailControlButtons} from '../src/thumbnail';
-import {bindPostButton} from '../src/postform';
-import {bindNightModeButton, startSynchronize} from '../src/nightmode';
-import initializeThumbnails from '../src/thumbnail';
+import initializeThumbnails, {bindThumbnailControlButtons} from '../src/thumbnail';
+import initializeNightMode, {bindNightModeButton, startSynchronize} from '../src/nightMode';
 import initializeQuotes from '../src/quote';
-import initializePostform from '../src/postform';
-import initializeNightMode from '../src/nightmode';
-import bindReplyListUpdate from '../src/replylistupdate';
-import bindThreadListUpdate from '../src/threadlistupdate';
-import {injectMenu, enableButtons} from '../src/injectmenu';
-import {init} from '../src/settingsync';
+import bindReplyListUpdate from '../src/replyListUpdate';
+import bindThreadListUpdate from '../src/threadListUpdate';
+import {injectMenu, enableButtons} from '../src/injectMenu';
+import {init} from '../src/settingSync';
 const url: string = window.location.href;
 
 const config: komicaHelper.Config = getConfigByURL(url);
@@ -37,10 +33,6 @@ function initialize(): void {
 
     // initialize reply sticker events
     initializeQuotes(menuButtons.menu);
-
-    // bind the post button event
-    initializePostform();
-    bindPostButton(menuButtons.postformButton);
 
     // bind the night mode toggle event
     bindNightModeButton(menuButtons.nightModeButton);

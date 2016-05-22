@@ -34,7 +34,6 @@ function extendConfig(oldConfig: komicaHelper.Config, newConfig: komicaHelper.Co
     'use strict';
     for (const key in newConfig) {
         if (!oldConfig.hasOwnProperty(key)) {
-            console.log('extending', key);
             oldConfig[key] = newConfig[key];
         }
     }
@@ -87,6 +86,5 @@ export default function getConfigByURL(url: string): komicaHelper.Config {
             return config;
         }
     }
-    console.log('using default config');
     return defaultConfig;
 }

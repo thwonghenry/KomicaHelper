@@ -10,7 +10,7 @@ const css: string = style[0][1];
 const locals: komicaHelper.LocalStyle = style.locals;
 
 
-let buttons: HTMLAnchorElement[] = [];
+let buttons: {[img: string]: HTMLAnchorElement} = {};
 
 function bindThumbnail(img: HTMLImageElement): void {
     'use strict';
@@ -56,13 +56,7 @@ function bindThumbnail(img: HTMLImageElement): void {
             button.innerHTML = '放大';
         }
     });
-    buttons.push(button);
-}
-
-export function resetButtons(): void {
-    'use strict';
-    // reset the button list by setting empty array
-    buttons = [];
+    buttons[src] = button;
 }
 
 export function bindThumbnailControlButtons(expandButton: HTMLAnchorElement, contractButton: HTMLAnchorElement): void {
@@ -72,24 +66,24 @@ export function bindThumbnailControlButtons(expandButton: HTMLAnchorElement, con
     expandButton.addEventListener('click', function(event: Event): void {
         event.preventDefault();
         // click all the enlarge button
-        for (let i: number = 0; i < buttons.length; i++) {
-            const button: HTMLAnchorElement = buttons[i];
+        Object.keys(buttons).forEach((key: string) => {
+            const button: HTMLAnchorElement = buttons[key];
             if (button.innerHTML === '放大') {
                 button.click();
             }
-        }
+        });
     });
 
     // bind the button that expand all expanded thumbnails
     contractButton.addEventListener('click', function(event: Event): void {
         event.preventDefault();
         // click all the contract button
-        for (let i: number = 0; i < buttons.length; i++) {
-            const button: HTMLAnchorElement = buttons[i];
+        Object.keys(buttons).forEach((key: string) => {
+            const button: HTMLAnchorElement = buttons[key];
             if (button.innerHTML === '縮小') {
                 button.click();
             }
-        }
+        });
     });
 }
 
@@ -135,9 +129,5 @@ export default function initializeThumbnails(): void {
             reply.removeAttribute('id');
         }
     });
-
-    if (!isThread) {
-        domWatcher.on('update', resetButtons);
-    }
     domWatcher.start();
 }

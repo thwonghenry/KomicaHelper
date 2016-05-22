@@ -1,0 +1,35 @@
+{
+    "entries": [{
+        "name": "komicaHelper",
+        "replace": {
+            "name": "Komica Helper Scripts",
+            "description": "A plugin that add bunch of functions"
+        }
+    }, {
+        "name": "quoteLinker",
+        "replace": {
+            "name": "Komica Quotes Linker",
+            "description": "A plugin that stick the quoted reply directly"
+        }
+    }, {
+        "name": "thumbnailEnlarger",
+        "replace": {
+            "name": "Komica Thumbnails Enlarger",
+            "description": "A plugin that add enlarge button to all thumbnails"
+        }
+    }, {
+        "name": "ajaxUpdate",
+        "replace": {
+            "name": "Komica AJAX Updater",
+            "description": "A plugin that update the list of replies or threads without refresh"
+        }
+    }, {
+        "name": "nightModeToggle",
+        "replace": {
+            "name": "Komica Night Mode Toggle",
+            "description": "A plugin that add night mode style toggle",
+            "extramatches": ["http://web.komica.org/*"],
+            "run-at": "document-start"
+        }
+    }]
+}

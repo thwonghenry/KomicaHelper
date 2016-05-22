@@ -3,5 +3,6 @@
     "description": "Helper for komica sites.",
     "name": "Komica Helper",
     "namespace": "https://github.com/thwonghenry/KomicaHelper",
-    "version": "0.1"
+    "version": "0.1",
+    "content_scripts": "komicaHelper.js"
 }

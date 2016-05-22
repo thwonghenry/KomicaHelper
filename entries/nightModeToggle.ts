@@ -1,6 +1,6 @@
-import initializeNightMode, {bindNightModeButton, startSynchronize} from '../src/nightmode';
-import {injectMenu, enableButtons} from '../src/injectmenu';
-import {init} from '../src/settingsync';
+import initializeNightMode, {bindNightModeButton, startSynchronize} from '../src/nightMode';
+import {injectMenu, enableButtons} from '../src/injectMenu';
+import {init} from '../src/settingSync';
 
 const isMenu: boolean = /web\.komica\.org/.test(window.location.href);
 function initialize(): void {

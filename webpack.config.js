@@ -1,21 +1,36 @@
 const path = require('path');
 const buildPath = path.resolve(__dirname, 'build');
 const entryPath = path.resolve(__dirname, 'entries');
-const chromeBuildPath = path.resolve(buildPath, 'chrome_extension/komicahelper');
+const chromeBuildPath = path.resolve(buildPath, 'chrome_extension/komicaHelper');
 const userscriptsPath = path.resolve(buildPath, 'userscripts');
 const webpack = require('webpack');
 
+// webpack plugin to prepend userscripts metadata
+const PrependMetadata = require('./webpack_plugins/MetadataPrepender');
+const WriteChromeManifest = require('./webpack_plugins/ManifestWriter');
 const metadata = require('./metadata.json');
-const PrependMetadata = require('./webpack_plugins/prependmetadata');
+
+// entries
+const entries = require('./entries/index.json');
+
+let userscriptEntries = {};
+entries.entries.forEach((entry) => {
+    userscriptEntries[entry.name] = path.resolve(entryPath, entry.name + '.ts');
+});
+
+let entriesMetadata = entries.entries.map((entry) => ({
+    path: path.resolve(userscriptsPath, entry.name + '.js'),
+    replace: entry.replace
+}));
 
 module.exports = [{
     name: 'chrome-extension',
     entry: {
-        komicahelper: path.resolve(entryPath, 'komicahelper.ts')
+        komicaHelper: path.resolve(entryPath, 'komicaHelper.ts')
     },
     // Currently we need to add '.ts' to the resolve.extensions array.
     resolve: {
-        extensions: ['', '.ts', '.webpack.js', '.web.js', '.js']
+        extensions: ['', '.ts', '.js']
     },
 
     output: {
@@ -39,18 +54,15 @@ module.exports = [{
             test: /\.sass$/,
             loader: 'css/locals!sass'
         }]
-    }
+    },
+    plugins: [
+        new WriteChromeManifest(metadata, path.resolve(chromeBuildPath, 'manifest.json'))
+    ]
 }, {
     name: 'userscripts',
-    entry: {
-        quotelinker: path.resolve(entryPath, 'quotelinker.ts'),
-        thumbnailenlarger: path.resolve(entryPath, 'thumbnailenlarger.ts'),
-        ajaxupdate: path.resolve(entryPath, 'ajaxupdate.ts'),
-        nightmodetoggle: path.resolve(entryPath, 'nightmodetoggle.ts'),
-        postformtoggle: path.resolve(entryPath, 'postformtoggle.ts')
-    },
+    entry: userscriptEntries,
     resolve: {
-        extensions: ['', '.ts', '.webpack.js', '.web.js', '.js']
+        extensions: ['', '.ts', '.js']
     },
 
     output: {
@@ -77,38 +89,6 @@ module.exports = [{
 
     plugins: [
         // run the custom metadata prepender
-        new PrependMetadata(metadata, [{
-            path: path.resolve(userscriptsPath, 'quotelinker.js'),
-            replace: {
-                name: 'Komica Quotes Linker',
-                description: 'A plugin that stick the quoted reply directly'
-            }
-        }, {
-            path: path.resolve(userscriptsPath, 'thumbnailenlarger.js'),
-            replace: {
-                name: 'Komica Thumbnails Enlarger',
-                description: 'A plugin that add enlarge button to all thumbnails'
-            }
-        }, {
-            path: path.resolve(userscriptsPath, 'ajaxupdate.js'),
-            replace: {
-                name: 'Komica AJAX Updater',
-                description: 'A plugin that update the list of replies or threads without refresh'
-            }
-        }, {
-            path: path.resolve(userscriptsPath, 'nightmodetoggle.js'),
-            replace: {
-                name: 'Komica Night Mode Toggle',
-                description: 'A plugin that add night mode style toggle',
-                extramatches: ['http://web.komica.org/*'],
-                'run-at': 'document-start', 
-            }
-        }, {
-            path: path.resolve(userscriptsPath, 'postformtoggle.js'),
-            replace: {
-                name: 'Komica Post Form Togle',
-                description: 'A plugin that add post form toggle'
-            }
-        }])
+        new PrependMetadata(metadata, entriesMetadata)
     ]
 }];

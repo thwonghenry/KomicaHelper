@@ -17,7 +17,6 @@ let menu: HTMLElement;
 let updateButton: HTMLAnchorElement;
 let expandAllButton: HTMLAnchorElement;
 let contractAllButton: HTMLAnchorElement;
-let postformButton: HTMLAnchorElement;
 let nightModeButton: HTMLAnchorElement;
 let locals: komicaHelper.LocalStyle;
 
@@ -49,10 +48,9 @@ export function injectMenu(): komicaHelper.MenuButtons {
     updateButton = document.getElementById(locals.update) as HTMLAnchorElement;
     expandAllButton = document.getElementById(locals.expand) as HTMLAnchorElement;
     contractAllButton = document.getElementById(locals.contract) as HTMLAnchorElement;
-    postformButton = document.getElementById(locals.postform) as HTMLAnchorElement;
     nightModeButton = document.getElementById(locals.night) as HTMLAnchorElement;
     return {
-        menu, updateButton, expandAllButton, contractAllButton, postformButton, nightModeButton, locals,
+        menu, updateButton, expandAllButton, contractAllButton, nightModeButton, locals,
     };
 }
 
@@ -67,7 +65,6 @@ export function enableButtons(enables: komicaHelper.EnableMenuButtons = {
     contractAllButton: true,
     expandAllButton: true,
     nightModeButton: true,
-    postformButton: true,
     updateButton: true,
 }): void {
     'use strict';
@@ -79,9 +76,6 @@ export function enableButtons(enables: komicaHelper.EnableMenuButtons = {
     }
     if (enables.contractAllButton) {
         enableButton(contractAllButton);
-    }
-    if (enables.postformButton) {
-        enableButton(postformButton);
     }
     if (enables.nightModeButton) {
         enableButton(nightModeButton);

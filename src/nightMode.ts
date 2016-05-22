@@ -1,5 +1,5 @@
 import getConfigByURL from './config';
-import {synchronizeSetting, setSetting} from './settingsync';
+import {synchronizeSetting, setSetting} from './settingSync';
 
 // get the night mode state from local storage
 let isNight: boolean = false;

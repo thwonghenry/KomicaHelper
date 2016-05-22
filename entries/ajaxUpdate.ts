@@ -1,7 +1,7 @@
-import bindUpdateRepliesButton from '../src/replylistupdate';
-import bindUpdateThreadsButton from '../src/threadlistupdate';
+import bindUpdateRepliesButton from '../src/replyListUpdate';
+import bindUpdateThreadsButton from '../src/threadListUpdate';
 import getConfigByURL from '../src/config';
-import {injectMenu, enableButtons} from '../src/injectmenu';
+import {injectMenu, enableButtons} from '../src/injectMenu';
 
 function initialize(): void {
     'use strict';

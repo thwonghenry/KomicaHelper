@@ -94,7 +94,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 29);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -188,7 +188,6 @@
 	    'use strict';
 	    for (var key in newConfig) {
 	        if (!oldConfig.hasOwnProperty(key)) {
-	            console.log('extending', key);
 	            oldConfig[key] = newConfig[key];
 	        }
 	    }
@@ -238,7 +237,6 @@
 	            return config;
 	        }
 	    }
-	    console.log('using default config');
 	    return defaultConfig;
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -255,7 +253,7 @@
 
 
 	// module
-	exports.push([module.i, "html._1CH0lDxiMIShbCcxHUrmod {\n  background-color: #111;\n  color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod body {\n    background-color: #111;\n    color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod a:link {\n    color: #6699FF; }\n  html._1CH0lDxiMIShbCcxHUrmod a:hover {\n    color: #FF9966; }\n  html._1CH0lDxiMIShbCcxHUrmod a:visited {\n    color: #99FF66; }\n  html._1CH0lDxiMIShbCcxHUrmod hr {\n    border-color: #555555; }\n  html._1CH0lDxiMIShbCcxHUrmod h1 {\n    color: #B36666; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply_hl {\n    background-color: #333333; }\n  html._1CH0lDxiMIShbCcxHUrmod .Form_bg {\n    color: #800000; }\n  html._1CH0lDxiMIShbCcxHUrmod #postform_main {\n    background-color: #444444; }\n  html._1CH0lDxiMIShbCcxHUrmod .page_switch .ul div.link a {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .pushpost {\n    background-color: #333333; }\n", ""]);
+	exports.push([module.i, "html._1CH0lDxiMIShbCcxHUrmod {\n  background-color: #111;\n  color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod body {\n    background-color: #111;\n    color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod a:link {\n    color: #6699FF; }\n  html._1CH0lDxiMIShbCcxHUrmod a:hover {\n    color: #FF9966; }\n  html._1CH0lDxiMIShbCcxHUrmod a:visited {\n    color: #99FF66; }\n  html._1CH0lDxiMIShbCcxHUrmod hr {\n    border-color: #555555; }\n  html._1CH0lDxiMIShbCcxHUrmod h1 {\n    color: #B36666; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply_hl {\n    background-color: #333333; }\n  html._1CH0lDxiMIShbCcxHUrmod .Form_bg {\n    color: #800000; }\n  html._1CH0lDxiMIShbCcxHUrmod .page_switch .ul div.link a {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .pushpost {\n    background-color: #333333; }\n", ""]);
 
 	// exports
 	exports.locals = {
@@ -271,7 +269,7 @@
 
 
 	// module
-	exports.push([module.i, "html._3PcSwAIK8c5KIZxv3BleHH {\n  background-color: #111;\n  color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH body {\n    background-color: #111;\n    color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:link {\n    color: #6699FF; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:hover {\n    color: #FF9966; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:visited {\n    color: #99FF66; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#F0E0D6\"], html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#FFFFEE\"] {\n    background-color: #222222; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#eeaa88\"] {\n    color: #800000; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#DDDDEE\"] {\n    background-color: #453877; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#EEDDDD\"] {\n    background-color: #333333; }\n  html._3PcSwAIK8c5KIZxv3BleHH hr {\n    border-color: #555555; }\n  html._3PcSwAIK8c5KIZxv3BleHH font[size=\"5\"] {\n    color: #B36666; }\n  html._3PcSwAIK8c5KIZxv3BleHH center form {\n    background-color: #444444; }\n", ""]);
+	exports.push([module.i, "html._3PcSwAIK8c5KIZxv3BleHH {\n  background-color: #111;\n  color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH body {\n    background-color: #111;\n    color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:link {\n    color: #6699FF; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:hover {\n    color: #FF9966; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:visited {\n    color: #99FF66; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#F0E0D6\"], html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#FFFFEE\"] {\n    background-color: #222222; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#eeaa88\"] {\n    color: #800000; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#DDDDEE\"] {\n    background-color: #453877; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#EEDDDD\"] {\n    background-color: #333333; }\n  html._3PcSwAIK8c5KIZxv3BleHH hr {\n    border-color: #555555; }\n  html._3PcSwAIK8c5KIZxv3BleHH font[size=\"5\"] {\n    color: #B36666; }\n", ""]);
 
 	// exports
 	exports.locals = {
@@ -293,11 +291,7 @@
 
 
 /***/ },
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */
+/* 6 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -336,7 +330,12 @@
 
 
 /***/ },
-/* 11 */
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -345,7 +344,7 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var EventEmitter_1 = __webpack_require__(12);
+	var EventEmitter_1 = __webpack_require__(13);
 	var DOMWatcher = (function (_super) {
 	    __extends(DOMWatcher, _super);
 	    function DOMWatcher(parent) {
@@ -355,7 +354,7 @@
 	    // install the observer
 	    DOMWatcher.prototype.start = function () {
 	        var _this = this;
-	        var mutationObserver = new MutationObserver(function (mutations, observer) {
+	        this.observer = new MutationObserver(function (mutations, observer) {
 	            if (_this.hasSubscriber('update')) {
 	                _this.emit('update');
 	            }
@@ -378,9 +377,15 @@
 	            });
 	        });
 	        // attach a DOM watcher on the parent element
-	        mutationObserver.observe(this.parent, {
+	        this.observer.observe(this.parent, {
 	            childList: true,
 	        });
+	    };
+	    DOMWatcher.prototype.stop = function () {
+	        if (this.observer) {
+	            this.observer.disconnect();
+	        }
+	        delete this.observer;
 	    };
 	    return DOMWatcher;
 	}(EventEmitter_1.default));
@@ -389,7 +394,7 @@
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -432,16 +437,14 @@
 
 
 /***/ },
-/* 13 */,
 /* 14 */,
-/* 15 */,
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Ajax_1 = __webpack_require__(10);
+	var Ajax_1 = __webpack_require__(6);
 	var config_1 = __webpack_require__(1);
-	var DOMWatcher_1 = __webpack_require__(11);
+	var DOMWatcher_1 = __webpack_require__(12);
 	var url = window.location.href;
 	var config = config_1.default(url);
 	var isThread = config.isThread.test(url);
@@ -543,7 +546,7 @@
 	    'use strict';
 	    if (floatsParent === void 0) { floatsParent = document.body; }
 	    // import the css
-	    var style = __webpack_require__(24);
+	    var style = __webpack_require__(22);
 	    var css = style[0][1];
 	    var locals = style.locals;
 	    // append the style
@@ -598,14 +601,13 @@
 
 
 /***/ },
+/* 16 */,
 /* 17 */,
 /* 18 */,
 /* 19 */,
 /* 20 */,
 /* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(0)();
@@ -621,15 +623,15 @@
 	};
 
 /***/ },
+/* 23 */,
+/* 24 */,
 /* 25 */,
 /* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var quote_1 = __webpack_require__(16);
+	var quote_1 = __webpack_require__(15);
 	if (document.readyState !== 'loading') {
 	    quote_1.default();
 	}

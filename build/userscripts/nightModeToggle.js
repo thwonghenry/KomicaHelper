@@ -96,7 +96,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 27);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -190,7 +190,6 @@
 	    'use strict';
 	    for (var key in newConfig) {
 	        if (!oldConfig.hasOwnProperty(key)) {
-	            console.log('extending', key);
 	            oldConfig[key] = newConfig[key];
 	        }
 	    }
@@ -240,7 +239,6 @@
 	            return config;
 	        }
 	    }
-	    console.log('using default config');
 	    return defaultConfig;
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -268,14 +266,13 @@
 	var updateButton;
 	var expandAllButton;
 	var contractAllButton;
-	var postformButton;
 	var nightModeButton;
 	var locals;
 	// inject menu buttons
 	function injectMenu() {
 	    'use strict';
 	    // import assests
-	    var style = __webpack_require__(6);
+	    var style = __webpack_require__(7);
 	    var css = style[0][1];
 	    locals = style.locals;
 	    menu = document.getElementById(locals.komicaHelper);
@@ -284,7 +281,7 @@
 	        // render the menu buttons with local scoped id
 	        var body = document.body;
 	        locals.newString = isThread ? '新回覆' : '新主題';
-	        var html = __webpack_require__(7)(locals);
+	        var html = __webpack_require__(8)(locals);
 	        // add the menu buttons
 	        addHTMLToElement('div', html, body);
 	        // add the buttons style from main.sass
@@ -295,10 +292,9 @@
 	    updateButton = document.getElementById(locals.update);
 	    expandAllButton = document.getElementById(locals.expand);
 	    contractAllButton = document.getElementById(locals.contract);
-	    postformButton = document.getElementById(locals.postform);
 	    nightModeButton = document.getElementById(locals.night);
 	    return {
-	        menu: menu, updateButton: updateButton, expandAllButton: expandAllButton, contractAllButton: contractAllButton, postformButton: postformButton, nightModeButton: nightModeButton, locals: locals,
+	        menu: menu, updateButton: updateButton, expandAllButton: expandAllButton, contractAllButton: contractAllButton, nightModeButton: nightModeButton, locals: locals,
 	    };
 	}
 	exports.injectMenu = injectMenu;
@@ -314,7 +310,6 @@
 	        contractAllButton: true,
 	        expandAllButton: true,
 	        nightModeButton: true,
-	        postformButton: true,
 	        updateButton: true,
 	    }; }
 	    if (enables.updateButton) {
@@ -325,9 +320,6 @@
 	    }
 	    if (enables.contractAllButton) {
 	        enableButton(contractAllButton);
-	    }
-	    if (enables.postformButton) {
-	        enableButton(postformButton);
 	    }
 	    if (enables.nightModeButton) {
 	        enableButton(nightModeButton);
@@ -345,7 +337,7 @@
 
 
 	// module
-	exports.push([module.i, "html._1CH0lDxiMIShbCcxHUrmod {\n  background-color: #111;\n  color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod body {\n    background-color: #111;\n    color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod a:link {\n    color: #6699FF; }\n  html._1CH0lDxiMIShbCcxHUrmod a:hover {\n    color: #FF9966; }\n  html._1CH0lDxiMIShbCcxHUrmod a:visited {\n    color: #99FF66; }\n  html._1CH0lDxiMIShbCcxHUrmod hr {\n    border-color: #555555; }\n  html._1CH0lDxiMIShbCcxHUrmod h1 {\n    color: #B36666; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply_hl {\n    background-color: #333333; }\n  html._1CH0lDxiMIShbCcxHUrmod .Form_bg {\n    color: #800000; }\n  html._1CH0lDxiMIShbCcxHUrmod #postform_main {\n    background-color: #444444; }\n  html._1CH0lDxiMIShbCcxHUrmod .page_switch .ul div.link a {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .pushpost {\n    background-color: #333333; }\n", ""]);
+	exports.push([module.i, "html._1CH0lDxiMIShbCcxHUrmod {\n  background-color: #111;\n  color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod body {\n    background-color: #111;\n    color: silver; }\n  html._1CH0lDxiMIShbCcxHUrmod a:link {\n    color: #6699FF; }\n  html._1CH0lDxiMIShbCcxHUrmod a:hover {\n    color: #FF9966; }\n  html._1CH0lDxiMIShbCcxHUrmod a:visited {\n    color: #99FF66; }\n  html._1CH0lDxiMIShbCcxHUrmod hr {\n    border-color: #555555; }\n  html._1CH0lDxiMIShbCcxHUrmod h1 {\n    color: #B36666; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .reply_hl {\n    background-color: #333333; }\n  html._1CH0lDxiMIShbCcxHUrmod .Form_bg {\n    color: #800000; }\n  html._1CH0lDxiMIShbCcxHUrmod .page_switch .ul div.link a {\n    background-color: #222222; }\n  html._1CH0lDxiMIShbCcxHUrmod .pushpost {\n    background-color: #333333; }\n", ""]);
 
 	// exports
 	exports.locals = {
@@ -361,7 +353,7 @@
 
 
 	// module
-	exports.push([module.i, "html._3PcSwAIK8c5KIZxv3BleHH {\n  background-color: #111;\n  color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH body {\n    background-color: #111;\n    color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:link {\n    color: #6699FF; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:hover {\n    color: #FF9966; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:visited {\n    color: #99FF66; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#F0E0D6\"], html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#FFFFEE\"] {\n    background-color: #222222; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#eeaa88\"] {\n    color: #800000; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#DDDDEE\"] {\n    background-color: #453877; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#EEDDDD\"] {\n    background-color: #333333; }\n  html._3PcSwAIK8c5KIZxv3BleHH hr {\n    border-color: #555555; }\n  html._3PcSwAIK8c5KIZxv3BleHH font[size=\"5\"] {\n    color: #B36666; }\n  html._3PcSwAIK8c5KIZxv3BleHH center form {\n    background-color: #444444; }\n", ""]);
+	exports.push([module.i, "html._3PcSwAIK8c5KIZxv3BleHH {\n  background-color: #111;\n  color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH body {\n    background-color: #111;\n    color: silver; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:link {\n    color: #6699FF; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:hover {\n    color: #FF9966; }\n  html._3PcSwAIK8c5KIZxv3BleHH a:visited {\n    color: #99FF66; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#F0E0D6\"], html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#FFFFEE\"] {\n    background-color: #222222; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#eeaa88\"] {\n    color: #800000; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#DDDDEE\"] {\n    background-color: #453877; }\n  html._3PcSwAIK8c5KIZxv3BleHH td[bgColor=\"#EEDDDD\"] {\n    background-color: #333333; }\n  html._3PcSwAIK8c5KIZxv3BleHH hr {\n    border-color: #555555; }\n  html._3PcSwAIK8c5KIZxv3BleHH font[size=\"5\"] {\n    color: #B36666; }\n", ""]);
 
 	// exports
 	exports.locals = {
@@ -383,7 +375,8 @@
 
 
 /***/ },
-/* 6 */
+/* 6 */,
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(0)();
@@ -391,7 +384,7 @@
 
 
 	// module
-	exports.push([module.i, "#_2RKIDvBZ-c75YVkbPE3upo {\n  position: fixed;\n  top: 40%;\n  right: 0px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._239Ry-eeiEXoNyd-zFwfxk {\n    pointer-events: none;\n    cursor: default;\n    color: gray; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2HQO3DDkC7XaudXT9Urjzk {\n    color: BBB;\n    text-decoration: none;\n    border-bottom: 2px solid silver;\n    margin-bottom: 6px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2bliZs_JXLzcFFvsue8m7Z {\n    display: none; }\n\n#pHE21zpZzvEWryqHMcJf1, #_2jg1ulKVXlhO3Zu-TeZl0r, #Gll4U5FrCKtIYknK7gnl, #_3sNxjFDihcy5wsRxcqmdTm, #_1abk3Qff5m62ALvruCfPMy {\n  text-decoration: none; }\n", ""]);
+	exports.push([module.i, "#_2RKIDvBZ-c75YVkbPE3upo {\n  position: fixed;\n  top: 40%;\n  right: 0px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._239Ry-eeiEXoNyd-zFwfxk {\n    pointer-events: none;\n    cursor: default;\n    color: gray; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2HQO3DDkC7XaudXT9Urjzk {\n    color: BBB;\n    text-decoration: none;\n    border-bottom: 2px solid silver;\n    margin-bottom: 6px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2bliZs_JXLzcFFvsue8m7Z {\n    display: none; }\n\n#pHE21zpZzvEWryqHMcJf1, #_2jg1ulKVXlhO3Zu-TeZl0r, #Gll4U5FrCKtIYknK7gnl, #_1abk3Qff5m62ALvruCfPMy {\n  text-decoration: none; }\n", ""]);
 
 	// exports
 	exports.locals = {
@@ -402,26 +395,25 @@
 		"update": "pHE21zpZzvEWryqHMcJf1",
 		"expand": "_2jg1ulKVXlhO3Zu-TeZl0r",
 		"contract": "Gll4U5FrCKtIYknK7gnl",
-		"postform": "_3sNxjFDihcy5wsRxcqmdTm",
 		"night": "_1abk3Qff5m62ALvruCfPMy"
 	};
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(8);
+	var jade = __webpack_require__(9);
 
 	module.exports = function template(locals) {
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (contract, expand, hiddenButton, komicaHelper, newString, night, postform, update) {
-	buf.push("<div" + (jade.attr("id", komicaHelper, true, true)) + "><a href=\"#\"" + (jade.attr("id", update, true, true)) + (jade.cls([hiddenButton], [true])) + ">更新<br></a><a href=\"#\"" + (jade.attr("id", expand, true, true)) + (jade.cls([hiddenButton], [true])) + ">放大所有圖片<br></a><a href=\"#\"" + (jade.attr("id", contract, true, true)) + (jade.cls([hiddenButton], [true])) + ">縮小所有圖片<br></a><a href=\"#\"" + (jade.attr("id", postform, true, true)) + (jade.cls([hiddenButton], [true])) + ">" + (jade.escape((jade_interp = newString) == null ? '' : jade_interp)) + "<br></a><a href=\"#\"" + (jade.attr("id", night, true, true)) + (jade.cls([hiddenButton], [true])) + ">夜間模式</a></div>");}.call(this,"contract" in locals_for_with?locals_for_with.contract:typeof contract!=="undefined"?contract:undefined,"expand" in locals_for_with?locals_for_with.expand:typeof expand!=="undefined"?expand:undefined,"hiddenButton" in locals_for_with?locals_for_with.hiddenButton:typeof hiddenButton!=="undefined"?hiddenButton:undefined,"komicaHelper" in locals_for_with?locals_for_with.komicaHelper:typeof komicaHelper!=="undefined"?komicaHelper:undefined,"newString" in locals_for_with?locals_for_with.newString:typeof newString!=="undefined"?newString:undefined,"night" in locals_for_with?locals_for_with.night:typeof night!=="undefined"?night:undefined,"postform" in locals_for_with?locals_for_with.postform:typeof postform!=="undefined"?postform:undefined,"update" in locals_for_with?locals_for_with.update:typeof update!=="undefined"?update:undefined));;return buf.join("");
+	;var locals_for_with = (locals || {});(function (contract, expand, hiddenButton, komicaHelper, night, update) {
+	buf.push("<div" + (jade.attr("id", komicaHelper, true, true)) + "><a href=\"#\"" + (jade.attr("id", update, true, true)) + (jade.cls([hiddenButton], [true])) + ">更新<br></a><a href=\"#\"" + (jade.attr("id", expand, true, true)) + (jade.cls([hiddenButton], [true])) + ">放大所有圖片<br></a><a href=\"#\"" + (jade.attr("id", contract, true, true)) + (jade.cls([hiddenButton], [true])) + ">縮小所有圖片<br></a><a href=\"#\"" + (jade.attr("id", night, true, true)) + (jade.cls([hiddenButton], [true])) + ">夜間模式</a></div>");}.call(this,"contract" in locals_for_with?locals_for_with.contract:typeof contract!=="undefined"?contract:undefined,"expand" in locals_for_with?locals_for_with.expand:typeof expand!=="undefined"?expand:undefined,"hiddenButton" in locals_for_with?locals_for_with.hiddenButton:typeof hiddenButton!=="undefined"?hiddenButton:undefined,"komicaHelper" in locals_for_with?locals_for_with.komicaHelper:typeof komicaHelper!=="undefined"?komicaHelper:undefined,"night" in locals_for_with?locals_for_with.night:typeof night!=="undefined"?night:undefined,"update" in locals_for_with?locals_for_with.update:typeof update!=="undefined"?update:undefined));;return buf.join("");
 	}
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -641,7 +633,7 @@
 	    throw err;
 	  }
 	  try {
-	    str = str || __webpack_require__(9).readFileSync(filename, 'utf8')
+	    str = str || __webpack_require__(10).readFileSync(filename, 'utf8')
 	  } catch (ex) {
 	    rethrow(err, null, lineno)
 	  }
@@ -673,20 +665,17 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var crossStorage = __webpack_require__(22);
+	var crossStorage = __webpack_require__(21);
 	// used for cross storage hub
 	function init() {
 	    'use strict';
@@ -777,12 +766,14 @@
 
 
 /***/ },
+/* 12 */,
+/* 13 */,
 /* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var config_1 = __webpack_require__(1);
-	var settingsync_1 = __webpack_require__(13);
+	var settingSync_1 = __webpack_require__(11);
 	// get the night mode state from local storage
 	var isNight = false;
 	var darkStyleName;
@@ -807,7 +798,7 @@
 	            value: isNight ? 'true' : 'false',
 	        };
 	        localStorage.setItem('komica_helper_nightmode', JSON.stringify(setting));
-	        settingsync_1.setSetting('nightmode', setting);
+	        settingSync_1.setSetting('nightmode', setting);
 	    }
 	}
 	function bindNightModeButton(nightButton) {
@@ -820,7 +811,7 @@
 	exports.bindNightModeButton = bindNightModeButton;
 	function startSynchronize() {
 	    'use strict';
-	    settingsync_1.synchronizeSetting('nightmode').then(function () {
+	    settingSync_1.synchronizeSetting('nightmode').then(function () {
 	        var localNightMode = JSON.parse(localStorage.getItem('komica_helper_nightmode'));
 	        if (localNightMode && (localNightMode.value === 'true') !== isNight) {
 	            toggleNightMode(true);
@@ -871,8 +862,7 @@
 /* 16 */,
 /* 17 */,
 /* 18 */,
-/* 19 */,
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	;(function(root) {
@@ -1335,7 +1325,7 @@
 
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	;(function(root) {
@@ -1617,46 +1607,46 @@
 
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	  CrossStorageClient: __webpack_require__(20),
-	  CrossStorageHub:    __webpack_require__(21)
+	  CrossStorageClient: __webpack_require__(19),
+	  CrossStorageHub:    __webpack_require__(20)
 	};
 
 
 /***/ },
+/* 22 */,
 /* 23 */,
 /* 24 */,
 /* 25 */,
-/* 26 */,
-/* 27 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var nightmode_1 = __webpack_require__(14);
-	var injectmenu_1 = __webpack_require__(2);
-	var settingsync_1 = __webpack_require__(13);
+	var nightMode_1 = __webpack_require__(14);
+	var injectMenu_1 = __webpack_require__(2);
+	var settingSync_1 = __webpack_require__(11);
 	var isMenu = /web\.komica\.org/.test(window.location.href);
 	function initialize() {
 	    'use strict';
 	    // inject the menu buttons
-	    var menuButtons = injectmenu_1.injectMenu();
+	    var menuButtons = injectMenu_1.injectMenu();
 	    var nightModeButton = menuButtons.nightModeButton;
 	    // enable night mode toggle
-	    injectmenu_1.enableButtons({
+	    injectMenu_1.enableButtons({
 	        nightModeButton: true,
 	    });
 	    // initialize night mode toggle
-	    nightmode_1.bindNightModeButton(nightModeButton);
+	    nightMode_1.bindNightModeButton(nightModeButton);
 	    // synchronize the night mode state
-	    nightmode_1.startSynchronize();
+	    nightMode_1.startSynchronize();
 	}
 	// if the page is menu page, init for cross storage hub
-	nightmode_1.default();
+	nightMode_1.default();
 	if (isMenu) {
-	    settingsync_1.init();
+	    settingSync_1.init();
 	}
 	else {
 	    if (document.readyState !== 'loading') {

@@ -30,7 +30,6 @@ declare namespace komicaHelper {
         update: string;
         expand: string;
         contract: string;
-        postform: string;
         night: string;
 
         // classes
@@ -57,7 +56,6 @@ declare namespace komicaHelper {
         updateButton: HTMLAnchorElement;
         expandAllButton: HTMLAnchorElement;
         contractAllButton: HTMLAnchorElement;
-        postformButton: HTMLAnchorElement;
         nightModeButton: HTMLAnchorElement;
         locals: LocalStyle;
     }
@@ -66,7 +64,6 @@ declare namespace komicaHelper {
         updateButton?: boolean;
         expandAllButton?: boolean;
         contractAllButton?: boolean;
-        postformButton?: boolean;
         nightModeButton?: boolean;
     }
 
