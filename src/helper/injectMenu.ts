@@ -24,7 +24,7 @@ let locals: komicaHelper.LocalStyle;
 export function injectMenu(): komicaHelper.MenuButtons {
     'use strict';
     // import assests
-    const style: any = require('!css!sass!../styles/main.sass');
+    const style: any = require('!css!sass!../../styles/main.sass');
     const css: string = style[0][1];
     locals = style.locals;
     menu = document.getElementById(locals.komicaHelper);
@@ -35,7 +35,7 @@ export function injectMenu(): komicaHelper.MenuButtons {
         const body: HTMLElement = document.body;
 
         locals.newString = isThread ? '新回覆' : '新主題';
-        const html: string = require('!jade!../templates/buttons.jade')(locals);
+        const html: string = require('!jade!../../templates/buttons.jade')(locals);
         // add the menu buttons
         addHTMLToElement('div', html, body);
 

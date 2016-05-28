@@ -4,9 +4,9 @@ function metadataToManifest(metadata) {
     let content_scripts = {
         all_frames: true,
         js: [metadata.content_scripts],
-        matches: metadata.matches
+        matches: metadata.matches,
+        run_at: metadata.run_at
     }
-
     return {
         content_scripts: [content_scripts],
         description: metadata.description,
@@ -16,13 +16,10 @@ function metadataToManifest(metadata) {
     }
 }
 
-function ManifestWriter(metadata, option) {
+function ManifestWriter(metadata, path) {
     const apply = (compiler) => {
         compiler.plugin('after-emit', (compilation, callback) => {
-            const path = option.path;
-            new Promise((resolve, reject) => {
-                fs.writeFile(path, JSON.stringify(metadataToManifest(metadata), null, '\t', 'utf8', resolve));
-            });
+            fs.writeFile(path, JSON.stringify(metadataToManifest(metadata), null, '\t', 'utf8', callback));
         });
     }
     return {

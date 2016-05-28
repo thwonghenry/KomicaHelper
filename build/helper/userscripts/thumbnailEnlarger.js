@@ -49,8 +49,8 @@
 // @match http://k2slime.2nyan.org/*
 // @match http://homu.komica.org/*/*
 // @match http://pink.komica.org/*/*
-// @description A plugin that update the list of replies or threads without refresh
-// @name Komica AJAX Updater
+// @description A plugin that add enlarge button to all thumbnails
+// @name Komica Thumbnails Enlarger
 // @namespace https://github.com/thwonghenry/KomicaHelper
 // @version 0.1
 // ==/UserScript==
@@ -94,7 +94,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 28);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -157,6 +157,7 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	"use strict";
 	var index_1 = __webpack_require__(5);
 	// helper functions that used for binding
@@ -247,6 +248,7 @@
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	"use strict";
 	var config_1 = __webpack_require__(1);
 	// a function that add html as DOM node to element
@@ -363,6 +365,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	"use strict";
 	var def = __webpack_require__(3);
 	var homu = __webpack_require__(4);
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -373,45 +376,7 @@
 
 
 /***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var Ajax = (function () {
-	    function Ajax(method, url, type) {
-	        this.method = method;
-	        this.url = url;
-	        this.xhr = new XMLHttpRequest();
-	        this.type = type;
-	    }
-	    Ajax.prototype.start = function () {
-	        var _this = this;
-	        var onLoad = new Promise(function (resolve, reject) {
-	            _this.xhr.onload = function () {
-	                if (_this.xhr.status === 200) {
-	                    resolve(_this.xhr.response);
-	                }
-	                else {
-	                    console.log('reject', _this.xhr.status);
-	                    reject();
-	                }
-	            };
-	            _this.xhr.onerror = reject;
-	        });
-	        this.xhr.open(this.method, this.url, true);
-	        if (this.type) {
-	            this.xhr.responseType = this.type;
-	        }
-	        this.xhr.send();
-	        return onLoad;
-	    };
-	    return Ajax;
-	}());
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = Ajax;
-
-
-/***/ },
+/* 6 */,
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -452,6 +417,7 @@
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	'use strict';
 
 	/**
@@ -708,223 +674,285 @@
 
 /***/ },
 /* 11 */,
-/* 12 */,
-/* 13 */,
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var EventEmitter_1 = __webpack_require__(13);
+	var DOMWatcher = (function (_super) {
+	    __extends(DOMWatcher, _super);
+	    function DOMWatcher(parent) {
+	        _super.call(this);
+	        this.parent = parent;
+	    }
+	    // install the observer
+	    DOMWatcher.prototype.start = function () {
+	        var _this = this;
+	        this.observer = new MutationObserver(function (mutations, observer) {
+	            if (_this.hasSubscriber('update')) {
+	                _this.emit('update');
+	            }
+	            // only continue if both event callback exists
+	            if (!_this.hasSubscriber('addnode') && !_this.hasSubscriber('removenode')) {
+	                return;
+	            }
+	            mutations.forEach(function (mutation) {
+	                // for each event type, trigger the callback
+	                if (_this.hasSubscriber('addnode')) {
+	                    for (var i = 0; i < mutation.addedNodes.length; i++) {
+	                        _this.emit('addnode', mutation.addedNodes[i]);
+	                    }
+	                }
+	                if (_this.hasSubscriber('removenode')) {
+	                    for (var i = 0; i < mutation.removedNodes.length; i++) {
+	                        _this.emit('removenode', mutation.removedNodes[i]);
+	                    }
+	                }
+	            });
+	        });
+	        // attach a DOM watcher on the parent element
+	        this.observer.observe(this.parent, {
+	            childList: true,
+	        });
+	    };
+	    DOMWatcher.prototype.stop = function () {
+	        if (this.observer) {
+	            this.observer.disconnect();
+	        }
+	        delete this.observer;
+	    };
+	    return DOMWatcher;
+	}(EventEmitter_1.default));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = DOMWatcher;
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	"use strict";
+	"use strict";
+	var EventEmitter = (function () {
+	    function EventEmitter() {
+	        this.subscribers = {};
+	    }
+	    EventEmitter.prototype.on = function (topic, callback) {
+	        if (!(topic in this.subscribers)) {
+	            this.subscribers[topic] = [callback];
+	        }
+	        else {
+	            this.subscribers[topic].push(callback);
+	        }
+	    };
+	    EventEmitter.prototype.off = function (topic, callback) {
+	        if (topic in this.subscribers) {
+	            var index = this.subscribers[topic].indexOf(callback);
+	            if (index > -1) {
+	                this.subscribers[topic].splice(index, 1);
+	            }
+	        }
+	    };
+	    EventEmitter.prototype.emit = function (topic) {
+	        var args = [];
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            args[_i - 1] = arguments[_i];
+	        }
+	        if (topic in this.subscribers) {
+	            this.subscribers[topic].forEach(function (callback) { return callback.apply(void 0, args); });
+	        }
+	    };
+	    EventEmitter.prototype.hasSubscriber = function (eventType) {
+	        return this.subscribers[eventType] && this.subscribers[eventType].length > 0;
+	    };
+	    return EventEmitter;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = EventEmitter;
+
+
+/***/ },
 /* 14 */,
 /* 15 */,
-/* 16 */
+/* 16 */,
+/* 17 */,
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	// update function after clicking update button
-	var Ajax_1 = __webpack_require__(6);
-	var config_1 = __webpack_require__(1);
-	var url = window.location.href;
-	var config = config_1.default(url);
-	function createUpdateCallback(floatsParent, floatClass) {
-	    'use strict';
-	    if (floatsParent === void 0) { floatsParent = document.body; }
-	    // initialize ajax object
-	    var ajax = new Ajax_1.default('get', url, 'document');
-	    var newElements;
-	    var oldElements;
-	    var newChildren;
-	    var oldChildren;
-	    // get the method of obtaining replies
-	    var getElements = config.getReplies;
-	    return function () {
-	        return ajax.start().then(function (newDoc) {
-	            newElements = getElements(newDoc);
-	            oldElements = getElements(document);
-	            if (!newElements || !oldElements) {
-	                console.error('Error when getting the document of ajax result');
-	                return;
-	            }
-	            newChildren = newElements.children;
-	            oldChildren = oldElements.children;
-	            var diff = newChildren.length - oldChildren.length;
-	            // compare the difference on the number of threads reply
-	            var lastReply = oldChildren[oldChildren.length - 2];
-	            // insert the new replys from bottom of the new list to the bottom of the old list
-	            for (var i = newChildren.length - 2, j = 0; i >= 0; i--, j++) {
-	                if (lastReply.id === newChildren[i].id) {
-	                    break;
-	                }
-	                else {
-	                    oldElements.insertBefore(newChildren[i], oldChildren[oldChildren.length - 1 - j]);
-	                }
-	            }
-	            // return the diff value
-	            return new Promise(function (resolve) {
-	                resolve(diff);
-	            });
-	        }, function () { return console.log('rejected'); });
-	    };
-	}
-	function bindUpdateButton(menuButtons, locals, updateButton) {
-	    'use strict';
-	    // create callback function
-	    var clickCallback = createUpdateCallback(menuButtons, locals.floatingReply);
-	    // store the id of setTimeout in the click event below for later clearTimeout
-	    var timeout = 0;
-	    updateButton.addEventListener('click', function (event) {
-	        var _this = this;
-	        event.preventDefault();
-	        // only invoke update function if it is not updating
-	        if (!(/disabledAnchor/.test(this.className))) {
-	            this.classList.add(locals.disabledAnchor);
-	            this.innerHTML = '更新中..<br>';
-	            // remove any timeout that is started before
-	            if (timeout) {
-	                clearTimeout(timeout);
-	            }
-	            clickCallback().then(function (diff) {
-	                // remove the "disabledAnchor" class
-	                _this.classList.remove(locals.disabledAnchor);
-	                return new Promise(function (resolve) {
-	                    if (diff) {
-	                        // if there are new thread, show the diff and reset after 5 seconds
-	                        _this.innerHTML = "\u66F4\u65B0(+" + diff + ")<br>";
-	                        timeout = setTimeout(resolve, 5000);
-	                    }
-	                    else {
-	                        // reset immediately
-	                        resolve();
-	                    }
-	                });
-	            }).then(function () {
-	                // reset the button text
-	                _this.innerHTML = '更新<br>';
-	            });
-	        }
-	        else {
-	            console.log('waiting');
-	        }
-	    });
-	}
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = bindUpdateButton;
-
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
 	"use strict";
-	// update function after clicking update button
-	var Ajax_1 = __webpack_require__(6);
 	var config_1 = __webpack_require__(1);
+	var DOMWatcher_1 = __webpack_require__(12);
 	var url = window.location.href;
 	var config = config_1.default(url);
-	function createUpdateCallback(floatsParent, floatClass) {
+	var isThread = config.isThread.test(url);
+	var style = __webpack_require__(23);
+	var css = style[0][1];
+	var locals = style.locals;
+	var buttons = {};
+	function bindThumbnail(img) {
 	    'use strict';
-	    if (floatsParent === void 0) { floatsParent = document.body; }
-	    // initialize ajax object
-	    var ajax = new Ajax_1.default('get', url, 'document');
-	    var newElements;
-	    var oldElements;
-	    var newChildren;
-	    var oldChildren;
-	    // get the method of obtaining threads
-	    var getElements = config.getThreads;
-	    return function () {
-	        return ajax.start().then(function (newDoc) {
-	            // create a new doc to plug in the ajax result
-	            newElements = getElements(newDoc);
-	            oldElements = getElements(document);
-	            if (!newElements || !oldElements) {
-	                console.error('Error when getting the document of ajax result');
-	                return;
-	            }
-	            newChildren = newElements.children;
-	            oldChildren = oldElements.children;
-	            // update the whole page
-	            oldElements.innerHTML = newElements.innerHTML;
-	            // return the diff value
-	            return new Promise(function (resolve) {
-	                resolve(0);
-	            });
-	        }, function () { return console.log('rejected'); });
-	    };
-	}
-	function bindUpdateButton(menuButtons, locals, updateButton) {
-	    'use strict';
-	    // create callback function
-	    var clickCallback = createUpdateCallback(menuButtons, locals.floatingReply);
-	    // store the id of setTimeout in the click event below for later clearTimeout
-	    var timeout = 0;
-	    updateButton.addEventListener('click', function (event) {
-	        var _this = this;
+	    // create the button element for image function
+	    var button = document.createElement('a');
+	    button.innerHTML = '放大';
+	    button.href = '#';
+	    // insert the button alongside with the image
+	    var anchor = img.parentNode;
+	    anchor.parentNode.insertBefore(button, anchor.nextSibling);
+	    // use for breaking line between the enlarged image and the reply
+	    var br = document.createElement('br');
+	    // save the src of the thumbnail for restoring later
+	    var src = img.src;
+	    // remove all the dimension related attributes
+	    img.removeAttribute('style');
+	    img.removeAttribute('width');
+	    img.removeAttribute('height');
+	    // add custom thumbnail class
+	    img.classList.add(locals.contracted);
+	    button.addEventListener('click', function (event) {
 	        event.preventDefault();
-	        // only invoke update function if it is not updating
-	        if (!(/disabledAnchor/.test(this.className))) {
-	            this.classList.add(locals.disabledAnchor);
-	            this.innerHTML = '更新中..<br>';
-	            // remove any timeout that is started before
-	            if (timeout) {
-	                clearTimeout(timeout);
-	            }
-	            clickCallback().then(function (diff) {
-	                // remove the "disabledAnchor" class
-	                _this.classList.remove(locals.disabledAnchor);
-	                return new Promise(function (resolve) {
-	                    if (diff) {
-	                        // if there are new thread, show the diff and reset after 5 seconds
-	                        _this.innerHTML = "\u66F4\u65B0(+" + diff + ")<br>";
-	                        timeout = setTimeout(resolve, 5000);
-	                    }
-	                    else {
-	                        // reset immediately
-	                        resolve();
-	                    }
-	                });
-	            }).then(function () {
-	                // reset the button text
-	                _this.innerHTML = '更新<br>';
-	            });
+	        // enlarge the image
+	        if (img.classList.contains(locals.contracted)) {
+	            img.src = anchor.href;
+	            img.classList.remove(locals.contracted);
+	            img.classList.add(locals.expanded);
+	            anchor.parentNode.insertBefore(br, button);
+	            button.innerHTML = '縮小';
 	        }
-	        else {
-	            console.log('waiting');
+	        else if (img.classList.contains(locals.expanded)) {
+	            // restore the image and button
+	            img.src = src;
+	            img.classList.remove(locals.expanded);
+	            img.classList.add(locals.contracted);
+	            anchor.parentNode.removeChild(br);
+	            button.innerHTML = '放大';
 	        }
 	    });
+	    buttons[src] = button;
+	}
+	function bindThumbnailControlButtons(expandButton, contractButton) {
+	    'use strict';
+	    // bind the button that expand all unexpanded thumbnails
+	    expandButton.addEventListener('click', function (event) {
+	        event.preventDefault();
+	        // click all the enlarge button
+	        Object.keys(buttons).forEach(function (key) {
+	            var button = buttons[key];
+	            if (button.innerHTML === '放大') {
+	                button.click();
+	            }
+	        });
+	    });
+	    // bind the button that expand all expanded thumbnails
+	    contractButton.addEventListener('click', function (event) {
+	        event.preventDefault();
+	        // click all the contract button
+	        Object.keys(buttons).forEach(function (key) {
+	            var button = buttons[key];
+	            if (button.innerHTML === '縮小') {
+	                button.click();
+	            }
+	        });
+	    });
+	}
+	exports.bindThumbnailControlButtons = bindThumbnailControlButtons;
+	function initializeThumbnails() {
+	    'use strict';
+	    // append the style
+	    var styleTag = document.createElement('style');
+	    styleTag.innerHTML = css;
+	    document.body.appendChild(styleTag);
+	    // bind all the thumbnails to a button
+	    var imgs = config.getThumbnails(document);
+	    for (var i = 0; i < imgs.length; i++) {
+	        bindThumbnail(imgs[i]);
+	    }
+	    // attach a DOM watcher on the main thread or thread list
+	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
+	    var domWatcher = new DOMWatcher_1.default(parent);
+	    domWatcher.on('addnode', function (element) {
+	        var reply = element;
+	        var id = reply.id;
+	        var clear = false;
+	        // if the element is text node, continue;
+	        if (!reply.setAttribute) {
+	            return;
+	        }
+	        // if no id to query, add a temporary id to the node
+	        if (!id) {
+	            reply.setAttribute('id', 'komica_helper_temp');
+	            id = reply.id;
+	            clear = true;
+	        }
+	        // query the thumbnail element
+	        var img = document.querySelector("#" + id + " img");
+	        if (img) {
+	            bindThumbnail(img);
+	        }
+	        // if a temporary id is added, clear it at the end
+	        if (clear) {
+	            reply.removeAttribute('id');
+	        }
+	    });
+	    domWatcher.start();
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = bindUpdateButton;
+	exports.default = initializeThumbnails;
 
 
 /***/ },
-/* 18 */,
 /* 19 */,
 /* 20 */,
 /* 21 */,
 /* 22 */,
-/* 23 */,
-/* 24 */
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(0)();
+	// imports
+
+
+	// module
+	exports.push([module.i, "._9HAoyOb7oMTzd7oUnrh5U {\n  max-width: 95% !important;\n  float: none !important; }\n\n._3_c8JMxFnbPB8x56-DfLAG {\n  max-width: none; }\n", ""]);
+
+	// exports
+	exports.locals = {
+		"expanded": "_9HAoyOb7oMTzd7oUnrh5U",
+		"contracted": "_3_c8JMxFnbPB8x56-DfLAG"
+	};
+
+/***/ },
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var replyListUpdate_1 = __webpack_require__(16);
-	var threadListUpdate_1 = __webpack_require__(17);
-	var config_1 = __webpack_require__(1);
+	"use strict";
+	var thumbnail_1 = __webpack_require__(18);
 	var injectMenu_1 = __webpack_require__(2);
 	function initialize() {
 	    'use strict';
-	    var url = window.location.href;
-	    var config = config_1.default(url);
-	    var isThread = config.isThread.test(url);
-	    // inject the menu buttons
+	    // inject menu buttons
 	    var menuButtons = injectMenu_1.injectMenu();
-	    // enable update button
+	    var expandAllButton = menuButtons.expandAllButton;
+	    var contractAllButton = menuButtons.contractAllButton;
+	    // enable contract and expand all buttons
 	    injectMenu_1.enableButtons({
-	        updateButton: true,
+	        contractAllButton: true,
+	        expandAllButton: true,
 	    });
-	    // bind the update button base on the page type
-	    if (isThread) {
-	        replyListUpdate_1.default(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
-	    }
-	    else {
-	        threadListUpdate_1.default(menuButtons.menu, menuButtons.locals, menuButtons.updateButton);
-	    }
+	    // initialize thumbnail enlarger
+	    thumbnail_1.default();
+	    thumbnail_1.bindThumbnailControlButtons(expandAllButton, contractAllButton);
 	}
 	if (document.readyState !== 'loading') {
 	    initialize();

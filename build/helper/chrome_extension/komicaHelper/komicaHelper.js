@@ -37,13 +37,14 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 21);
+/******/ 	return __webpack_require__(__webpack_require__.s = 22);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	"use strict";
 	var index_1 = __webpack_require__(23);
 	// helper functions that used for binding
@@ -191,6 +192,7 @@
 /***/ function(module, exports) {
 
 	"use strict";
+	"use strict";
 	var Ajax = (function () {
 	    function Ajax(method, url, type) {
 	        this.method = method;
@@ -229,6 +231,7 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	"use strict";
 	var crossStorage = __webpack_require__(13);
 	// used for cross storage hub
@@ -325,12 +328,13 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var EventEmitter_1 = __webpack_require__(22);
+	var EventEmitter_1 = __webpack_require__(21);
 	var DOMWatcher = (function (_super) {
 	    __extends(DOMWatcher, _super);
 	    function DOMWatcher(parent) {
@@ -383,6 +387,7 @@
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	"use strict";
 	var config_1 = __webpack_require__(0);
 	// a function that add html as DOM node to element
@@ -466,6 +471,7 @@
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	"use strict";
 	var config_1 = __webpack_require__(0);
 	var settingSync_1 = __webpack_require__(3);
@@ -556,6 +562,7 @@
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	"use strict";
 	var Ajax_1 = __webpack_require__(2);
 	var config_1 = __webpack_require__(0);
@@ -720,6 +727,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	"use strict";
 	// update function after clicking update button
 	var Ajax_1 = __webpack_require__(2);
 	var config_1 = __webpack_require__(0);
@@ -815,6 +823,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	"use strict";
 	// update function after clicking update button
 	var Ajax_1 = __webpack_require__(2);
 	var config_1 = __webpack_require__(0);
@@ -900,6 +909,7 @@
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	"use strict";
 	var config_1 = __webpack_require__(0);
 	var DOMWatcher_1 = __webpack_require__(4);
@@ -1881,6 +1891,7 @@
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	'use strict';
 
 	/**
@@ -2131,8 +2142,53 @@
 
 /***/ },
 /* 21 */
+/***/ function(module, exports) {
+
+	"use strict";
+	"use strict";
+	var EventEmitter = (function () {
+	    function EventEmitter() {
+	        this.subscribers = {};
+	    }
+	    EventEmitter.prototype.on = function (topic, callback) {
+	        if (!(topic in this.subscribers)) {
+	            this.subscribers[topic] = [callback];
+	        }
+	        else {
+	            this.subscribers[topic].push(callback);
+	        }
+	    };
+	    EventEmitter.prototype.off = function (topic, callback) {
+	        if (topic in this.subscribers) {
+	            var index = this.subscribers[topic].indexOf(callback);
+	            if (index > -1) {
+	                this.subscribers[topic].splice(index, 1);
+	            }
+	        }
+	    };
+	    EventEmitter.prototype.emit = function (topic) {
+	        var args = [];
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            args[_i - 1] = arguments[_i];
+	        }
+	        if (topic in this.subscribers) {
+	            this.subscribers[topic].forEach(function (callback) { return callback.apply(void 0, args); });
+	        }
+	    };
+	    EventEmitter.prototype.hasSubscriber = function (eventType) {
+	        return this.subscribers[eventType] && this.subscribers[eventType].length > 0;
+	    };
+	    return EventEmitter;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = EventEmitter;
+
+
+/***/ },
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	"use strict";
 	var config_1 = __webpack_require__(0);
 	var thumbnail_1 = __webpack_require__(10);
@@ -2185,52 +2241,10 @@
 
 
 /***/ },
-/* 22 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var EventEmitter = (function () {
-	    function EventEmitter() {
-	        this.subscribers = {};
-	    }
-	    EventEmitter.prototype.on = function (topic, callback) {
-	        if (!(topic in this.subscribers)) {
-	            this.subscribers[topic] = [callback];
-	        }
-	        else {
-	            this.subscribers[topic].push(callback);
-	        }
-	    };
-	    EventEmitter.prototype.off = function (topic, callback) {
-	        if (topic in this.subscribers) {
-	            var index = this.subscribers[topic].indexOf(callback);
-	            if (index > -1) {
-	                this.subscribers[topic].splice(index, 1);
-	            }
-	        }
-	    };
-	    EventEmitter.prototype.emit = function (topic) {
-	        var args = [];
-	        for (var _i = 1; _i < arguments.length; _i++) {
-	            args[_i - 1] = arguments[_i];
-	        }
-	        if (topic in this.subscribers) {
-	            this.subscribers[topic].forEach(function (callback) { return callback.apply(void 0, args); });
-	        }
-	    };
-	    EventEmitter.prototype.hasSubscriber = function (eventType) {
-	        return this.subscribers[eventType] && this.subscribers[eventType].length > 0;
-	    };
-	    return EventEmitter;
-	}());
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = EventEmitter;
-
-
-/***/ },
 /* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	"use strict";
 	var def = __webpack_require__(14);
 	var homu = __webpack_require__(15);

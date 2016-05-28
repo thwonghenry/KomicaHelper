@@ -1,6 +1,6 @@
-import Ajax from './Ajax';
+import Ajax from '../Ajax';
 import getConfigByURL from './config';
-import DOMWatcher from './DOMWatcher';
+import DOMWatcher from '../DOMWatcher';
 
 const url: string  = window.location.href;
 const config: komicaHelper.Config = getConfigByURL(url);
@@ -121,7 +121,7 @@ export default function initializeQuotes(floatsParent: HTMLElement = document.bo
 
     'use strict';
     // import the css
-    const style: any = require('!css!sass!../styles/quote.sass');
+    const style: any = require('!css!sass!../../styles/quote.sass');
     const css: string = style[0][1];
     const locals: komicaHelper.LocalStyle = style.locals;
 

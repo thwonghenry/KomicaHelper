@@ -1,5 +1,5 @@
 // update function after clicking update button
-import Ajax from './Ajax';
+import Ajax from '../Ajax';
 import getConfigByURL from './config';
 
 const url: string = window.location.href;

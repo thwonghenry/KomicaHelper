@@ -1,0 +1,9 @@
+{
+    "entries": [{
+        "name": "HomuExtractorTester",
+        "replace": {
+            "name": "Komica Extractor (Homu)",
+            "extramatches": ["http://homu.komica.org/*/*"]
+        }
+    }]
+}

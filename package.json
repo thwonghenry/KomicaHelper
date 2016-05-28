@@ -23,7 +23,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
+    "build": "webpack --config build/helper/webpack.config.js",
+    "build-extractor-test": "webpack --config build/extractorTests/webpack.config.js",
     "watch": "webpack --progress --color --watch"
   },
   "repository": {

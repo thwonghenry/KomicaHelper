@@ -1,4 +1,4 @@
-import nightStyles from '../styles/dark/index';
+import nightStyles from '../../styles/dark/index';
 
 // helper functions that used for binding
 function getElementById(id: string, doc: Document): HTMLElement {

@@ -49,8 +49,8 @@
 // @match http://k2slime.2nyan.org/*
 // @match http://homu.komica.org/*/*
 // @match http://pink.komica.org/*/*
-// @description A plugin that add enlarge button to all thumbnails
-// @name Komica Thumbnails Enlarger
+// @description A plugin that stick the quoted reply directly
+// @name Komica Quotes Linker
 // @namespace https://github.com/thwonghenry/KomicaHelper
 // @version 0.1
 // ==/UserScript==
@@ -94,7 +94,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 28);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -157,6 +157,7 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	"use strict";
 	var index_1 = __webpack_require__(5);
 	// helper functions that used for binding
@@ -244,89 +245,7 @@
 
 
 /***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var config_1 = __webpack_require__(1);
-	// a function that add html as DOM node to element
-	function addHTMLToElement(tag, html, element) {
-	    'use strict';
-	    var node = document.createElement(tag);
-	    node.innerHTML = html;
-	    element.appendChild(node);
-	}
-	var url = window.location.href;
-	var config = config_1.default(url);
-	var isThread = config.isThread.test(url);
-	// menu buttons
-	var menu;
-	var updateButton;
-	var expandAllButton;
-	var contractAllButton;
-	var nightModeButton;
-	var locals;
-	// inject menu buttons
-	function injectMenu() {
-	    'use strict';
-	    // import assests
-	    var style = __webpack_require__(7);
-	    var css = style[0][1];
-	    locals = style.locals;
-	    menu = document.getElementById(locals.komicaHelper);
-	    // only inject menu if it not exists
-	    if (!menu) {
-	        // render the menu buttons with local scoped id
-	        var body = document.body;
-	        locals.newString = isThread ? '新回覆' : '新主題';
-	        var html = __webpack_require__(8)(locals);
-	        // add the menu buttons
-	        addHTMLToElement('div', html, body);
-	        // add the buttons style from main.sass
-	        addHTMLToElement('style', css, body);
-	        menu = document.getElementById(locals.komicaHelper);
-	    }
-	    // retrieve the menu buttons
-	    updateButton = document.getElementById(locals.update);
-	    expandAllButton = document.getElementById(locals.expand);
-	    contractAllButton = document.getElementById(locals.contract);
-	    nightModeButton = document.getElementById(locals.night);
-	    return {
-	        menu: menu, updateButton: updateButton, expandAllButton: expandAllButton, contractAllButton: contractAllButton, nightModeButton: nightModeButton, locals: locals,
-	    };
-	}
-	exports.injectMenu = injectMenu;
-	function enableButton(button) {
-	    'use strict';
-	    // remove the hiddenButton class
-	    button.classList.remove(locals.hiddenButton);
-	}
-	// enable the selected menu buttons
-	function enableButtons(enables) {
-	    'use strict';
-	    if (enables === void 0) { enables = {
-	        contractAllButton: true,
-	        expandAllButton: true,
-	        nightModeButton: true,
-	        updateButton: true,
-	    }; }
-	    if (enables.updateButton) {
-	        enableButton(updateButton);
-	    }
-	    if (enables.expandAllButton) {
-	        enableButton(expandAllButton);
-	    }
-	    if (enables.contractAllButton) {
-	        enableButton(contractAllButton);
-	    }
-	    if (enables.nightModeButton) {
-	        enableButton(nightModeButton);
-	    }
-	}
-	exports.enableButtons = enableButtons;
-
-
-/***/ },
+/* 2 */,
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -363,6 +282,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	"use strict";
 	var def = __webpack_require__(3);
 	var homu = __webpack_require__(4);
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -373,306 +293,55 @@
 
 
 /***/ },
-/* 6 */,
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(0)();
-	// imports
-
-
-	// module
-	exports.push([module.i, "#_2RKIDvBZ-c75YVkbPE3upo {\n  position: fixed;\n  top: 40%;\n  right: 0px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._239Ry-eeiEXoNyd-zFwfxk {\n    pointer-events: none;\n    cursor: default;\n    color: gray; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2HQO3DDkC7XaudXT9Urjzk {\n    color: BBB;\n    text-decoration: none;\n    border-bottom: 2px solid silver;\n    margin-bottom: 6px; }\n  #_2RKIDvBZ-c75YVkbPE3upo ._2bliZs_JXLzcFFvsue8m7Z {\n    display: none; }\n\n#pHE21zpZzvEWryqHMcJf1, #_2jg1ulKVXlhO3Zu-TeZl0r, #Gll4U5FrCKtIYknK7gnl, #_1abk3Qff5m62ALvruCfPMy {\n  text-decoration: none; }\n", ""]);
-
-	// exports
-	exports.locals = {
-		"komicaHelper": "_2RKIDvBZ-c75YVkbPE3upo",
-		"disabledAnchor": "_239Ry-eeiEXoNyd-zFwfxk",
-		"threadButtons": "_2HQO3DDkC7XaudXT9Urjzk",
-		"hiddenButton": "_2bliZs_JXLzcFFvsue8m7Z",
-		"update": "pHE21zpZzvEWryqHMcJf1",
-		"expand": "_2jg1ulKVXlhO3Zu-TeZl0r",
-		"contract": "Gll4U5FrCKtIYknK7gnl",
-		"night": "_1abk3Qff5m62ALvruCfPMy"
-	};
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var jade = __webpack_require__(9);
-
-	module.exports = function template(locals) {
-	var buf = [];
-	var jade_mixins = {};
-	var jade_interp;
-	;var locals_for_with = (locals || {});(function (contract, expand, hiddenButton, komicaHelper, night, update) {
-	buf.push("<div" + (jade.attr("id", komicaHelper, true, true)) + "><a href=\"#\"" + (jade.attr("id", update, true, true)) + (jade.cls([hiddenButton], [true])) + ">更新<br></a><a href=\"#\"" + (jade.attr("id", expand, true, true)) + (jade.cls([hiddenButton], [true])) + ">放大所有圖片<br></a><a href=\"#\"" + (jade.attr("id", contract, true, true)) + (jade.cls([hiddenButton], [true])) + ">縮小所有圖片<br></a><a href=\"#\"" + (jade.attr("id", night, true, true)) + (jade.cls([hiddenButton], [true])) + ">夜間模式</a></div>");}.call(this,"contract" in locals_for_with?locals_for_with.contract:typeof contract!=="undefined"?contract:undefined,"expand" in locals_for_with?locals_for_with.expand:typeof expand!=="undefined"?expand:undefined,"hiddenButton" in locals_for_with?locals_for_with.hiddenButton:typeof hiddenButton!=="undefined"?hiddenButton:undefined,"komicaHelper" in locals_for_with?locals_for_with.komicaHelper:typeof komicaHelper!=="undefined"?komicaHelper:undefined,"night" in locals_for_with?locals_for_with.night:typeof night!=="undefined"?night:undefined,"update" in locals_for_with?locals_for_with.update:typeof update!=="undefined"?update:undefined));;return buf.join("");
-	}
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	/**
-	 * Merge two attribute objects giving precedence
-	 * to values in object `b`. Classes are special-cased
-	 * allowing for arrays and merging/joining appropriately
-	 * resulting in a string.
-	 *
-	 * @param {Object} a
-	 * @param {Object} b
-	 * @return {Object} a
-	 * @api private
-	 */
-
-	exports.merge = function merge(a, b) {
-	  if (arguments.length === 1) {
-	    var attrs = a[0];
-	    for (var i = 1; i < a.length; i++) {
-	      attrs = merge(attrs, a[i]);
-	    }
-	    return attrs;
-	  }
-	  var ac = a['class'];
-	  var bc = b['class'];
-
-	  if (ac || bc) {
-	    ac = ac || [];
-	    bc = bc || [];
-	    if (!Array.isArray(ac)) ac = [ac];
-	    if (!Array.isArray(bc)) bc = [bc];
-	    a['class'] = ac.concat(bc).filter(nulls);
-	  }
-
-	  for (var key in b) {
-	    if (key != 'class') {
-	      a[key] = b[key];
-	    }
-	  }
-
-	  return a;
-	};
-
-	/**
-	 * Filter null `val`s.
-	 *
-	 * @param {*} val
-	 * @return {Boolean}
-	 * @api private
-	 */
-
-	function nulls(val) {
-	  return val != null && val !== '';
-	}
-
-	/**
-	 * join array as classes.
-	 *
-	 * @param {*} val
-	 * @return {String}
-	 */
-	exports.joinClasses = joinClasses;
-	function joinClasses(val) {
-	  return (Array.isArray(val) ? val.map(joinClasses) :
-	    (val && typeof val === 'object') ? Object.keys(val).filter(function (key) { return val[key]; }) :
-	    [val]).filter(nulls).join(' ');
-	}
-
-	/**
-	 * Render the given classes.
-	 *
-	 * @param {Array} classes
-	 * @param {Array.<Boolean>} escaped
-	 * @return {String}
-	 */
-	exports.cls = function cls(classes, escaped) {
-	  var buf = [];
-	  for (var i = 0; i < classes.length; i++) {
-	    if (escaped && escaped[i]) {
-	      buf.push(exports.escape(joinClasses([classes[i]])));
-	    } else {
-	      buf.push(joinClasses(classes[i]));
-	    }
-	  }
-	  var text = joinClasses(buf);
-	  if (text.length) {
-	    return ' class="' + text + '"';
-	  } else {
-	    return '';
-	  }
-	};
-
-
-	exports.style = function (val) {
-	  if (val && typeof val === 'object') {
-	    return Object.keys(val).map(function (style) {
-	      return style + ':' + val[style];
-	    }).join(';');
-	  } else {
-	    return val;
-	  }
-	};
-	/**
-	 * Render the given attribute.
-	 *
-	 * @param {String} key
-	 * @param {String} val
-	 * @param {Boolean} escaped
-	 * @param {Boolean} terse
-	 * @return {String}
-	 */
-	exports.attr = function attr(key, val, escaped, terse) {
-	  if (key === 'style') {
-	    val = exports.style(val);
-	  }
-	  if ('boolean' == typeof val || null == val) {
-	    if (val) {
-	      return ' ' + (terse ? key : key + '="' + key + '"');
-	    } else {
-	      return '';
-	    }
-	  } else if (0 == key.indexOf('data') && 'string' != typeof val) {
-	    if (JSON.stringify(val).indexOf('&') !== -1) {
-	      console.warn('Since Jade 2.0.0, ampersands (`&`) in data attributes ' +
-	                   'will be escaped to `&amp;`');
-	    };
-	    if (val && typeof val.toISOString === 'function') {
-	      console.warn('Jade will eliminate the double quotes around dates in ' +
-	                   'ISO form after 2.0.0');
-	    }
-	    return ' ' + key + "='" + JSON.stringify(val).replace(/'/g, '&apos;') + "'";
-	  } else if (escaped) {
-	    if (val && typeof val.toISOString === 'function') {
-	      console.warn('Jade will stringify dates in ISO form after 2.0.0');
-	    }
-	    return ' ' + key + '="' + exports.escape(val) + '"';
-	  } else {
-	    if (val && typeof val.toISOString === 'function') {
-	      console.warn('Jade will stringify dates in ISO form after 2.0.0');
-	    }
-	    return ' ' + key + '="' + val + '"';
-	  }
-	};
-
-	/**
-	 * Render the given attributes object.
-	 *
-	 * @param {Object} obj
-	 * @param {Object} escaped
-	 * @return {String}
-	 */
-	exports.attrs = function attrs(obj, terse){
-	  var buf = [];
-
-	  var keys = Object.keys(obj);
-
-	  if (keys.length) {
-	    for (var i = 0; i < keys.length; ++i) {
-	      var key = keys[i]
-	        , val = obj[key];
-
-	      if ('class' == key) {
-	        if (val = joinClasses(val)) {
-	          buf.push(' ' + key + '="' + val + '"');
-	        }
-	      } else {
-	        buf.push(exports.attr(key, val, false, terse));
-	      }
-	    }
-	  }
-
-	  return buf.join('');
-	};
-
-	/**
-	 * Escape the given string of `html`.
-	 *
-	 * @param {String} html
-	 * @return {String}
-	 * @api private
-	 */
-
-	var jade_encode_html_rules = {
-	  '&': '&amp;',
-	  '<': '&lt;',
-	  '>': '&gt;',
-	  '"': '&quot;'
-	};
-	var jade_match_html = /[&<>"]/g;
-
-	function jade_encode_char(c) {
-	  return jade_encode_html_rules[c] || c;
-	}
-
-	exports.escape = jade_escape;
-	function jade_escape(html){
-	  var result = String(html).replace(jade_match_html, jade_encode_char);
-	  if (result === '' + html) return html;
-	  else return result;
-	};
-
-	/**
-	 * Re-throw the given `err` in context to the
-	 * the jade in `filename` at the given `lineno`.
-	 *
-	 * @param {Error} err
-	 * @param {String} filename
-	 * @param {String} lineno
-	 * @api private
-	 */
-
-	exports.rethrow = function rethrow(err, filename, lineno, str){
-	  if (!(err instanceof Error)) throw err;
-	  if ((typeof window != 'undefined' || !filename) && !str) {
-	    err.message += ' on line ' + lineno;
-	    throw err;
-	  }
-	  try {
-	    str = str || __webpack_require__(10).readFileSync(filename, 'utf8')
-	  } catch (ex) {
-	    rethrow(err, null, lineno)
-	  }
-	  var context = 3
-	    , lines = str.split('\n')
-	    , start = Math.max(lineno - context, 0)
-	    , end = Math.min(lines.length, lineno + context);
-
-	  // Error context
-	  var context = lines.slice(start, end).map(function(line, i){
-	    var curr = i + start + 1;
-	    return (curr == lineno ? '  > ' : '    ')
-	      + curr
-	      + '| '
-	      + line;
-	  }).join('\n');
-
-	  // Alter exception message
-	  err.path = filename;
-	  err.message = (filename || 'Jade') + ':' + lineno
-	    + '\n' + context + '\n\n' + err.message;
-	  throw err;
-	};
-
-	exports.DebugItem = function DebugItem(lineno, filename) {
-	  this.lineno = lineno;
-	  this.filename = filename;
-	}
-
-
-/***/ },
-/* 10 */
+/* 6 */
 /***/ function(module, exports) {
 
-	/* (ignored) */
+	"use strict";
+	"use strict";
+	var Ajax = (function () {
+	    function Ajax(method, url, type) {
+	        this.method = method;
+	        this.url = url;
+	        this.xhr = new XMLHttpRequest();
+	        this.type = type;
+	    }
+	    Ajax.prototype.start = function () {
+	        var _this = this;
+	        var onLoad = new Promise(function (resolve, reject) {
+	            _this.xhr.onload = function () {
+	                if (_this.xhr.status === 200) {
+	                    resolve(_this.xhr.response);
+	                }
+	                else {
+	                    console.log('reject', _this.xhr.status);
+	                    reject();
+	                }
+	            };
+	            _this.xhr.onerror = reject;
+	        });
+	        this.xhr.open(this.method, this.url, true);
+	        if (this.type) {
+	            this.xhr.responseType = this.type;
+	        }
+	        this.xhr.send();
+	        return onLoad;
+	    };
+	    return Ajax;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = Ajax;
+
 
 /***/ },
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
 /* 11 */,
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -733,6 +402,7 @@
 /***/ function(module, exports) {
 
 	"use strict";
+	"use strict";
 	var EventEmitter = (function () {
 	    function EventEmitter() {
 	        this.subscribers = {};
@@ -773,107 +443,141 @@
 
 /***/ },
 /* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	"use strict";
+	var Ajax_1 = __webpack_require__(6);
 	var config_1 = __webpack_require__(1);
 	var DOMWatcher_1 = __webpack_require__(12);
 	var url = window.location.href;
 	var config = config_1.default(url);
 	var isThread = config.isThread.test(url);
-	var style = __webpack_require__(23);
-	var css = style[0][1];
-	var locals = style.locals;
-	var buttons = {};
-	function bindThumbnail(img) {
+	// a function that stick the reply element near the quote
+	function stickReply(quote, reply, floatClass, floatsParent) {
 	    'use strict';
-	    // create the button element for image function
-	    var button = document.createElement('a');
-	    button.innerHTML = '放大';
-	    button.href = '#';
-	    // insert the button alongside with the image
-	    var anchor = img.parentNode;
-	    anchor.parentNode.insertBefore(button, anchor.nextSibling);
-	    // use for breaking line between the enlarged image and the reply
-	    var br = document.createElement('br');
-	    // save the src of the thumbnail for restoring later
-	    var src = img.src;
-	    // remove all the dimension related attributes
-	    img.removeAttribute('style');
-	    img.removeAttribute('width');
-	    img.removeAttribute('height');
-	    // add custom thumbnail class
-	    img.classList.add(locals.contracted);
-	    button.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        // enlarge the image
-	        if (img.classList.contains(locals.contracted)) {
-	            img.src = anchor.href;
-	            img.classList.remove(locals.contracted);
-	            img.classList.add(locals.expanded);
-	            anchor.parentNode.insertBefore(br, button);
-	            button.innerHTML = '縮小';
-	        }
-	        else if (img.classList.contains(locals.expanded)) {
-	            // restore the image and button
-	            img.src = src;
-	            img.classList.remove(locals.expanded);
-	            img.classList.add(locals.contracted);
-	            anchor.parentNode.removeChild(br);
-	            button.innerHTML = '放大';
-	        }
-	    });
-	    buttons[src] = button;
-	}
-	function bindThumbnailControlButtons(expandButton, contractButton) {
-	    'use strict';
-	    // bind the button that expand all unexpanded thumbnails
-	    expandButton.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        // click all the enlarge button
-	        Object.keys(buttons).forEach(function (key) {
-	            var button = buttons[key];
-	            if (button.innerHTML === '放大') {
-	                button.click();
+	    var clone;
+	    if (reply) {
+	        // clone the reply element, prevent duplicate ids and add float class
+	        clone = reply.cloneNode(true);
+	        clone.removeAttribute('id');
+	        // if the reply is the post, add the reply class
+	        if (/threadpost/.test(clone.className)) {
+	            clone.classList.add('reply');
+	            // remove the warn text
+	            var toplevel = clone.children[0];
+	            var children = toplevel.children;
+	            var warnSpan = children[children.length - 2];
+	            if (warnSpan.tagName.toLowerCase() === 'span') {
+	                toplevel.removeChild(warnSpan);
 	            }
-	        });
-	    });
-	    // bind the button that expand all expanded thumbnails
-	    contractButton.addEventListener('click', function (event) {
-	        event.preventDefault();
-	        // click all the contract button
-	        Object.keys(buttons).forEach(function (key) {
-	            var button = buttons[key];
-	            if (button.innerHTML === '縮小') {
-	                button.click();
+	        }
+	        clone.classList.add(floatClass);
+	        // position it near the reply element
+	        var rect = quote.getBoundingClientRect();
+	        clone.setAttribute('style', "left: " + Math.round(rect.left + rect.width) + "px; top: " + Math.round(rect.top) + "px;");
+	        floatsParent.appendChild(clone);
+	    }
+	    // bind the mouseout event that destroy the clone element
+	    // if clone is undefined, still need it to remove "hovering" attribute
+	    function removeElement() {
+	        if (clone) {
+	            floatsParent.removeChild(clone);
+	        }
+	        clone = undefined;
+	        quote.removeAttribute('hovering');
+	        quote.removeEventListener('mouseout', removeElement);
+	        document.removeEventListener('scroll', removeElement);
+	    }
+	    quote.addEventListener('mouseout', removeElement);
+	    document.addEventListener('scroll', removeElement);
+	}
+	// the threads cache
+	var cache = {};
+	// the locks of ajax call for thread document
+	var getting = {};
+	function bindReplyToQuote(anchor, floatsParent, floatClass) {
+	    'use strict';
+	    if (floatsParent === void 0) { floatsParent = document.body; }
+	    // get all the quote element, a quote span may have multiple quote anchor points
+	    var matched = anchor.href.match(/.*#r([0-9]*).*/);
+	    if (!matched || matched.length < 2) {
+	        return;
+	    }
+	    var targetID = matched[1];
+	    anchor.addEventListener('mouseover', function () {
+	        var _this = this;
+	        var target = document.getElementById("r" + targetID);
+	        if (!target) {
+	            // if the reply is hide inside the thread
+	            // get the thread ID
+	            var threadIDmatch = this.href.match(/.res=([0-9]*).*/);
+	            if (!threadIDmatch || threadIDmatch.length !== 2) {
+	                return;
 	            }
-	        });
+	            var threadID_1 = threadIDmatch[1];
+	            // check if the thread is cached and the target is in the cache
+	            if (!cache[threadID_1] && !getting[threadID_1]) {
+	                // lock the ajax attempt
+	                getting[threadID_1] = true;
+	                // set the cursor pointing this quote to loading animation
+	                this.setAttribute('style', 'cursor: wait;');
+	                // start ajax loading the thread
+	                var ajax = new Ajax_1.default('get', this.href, 'document');
+	                ajax.start().then(function (newDoc) {
+	                    cache[threadID_1] = newDoc;
+	                    // unlock ajax attempt
+	                    delete getting[threadID_1];
+	                    // remove loading animation
+	                    _this.removeAttribute('style');
+	                    // if this quote is still hovered, stick the reply immediately
+	                    if (_this.getAttribute('hovering')) {
+	                        stickReply(_this, newDoc.getElementById('r' + targetID), floatClass, floatsParent);
+	                    }
+	                });
+	            }
+	            else if (cache[threadID_1]) {
+	                target = cache[threadID_1].getElementById("r" + targetID);
+	            }
+	        }
+	        // stick the quoted reply near the quote
+	        stickReply(this, target, floatClass, floatsParent);
+	        // set custom hovering attribute for after ajax loading
+	        this.setAttribute('hovering', 'true');
 	    });
 	}
-	exports.bindThumbnailControlButtons = bindThumbnailControlButtons;
-	function initializeThumbnails() {
+	exports.bindReplyToQuote = bindReplyToQuote;
+	function initializeQuotes(floatsParent) {
 	    'use strict';
+	    if (floatsParent === void 0) { floatsParent = document.body; }
+	    // import the css
+	    var style = __webpack_require__(22);
+	    var css = style[0][1];
+	    var locals = style.locals;
 	    // append the style
 	    var styleTag = document.createElement('style');
 	    styleTag.innerHTML = css;
 	    document.body.appendChild(styleTag);
-	    // bind all the thumbnails to a button
-	    var imgs = config.getThumbnails(document);
-	    for (var i = 0; i < imgs.length; i++) {
-	        bindThumbnail(imgs[i]);
+	    // bind all the quotes to stick reply event
+	    var qlinks = config.getQLinks(document);
+	    if (qlinks) {
+	        for (var i = 0; i < qlinks.length; i++) {
+	            var qlink = qlinks[i];
+	            if (config.quote && config.quote.test(qlink.href)) {
+	                bindReplyToQuote(qlink, floatsParent, locals.floatingReply);
+	            }
+	        }
 	    }
 	    // attach a DOM watcher on the main thread or thread list
 	    var parent = isThread ? config.getReplies(document) : config.getThreads(document);
 	    var domWatcher = new DOMWatcher_1.default(parent);
+	    // attach add node event callback
 	    domWatcher.on('addnode', function (element) {
 	        var reply = element;
 	        var id = reply.id;
 	        var clear = false;
-	        // if the element is text node, continue;
+	        // if the element is text node, return
 	        if (!reply.setAttribute) {
 	            return;
 	        }
@@ -883,10 +587,12 @@
 	            id = reply.id;
 	            clear = true;
 	        }
-	        // query the thumbnail element
-	        var img = document.querySelector("#" + id + " img");
-	        if (img) {
-	            bindThumbnail(img);
+	        // query the qoute element
+	        var newQlinks = document.querySelectorAll("#" + id + " .resquote .qlink");
+	        if (newQlinks) {
+	            for (var j = 0; j < newQlinks.length; j++) {
+	                bindReplyToQuote(newQlinks[j], floatsParent, locals.floatingReply);
+	            }
 	        }
 	        // if a temporary id is added, clear it at the end
 	        if (clear) {
@@ -896,15 +602,18 @@
 	    domWatcher.start();
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = initializeThumbnails;
+	exports.default = initializeQuotes;
+	;
 
 
 /***/ },
+/* 16 */,
+/* 17 */,
+/* 18 */,
 /* 19 */,
 /* 20 */,
 /* 21 */,
-/* 22 */,
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(0)();
@@ -912,45 +621,29 @@
 
 
 	// module
-	exports.push([module.i, "._9HAoyOb7oMTzd7oUnrh5U {\n  max-width: 95% !important;\n  float: none !important; }\n\n._3_c8JMxFnbPB8x56-DfLAG {\n  max-width: none; }\n", ""]);
+	exports.push([module.i, "._1BwsIm2EUmmPCSaK5mocad {\n  position: fixed;\n  border: 2px solid black;\n  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.9);\n  animation-duration: 0.25s;\n  animation-name: fadein; }\n\n@keyframes fadein {\n  from {\n    opacity: 0; }\n  to {\n    opacity: 1; } }\n", ""]);
 
 	// exports
 	exports.locals = {
-		"expanded": "_9HAoyOb7oMTzd7oUnrh5U",
-		"contracted": "_3_c8JMxFnbPB8x56-DfLAG"
+		"floatingReply": "_1BwsIm2EUmmPCSaK5mocad"
 	};
 
 /***/ },
+/* 23 */,
 /* 24 */,
 /* 25 */,
 /* 26 */,
-/* 27 */,
-/* 28 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var thumbnail_1 = __webpack_require__(18);
-	var injectMenu_1 = __webpack_require__(2);
-	function initialize() {
-	    'use strict';
-	    // inject menu buttons
-	    var menuButtons = injectMenu_1.injectMenu();
-	    var expandAllButton = menuButtons.expandAllButton;
-	    var contractAllButton = menuButtons.contractAllButton;
-	    // enable contract and expand all buttons
-	    injectMenu_1.enableButtons({
-	        contractAllButton: true,
-	        expandAllButton: true,
-	    });
-	    // initialize thumbnail enlarger
-	    thumbnail_1.default();
-	    thumbnail_1.bindThumbnailControlButtons(expandAllButton, contractAllButton);
-	}
+	"use strict";
+	var quote_1 = __webpack_require__(15);
 	if (document.readyState !== 'loading') {
-	    initialize();
+	    quote_1.default();
 	}
 	else {
-	    document.addEventListener('DOMContentLoaded', initialize.bind(undefined));
+	    document.addEventListener('DOMContentLoaded', quote_1.default.bind(undefined));
 	}
 
 

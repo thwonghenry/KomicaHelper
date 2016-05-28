@@ -1,11 +1,11 @@
-import getConfigByURL from '../src/config';
-import initializeThumbnails, {bindThumbnailControlButtons} from '../src/thumbnail';
-import initializeNightMode, {bindNightModeButton, startSynchronize} from '../src/nightMode';
-import initializeQuotes from '../src/quote';
-import bindReplyListUpdate from '../src/replyListUpdate';
-import bindThreadListUpdate from '../src/threadListUpdate';
-import {injectMenu, enableButtons} from '../src/injectMenu';
-import {init} from '../src/settingSync';
+import getConfigByURL from '../config';
+import initializeThumbnails, {bindThumbnailControlButtons} from '../thumbnail';
+import initializeNightMode, {bindNightModeButton, startSynchronize} from '../nightMode';
+import initializeQuotes from '../quote';
+import bindReplyListUpdate from '../replyListUpdate';
+import bindThreadListUpdate from '../threadListUpdate';
+import {injectMenu, enableButtons} from '../injectMenu';
+import {init} from '../settingSync';
 const url: string = window.location.href;
 
 const config: komicaHelper.Config = getConfigByURL(url);

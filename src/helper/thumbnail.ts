@@ -1,11 +1,11 @@
 import getConfigByURL from './config';
-import DOMWatcher from './DOMWatcher';
+import DOMWatcher from '../DOMWatcher';
 
 const url: string = window.location.href;
 const config: komicaHelper.Config = getConfigByURL(url);
 const isThread: boolean = config.isThread.test(url);
 
-const style: any = require('!css!sass!../styles/thumbnail.sass');
+const style: any = require('!css!sass!../../styles/thumbnail.sass');
 const css: string = style[0][1];
 const locals: komicaHelper.LocalStyle = style.locals;
 

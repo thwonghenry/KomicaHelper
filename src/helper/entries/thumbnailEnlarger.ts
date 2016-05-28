@@ -1,5 +1,5 @@
-import initializeThumbnails, {bindThumbnailControlButtons} from '../src/thumbnail';
-import {injectMenu, enableButtons} from '../src/injectMenu';
+import initializeThumbnails, {bindThumbnailControlButtons} from '../thumbnail';
+import {injectMenu, enableButtons} from '../injectMenu';
 
 function initialize(): void {
     'use strict';

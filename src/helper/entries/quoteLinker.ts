@@ -1,4 +1,4 @@
-import initializeQLinks from '../src/quote';
+import initializeQLinks from '../quote';
 
 if (document.readyState !== 'loading') {
     initializeQLinks();
