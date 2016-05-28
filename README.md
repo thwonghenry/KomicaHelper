@@ -17,16 +17,12 @@
 - Chrome:
 
   - Clone this repository
-  - Load [build/helper/chrome_extension/komicaHelper](build/chrome_extension/komicaHelper) as unpackaged extension from Google Chrome
+  - Load [build/helper/chrome_extension/komicaHelper](build/helper/chrome_extension/komicaHelper) as unpackaged extension from Google Chrome
   - Done!
 
 - Userscript:
 
-  - Choose the function you want to use from
-
-    <build userscripts="">
-    </build>
-
+  - Choose the function you want to use from [build/helper/userscripts](build/helper/userscripts)
   - Load it from your userscripts loader in your browser
   - Done!
 
@@ -56,7 +52,7 @@
 2. `npm i -g webpack`
 3. `cd ${this project folder}`
 4. `npm i`
-5. `webpack`
+5. `npm run build`
 6. Done! Find the folder / scripts described in [How to use](#how-to-use)
 
 ## Contribution guideline
