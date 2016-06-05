@@ -1,17 +1,17 @@
 const path = require('path');
 const buildPath = __dirname;
-const entryPath = path.resolve(__dirname, '../../src/helper/entries');
+const entryPath = path.resolve(__dirname, '../src/helper/entries');
 const chromeBuildPath = path.resolve(buildPath, 'chrome_extension/komicaHelper');
 const userscriptsPath = path.resolve(buildPath, 'userscripts');
 const webpack = require('webpack');
 
 // webpack plugin to prepend userscripts metadata
-const PrependMetadata = require('../../webpack_plugins/MetadataPrepender');
-const WriteChromeManifest = require('../../webpack_plugins/ManifestWriter');
+const PrependMetadata = require('../webpack_plugins/MetadataPrepender');
+const WriteChromeManifest = require('../webpack_plugins/ManifestWriter');
 const metadata = require('./metadata.json');
 
 // entries
-const entries = require('../../src/helper/entries/index.json');
+const entries = require('../src/helper/entries/index.json');
 
 let userscriptEntries = {};
 entries.entries.forEach((entry) => {
