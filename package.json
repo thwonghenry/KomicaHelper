@@ -22,6 +22,7 @@
     "webpack-append": "^0.1.2"
   },
   "scripts": {
+    "postinstall": "typings i",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config build/webpack.config.js",
     "watch": "webpack --progress --color --watch"

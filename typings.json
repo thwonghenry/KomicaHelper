@@ -1,0 +1,6 @@
+{
+  "globalDependencies": {
+    "cross-storage": "registry:dt/cross-storage#0.8.1+20160310000706",
+    "es6-promise": "registry:dt/es6-promise#0.0.0+20160423074304"
+  }
+}
